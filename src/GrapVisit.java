@@ -33,16 +33,27 @@ public class GrapVisit<T extends Comparable<T>> {
 		
 		while (!q.isEmpty()) {
 			Node<T> n=q.pop();
+			//if (!tuttoalvolo)
+			// GraphVisualize(G, q, n, m, distances, parents);
 				for(Node<T> m : G.adj(n)){
+					//if (!tuttoalvolo)
+					// GraphVisualize(G, q, n, m, distances, parents);
 					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(m, n)<distances[index.get(m)]) {
 						if (!q.contains(m)) {
 							q.add(m);
+							//if (!tuttoalvolo)
+							// GraphVisualize(G, q, n, m, distances, parents);
 							}
 						parents[index.get(m)]=n;
+						//if (!tuttoalvolo)
+						// GraphVisualize(G, q, n, m, distances, parents);
 						distances[index.get(m)]=distances[index.get(n)]+G.w(m, n);
+						//if (!tuttoalvolo)
+						// GraphVisualize(G, q, n, m, distances, parents);
 					}	
 				}
 		}
+		// GraphVisualize(G, q, n, m, distances, parents);
 		
 	}
 }
