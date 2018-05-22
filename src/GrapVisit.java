@@ -29,6 +29,8 @@ public class GrapVisit<T extends Comparable<T>> {
 		LinkedList<Node<T>> q=new LinkedList<Node<T>>();
 		q.add(radice);
 		
+		
+		
 		while (!q.isEmpty()) {
 			Node<T> n=q.pop();
 				for(Node<T> m : G.adj(n)){
