@@ -115,7 +115,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 					out.write(":");
 					out.write(pollo.get(n).get(o).toString());
 					out.write("\n");
-				}
+				} 
 			}
 				out.write("</E>");
 				out.close();
@@ -134,35 +134,33 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			BufferedReader in = new BufferedReader(new FileReader(path));
 			String inStr="";
 			inStr=in.readLine();
-			if (inStr!="<N>") {
+			if (!inStr.equals("<N>")) {
 				//Error.Inputfile();
 			}
 			inStr=in.readLine();
-			while (inStr!="</N>") {
+			while (!inStr.equals("</N>")) {
 				String[] line=inStr.split(":");
 				if (line.length<2) {
-					System.out.print("Error");
-					System.out.print("Error");
+					//Error.Inputfile();
 					}
-				else {
 				Node<T> m=new Node<T>((T)line[1]);
 				nodes.put(Integer.parseInt(line[0]), m);
 				this.insertNode(m);
 				i++;
-				}
 				inStr=in.readLine();
 			}
 			inStr=in.readLine();
-			if (inStr!="<E>") {
+			if (!inStr.equals("<E>")) {
 				//Error.Inputfile();
 			}
 			inStr=in.readLine();
-			while (inStr!="</E>") {
+			while (!inStr.equals("</E>")) {
 				String[] line=inStr.split(":");
 				if (line.length!=2) {
 					//Error.Inputfile()
 					}
-				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[1]));
+				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[2]));
+				inStr=in.readLine();
 				
 				
 				

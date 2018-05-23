@@ -10,7 +10,9 @@ public class GraphTest {
 		Tudor.insertEdge(lollo, pollo, 10);
 		Tudor.print();
 		Tudor.outGraph("src/tudor.txt");
-		
+		Graph<String> Denis=new Graph<String>();
+		Denis.inGraph("src/tudor.txt");
+		Denis.print();
 
 	}
 
