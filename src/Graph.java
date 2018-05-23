@@ -1,5 +1,6 @@
 
 
+import java.io.*;
 import java.util.*;
 
 
@@ -85,6 +86,101 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 				return n;
 		}
 		return null;
+	}
+	public void outGraph(String path) {
+		Integer i=0;
+		TreeMap<Node<T>, Integer> nodes= new TreeMap<Node<T>, Integer>();
+		try {
+			FileWriter b=new FileWriter(path);
+			BufferedWriter out=new BufferedWriter(b);
+			out.write("<N>");
+			out.write("\n");
+				for (Node<T> n : pollo.keySet()) {
+					out.write(i.toString()+":");
+					out.write(((String) n.getElement()));
+					nodes.put(n, i);
+					out.write("\n");
+					i++;
+				}
+			out.write("</N>");
+			out.write("\n");
+			out.write("<E>");
+			out.write("\n");
+			i=0;
+				for (Node<T> n : pollo.keySet()) {
+				for (Node<T> o : pollo.get(n).keySet()) {
+					out.write(nodes.get(n).toString());
+					out.write(":");
+					out.write(nodes.get(o).toString());
+					out.write(":");
+					out.write(pollo.get(n).get(o).toString());
+					out.write("\n");
+				}
+			}
+				out.write("</E>");
+				out.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void inGraph(String path) {
+		Integer i=0;
+		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(path));
+			String inStr="";
+			inStr=in.readLine();
+			if (inStr!="<N>") {
+				//Error.Inputfile();
+			}
+			inStr=in.readLine();
+			while (inStr!="</N>") {
+				String[] line=inStr.split(":");
+				if (line.length<2) {
+					System.out.print("Error");
+					System.out.print("Error");
+					}
+				else {
+				Node<T> m=new Node<T>((T)line[1]);
+				nodes.put(Integer.parseInt(line[0]), m);
+				this.insertNode(m);
+				i++;
+				}
+				inStr=in.readLine();
+			}
+			inStr=in.readLine();
+			if (inStr!="<E>") {
+				//Error.Inputfile();
+			}
+			inStr=in.readLine();
+			while (inStr!="</E>") {
+				String[] line=inStr.split(":");
+				if (line.length!=2) {
+					//Error.Inputfile()
+					}
+				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[1]));
+				
+				
+				
+			}
+			
+			
+			
+			in.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 
 }
