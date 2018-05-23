@@ -163,7 +163,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 				inStr=in.readLine();
 				
 				
-				
+				 
 			}
 			
 			
@@ -178,6 +178,29 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		}
 		
 		
+		
+	}
+	public void randomGraph(int Mnodes, int mnodes, int Medges, int medges, int Mw, int mw) {
+		Random rand = new Random();
+		int nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;
+		int nedges=rand.nextInt(Medges-medges)+medges;
+		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
+		for (Integer i=0; i<nnodes; i++) {
+			nodes.put(i, new Node<T>((T)i.toString()));
+			this.insertNode(nodes.get(i));
+		}
+		for (Integer i=0; i<nedges; i++) {
+			int nodea;
+			do{
+				nodea=rand.nextInt(nnodes);
+				}while (pollo.get(nodes.get(nodea)).keySet().size()>=nnodes);
+			
+			int nodeb;
+			do{
+				nodeb=rand.nextInt(nnodes);
+			}while (nodeb==nodea || pollo.get(nodes.get(nodea)).get(nodes.get(nodeb))!=null);
+			this.insertEdge(nodes.get(nodea), nodes.get(nodeb), rand.nextInt(Mw-mw)+mw);
+		}
 		
 	}
 
