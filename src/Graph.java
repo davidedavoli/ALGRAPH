@@ -134,7 +134,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			BufferedReader in = new BufferedReader(new FileReader(path));
 			String inStr="";
 			inStr=in.readLine();
-			if (!inStr.equals("<N>")) {
+			if (!inStr.equals("<N>") || inStr==null) {
 				//Error.Inputfile();
 			}
 			inStr=in.readLine();
@@ -180,10 +180,11 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		
 		
 	}
-	public void randomGraph(int Mnodes, int mnodes, int Medges, int medges, int Mw, int mw) {
+	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw) {
 		Random rand = new Random();
 		int nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;
-		int nedges=rand.nextInt(Medges-medges)+medges;
+		int nedges;
+		nedges=rand.nextInt(nnodes*(nnodes-1)-(nnodes-1))+nnodes-1;
 		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
 		for (Integer i=0; i<nnodes; i++) {
 			nodes.put(i, new Node<T>((T)i.toString()));
@@ -193,7 +194,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			int nodea;
 			do{
 				nodea=rand.nextInt(nnodes);
-				}while (pollo.get(nodes.get(nodea)).keySet().size()>=nnodes);
+				}while (pollo.get(nodes.get(nodea)).keySet().size()>=(nnodes-1));
 			
 			int nodeb;
 			do{

@@ -29,6 +29,7 @@ public class GrapVisit<T extends Comparable<T>> {
 		LinkedList<Node<T>> q=new LinkedList<Node<T>>();
 		q.add(radice);
 		
+		int counter=0;
 		
 		
 		while (!q.isEmpty()) {
@@ -38,22 +39,25 @@ public class GrapVisit<T extends Comparable<T>> {
 				for(Node<T> m : G.adj(n)){
 					//if (!tuttoalvolo)
 					// GraphVisualize(G, q, n, m, distances, parents);
-					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(m, n)<distances[index.get(m)]) {
+					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
 						if (!q.contains(m)) {
-							q.add(m);
+							q.addLast(m);
 							//if (!tuttoalvolo)
 							// GraphVisualize(G, q, n, m, distances, parents);
 							}
 						parents[index.get(m)]=n;
 						//if (!tuttoalvolo)
 						// GraphVisualize(G, q, n, m, distances, parents);
-						distances[index.get(m)]=distances[index.get(n)]+G.w(m, n);
+						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
 						//if (!tuttoalvolo)
 						// GraphVisualize(G, q, n, m, distances, parents);
+						
 					}	
 				}
+				counter++;
+				if (counter==G.V().size()*G.V().size())
+					break;
 		}
 		// GraphVisualize(G, q, n, m, distances, parents);
-		
 	}
 }
