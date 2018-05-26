@@ -3,7 +3,7 @@ public class GraphTest {
 
 	public static void main(String[] args) {
 		Graph<String> Tudor=new Graph<String>();
-		GrapVisit<String> Positano=new GrapVisit<String>();
+		GraphVisit<String> Positano=new GraphVisit<String>();
 		Tudor.randomGraph(10, 2, 10, -10);
 		Tudor.print();
 		Positano.BellmanFord(Tudor, true);

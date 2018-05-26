@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-public class GrapVisit<T extends Comparable<T>> {
+public class GraphVisit<T extends Comparable<T>> {
 	
 	
 	public void BellmanFord(Graph<T> G, boolean tuttoalvolo) {
