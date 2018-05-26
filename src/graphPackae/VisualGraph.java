@@ -1,3 +1,4 @@
+package graphPackae;
 import java.util.*;
 
 import algraphPackage.blackCircle;
@@ -31,7 +32,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		for (Node<T> lucaserafini : mappa.keySet()) {
 			for (Node<T> lucamariotti : G.adj(lucaserafini)) {
 				if (lucamariotti==u) {
-					//mappa.get(lucaserafini).unjoin(mappa.get(u));
+					//mappa.get(lucaserafini).deleteline(mappa.get(u));
 				}
 			}
 		}
@@ -47,7 +48,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 
 	public void deleteEdge(Node<T> u, Node<T> v) {
-		//mappa.get(u).unjoin(mappa.get(v));
+		//mappa.get(u).deleteline(mappa.get(v));
 		
 	}
 	

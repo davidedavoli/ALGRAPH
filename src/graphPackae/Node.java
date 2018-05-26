@@ -1,3 +1,4 @@
+package graphPackae;
 
 public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 		
