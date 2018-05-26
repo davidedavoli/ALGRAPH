@@ -34,23 +34,25 @@ public class Arrow {
 	}
 	
 	public void managePointer() {
-		/*line2.setEndX(line1.getEndX());
+		line2.setEndX(line1.getEndX());
 		line2.setEndY(line1.getEndY());
 		line3.setEndX(line1.getEndX());
 		line3.setEndY(line1.getEndY());
 		
 		double tanTeta = (double)(line1.getStartY()-line1.getEndY())/(line1.getStartX()-line1.getEndX());
 		double angle = Math.atan(tanTeta);
-		double angle2 = angle + 45;
-		double angle3 = angle - 45;
+		double angle2 = angle + Math.PI/4;
+		double angle3 = angle - Math.PI/4;
+		
+		System.out.println(Math.atan(tanTeta));
 		
 		double tanTeta2 = Math.tan(angle2);
-		line2.setStartX(line2.getEndX()-(100/Math.sqrt(Math.pow(tanTeta2, 2)+1)));
-		line2.setStartY(line2.getEndY()-line2.getStartX()*tanTeta2);
+		line2.setStartX(line2.getEndX()-(10/Math.sqrt(Math.pow(tanTeta2, 2)+1)));
+		line2.setStartY(line2.getEndY()-(10/Math.sqrt(Math.pow(tanTeta2, 2)+1))*tanTeta2);
 		
 		double tanTeta3 = Math.tan(angle3);
-		line3.setStartX(line3.getEndX()-(100/Math.sqrt(Math.pow(tanTeta3, 2)+1)));
-		line3.setStartY(line3.getEndY()-line3.getStartX()*tanTeta3);*/
+		line3.setStartX(line3.getEndX()-(10/Math.sqrt(Math.pow(tanTeta3, 2)+1)));
+		line3.setStartY(line3.getEndY()-(10/Math.sqrt(Math.pow(tanTeta3, 2)+1))*tanTeta3);
 	}
 	
 }
