@@ -1,4 +1,4 @@
-package graphPackae;
+package graphPackage;
 
 public class GraphTest {
 
