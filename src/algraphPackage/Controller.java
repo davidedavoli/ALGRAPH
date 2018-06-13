@@ -39,7 +39,7 @@ public class Controller{
 	public Controller() {
 		draggedEvent = new Boolean(false);
 		draggedLine = new Boolean(false);
-		mode = new Boolean(false);
+		mode = new Boolean(true);
 	}
 	 
 	public void setOnMouseTextController(Text text, Integer i, applicationRunning a) {
@@ -94,7 +94,7 @@ public class Controller{
 				}
 				else {
 					if (!draggedLine) {
-						blackcircle.getList().add(new Arrow());
+						blackcircle.getList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
 						blackcircle.incrementMaxList();
 						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine1());
 						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine2());
@@ -102,6 +102,9 @@ public class Controller{
 						draggedLine = true;
 					}
 					pane.setOnMouseClicked(e -> {
+						
+						// if the event is dropped inside a blackcircle, 
+						
 						draggedLine = false;
 					});
 					Line line = blackcircle.getList().get(blackcircle.getMaxList()-1).getLine1();
@@ -135,6 +138,13 @@ public class Controller{
 			blackcircle.changeChosen();
 			
 		});
+	}
+	
+	public void removeButtonController(Button button) {
+		button.setOnMouseClicked(event -> {
+			//function that looks for selected circles needed
+		});
+		
 	}
 	
 	public void boundsController(blackCircle blackcircle, Pane pane) {
@@ -172,5 +182,8 @@ public class Controller{
 		}
 		}
 	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////
 	
 }

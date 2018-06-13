@@ -8,6 +8,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 	
 	private TreeMap<Node<T>, blackCircle> mappa=new TreeMap<Node<T>, blackCircle>();
 	Graph<T> G;
+	Pane p;
 
 	public VisualGraph(Graph<T> lucaserafini, Pane p) {
 		super();
@@ -17,23 +18,24 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
-				//mappa.get(lucamariotti).join(lucacontalbo, p);
+				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo));
 				
 			}
 		}
+		this.p=p;
 	}
-	public void insertNode(Node<T> u, Pane p) {
+	public void insertNode(Node<T> u) {
 		// TODO Auto-generated method stub
 		G.insertNode(u);
 		mappa.put(u, new blackCircle(p));
 	}
 
-	public void deleteNode(Node<T> u, Pane p) {
+	public void deleteNode(Node<T> u) {
 		// TODO Auto-generated method stub
 		for (Node<T> lucaserafini : mappa.keySet()) {
 			for (Node<T> lucamariotti : G.adj(lucaserafini)) {
 				if (lucamariotti==u) {
-					//mappa.get(lucaserafini).deleteline(mappa.get(u), p);
+					mappa.get(lucaserafini).deleteLink(mappa.get(u));
 				}
 			}
 		}
@@ -41,16 +43,24 @@ public class VisualGraph<T  extends Comparable<T>> {
 		mappa.remove(u);
 	}
 
-	public void insertEdge(Node<T> u, Node<T> v, Pane p) {
+	public void insertEdge(Node<T> u, Node<T> v) {
 		
-		//mappa.get(u).join(mappa.get(v, Pane p));
+		mappa.get(u).bind(mappa.get(v));
 		
 		
 	}
 
-	public void deleteEdge(Node<T> u, Node<T> v, Pane p) {
-		//mappa.get(u).deleteline(mappa.get(v), Pane p);
-		
+	public void deleteEdge(Node<T> u, Node<T> v) {
+		mappa.get(u).deleteLink(mappa.get(v));
+		G.deleteEdge(u, v);
+	}
+	
+	public void deleteChoosenEdges() {
+		for(Node<T> lucamariotti: mappa.keySet()) {
+			if (mappa.get(lucamariotti).getChosen()) {
+				this.deleteNode(lucamariotti);
+			}
+		}
 	}
 	
 	public Set<blackCircle> circles(){

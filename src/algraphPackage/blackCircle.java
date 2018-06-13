@@ -55,4 +55,19 @@ public class blackCircle{
 	public Integer getMaxList() {
 		return maxList;
 	}
+	
+	public void bind(blackCircle target) {
+		this.getList().add(new Arrow(this.getCircle().getCenterX(), this.getCircle().getCenterY()));
+		this.incrementMaxList();
+		this.getList().get(maxList-1).setLines(this, target);
+	}
+	
+	public void deleteLink (blackCircle target) {
+		for (Arrow a : list) {
+			if (a.getLine1().getEndX() == target.getCircle().getCenterX() && a.getLine1().getEndY() == target.getCircle().getCenterY())
+			{
+				list.remove(a);
+			}
+		}
+	}
 }
