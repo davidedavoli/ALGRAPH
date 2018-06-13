@@ -1,24 +1,23 @@
 package algraphPackage;
 
-import javafx.event.EventHandler;
 import javafx.scene.shape.Line;
-import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.layout.Pane;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.List;
-import java.util.ArrayList;
+
 import java.lang.Math;
 
 public class Arrow {
 	private Line line1, line2, line3;
+	private Boolean manageArcTan2, manageArcTan3;
 	
-	public Arrow() {
+	public Arrow(double centerX, double centerY) {
 		line1 = new Line();
 		line2 = new Line();
 		line3 = new Line();
+		manageArcTan2 = new Boolean(false);
+		manageArcTan3 = new Boolean(false);
+		line1.setStartX(centerX);
+		line1.setStartY(centerY);
+		line1.setEndX(centerX+1);
+		line1.setEndY(centerY);
 	}
 	
 	public Line getLine1() {
@@ -33,6 +32,17 @@ public class Arrow {
 		return line3;
 	}
 	
+	public void setLines(blackCircle parent, blackCircle target) {
+		line1 = new Line();
+		line1.setStartX(parent.getCircle().getCenterX());
+		line1.setStartY(parent.getCircle().getCenterY());
+		line1.setEndX(target.getCircle().getCenterX());
+		line1.setEndY(target.getCircle().getCenterY());
+		this.managePointer();
+		//missing arrow
+		
+	}
+	
 	public void managePointer() {
 		boolean segno2;
 		boolean segno3;
@@ -41,7 +51,15 @@ public class Arrow {
 		line3.setEndX(line1.getEndX());
 		line3.setEndY(line1.getEndY());
 		
+		double sinTeta= (double)(line1.getEndY()-line1.getStartY())/Math.sqrt(Math.pow((line1.getEndY()-line1.getStartY()),2)+ Math.pow((line1.getStartX()-line1.getEndX()), 2));
+		double cosTeta= (double)(line1.getEndX()-line1.getStartX())/Math.sqrt(Math.pow((line1.getEndY()-line1.getStartY()),2)+ Math.pow((line1.getStartX()-line1.getEndX()), 2));
 		double tanTeta = (double)(line1.getStartY()-line1.getEndY())/(line1.getStartX()-line1.getEndX());
+		
+		line2.setEndX(line1.getEndX()-10*cosTeta);
+		line2.setEndY(line1.getEndY()-10*sinTeta);
+		line3.setEndX(line1.getEndX()-10*cosTeta);
+		line3.setEndY(line1.getEndY()-10*sinTeta);
+		
 		double angle = Math.atan(tanTeta);
 		double angle2 = angle + Math.PI/4;
 		double angle3 = angle - Math.PI/4;
@@ -88,7 +106,5 @@ public class Arrow {
 			line3.setStartY(line3.getEndY()+(10/Math.sqrt(Math.pow(tanTeta3, 2)+1))*tanTeta3);
 		}
 	}
-	
-	
 	
 }

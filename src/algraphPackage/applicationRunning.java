@@ -95,13 +95,14 @@ public class applicationRunning{
     	
         controller.addButtonController(button,pane);
         controller.manageButtonController(button4);
+        controller.removeButtonController(button2);
     	
     	
     	vbox.getChildren().addAll(menuBar,hbox,pane);
     	
-    	String css = this.getClass().getResource("style.css").toExternalForm();
+    	//String css = this.getClass().getResource("style.css").toExternalForm();
     	Scene scene=new Scene(vbox);
-    	scene.getStylesheets().add(css);
+    	//scene.getStylesheets().add(css);
     	stage2.setScene(scene);
     	stage2.show();
     }
