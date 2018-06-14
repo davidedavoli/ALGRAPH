@@ -54,6 +54,7 @@ public class applicationRunning{
 	
 	public void mainPage()
     {
+		String css = this.getClass().getResource("../style.css").toExternalForm();
 		stage2 = new Stage();
     	stage2.setMaximized(true);
     	stage2.setTitle("Algraph");
@@ -62,22 +63,27 @@ public class applicationRunning{
     	final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
     	
-    	menu1.getItems().add(menuItem);
+    	menuItem.getStyleClass().add(css);
     	
+    	menu1.getItems().add(menuItem);
     	MenuBar menuBar = new MenuBar();
     	menuBar.getMenus().addAll(menu1, menu2, menu3);
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove node");
     	Button button3=new Button("Apply algorithm");
     	Button button4=new Button("Move arrows");
-    	button.setPadding(new Insets(10,10,10,10));
+    	button.getStylesheets().add(css);
+    	button2.getStylesheets().add(css);
+    	button3.getStylesheets().add(css);
+    	button4.getStylesheets().add(css);
+    	/*button.setPadding(new Insets(10,10,10,10));
     	button2.setPadding(new Insets(10,10,10,10));
     	button3.setPadding(new Insets(10,10,10,10));
     	button4.setPadding(new Insets(10,10,10,10));
     	button.setMinWidth(130);
     	button2.setMinWidth(130);
     	button3.setMinWidth(130);
-    	button4.setMinWidth(130);
+    	button4.setMinWidth(130);*/
     	VBox vbox=new VBox();
     	
     	HBox hbox=new HBox();
@@ -99,10 +105,9 @@ public class applicationRunning{
     	
     	
     	vbox.getChildren().addAll(menuBar,hbox,pane);
-    	
-    	//String css = this.getClass().getResource("style.css").toExternalForm();
+  
     	Scene scene=new Scene(vbox);
-    	//scene.getStylesheets().add(css);
+    	scene.getStylesheets().add(css);
     	stage2.setScene(scene);
     	stage2.show();
     }
