@@ -56,10 +56,9 @@ public class blackCircle{
 		return maxList;
 	}
 	
-	public void bind(blackCircle target) {
-		this.getList().add(new Arrow(this.getCircle().getCenterX(), this.getCircle().getCenterY()));
+	public void bind(blackCircle target, String label) {
+		this.getList().add(new Arrow(this, target, label));
 		this.incrementMaxList();
-		this.getList().get(maxList-1).setLines(this, target);
 	}
 	
 	public void deleteLink (blackCircle target) {

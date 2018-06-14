@@ -99,6 +99,7 @@ public class Controller{
 						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine1());
 						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine2());
 						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine3());
+						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getText());
 						draggedLine = true;
 					}
 					pane.setOnMouseClicked(e -> {

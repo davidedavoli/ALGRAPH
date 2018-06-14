@@ -1,14 +1,19 @@
 package algraphPackage;
 
-import javafx.scene.control.Label;
+import javafx.geometry.VPos;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextBoundsType;
 
 import java.lang.Math;
+import java.time.format.TextStyle;
 
 public class Arrow {
 	private Line line1, line2, line3;
 	private Boolean manageArcTan2, manageArcTan3;
-	public Label label;
+	public Text label;
 	
 	public Arrow(double centerX, double centerY) {
 		line1 = new Line();
@@ -20,14 +25,35 @@ public class Arrow {
 		line1.setStartY(centerY);
 		line1.setEndX(centerX+1);
 		line1.setEndY(centerY);
-		label=new Label();
-		label.setLayoutX(centerX);
-		label.setLayoutY(centerY);
-		label.setText("");
+		label=new Text();
+		label.setX(centerX);
+		label.setY(centerY);
+		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\n");
+		label.setTextAlignment(TextAlignment.CENTER);
+	}
+	
+	public Arrow(blackCircle parent, blackCircle target, String l) {
+		line1 = new Line();
+		line2 = new Line();
+		line3 = new Line();
+		manageArcTan2 = new Boolean(false);
+		manageArcTan3 = new Boolean(false);
+		line1.setStartX(parent.getCircle().getCenterX());
+		line1.setStartY(parent.getCircle().getCenterY());
+		line1.setStartX(parent.getCircle().getCenterX());
+		line1.setStartY(parent.getCircle().getCenterY());
+		label=new Text();
+		label.setX((line1.getEndX()-line1.getEndX())/2);
+		label.setY((line1.getEndY()-line1.getEndY())/2);
+		label.setText(l);
 	}
 	
 	public Line getLine1() {
 		return line1;
+	}
+	
+	public Text getText() {
+		return label;
 	}
 	
 	public Line getLine2() {
@@ -69,6 +95,9 @@ public class Arrow {
 		line2.setEndY(line1.getEndY()-10*sinTeta);
 		line3.setEndX(line1.getEndX()-10*cosTeta);
 		line3.setEndY(line1.getEndY()-10*sinTeta);
+
+		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2);
+		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2);
 		
 		double angle = Math.atan(tanTeta);
 		double angle2 = angle + Math.PI/4;

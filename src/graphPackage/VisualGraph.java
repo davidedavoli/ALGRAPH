@@ -18,7 +18,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
-				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo));
+				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo), G.w(lucamariotti, lucacontalbo).toString());
 				
 			}
 		}
@@ -45,7 +45,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 
 	public void insertEdge(Node<T> u, Node<T> v) {
 		
-		mappa.get(u).bind(mappa.get(v));
+		mappa.get(u).bind(mappa.get(v), G.w(u, v).toString());
 		
 		
 	}
