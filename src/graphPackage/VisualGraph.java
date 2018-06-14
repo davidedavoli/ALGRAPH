@@ -71,5 +71,21 @@ public class VisualGraph<T  extends Comparable<T>> {
 		return G; 
 	}
 	
+	public int countSelected() {//conta i nodi selezionati 
+		int c=0;
+		for (blackCircle b: mappa.values()) {
+			if (b.getChosen()==true)
+				c++;
+		}
+		return c;
+	}
 	
+	public TreeSet<blackCircle> selectedCircles(){//ritorna i nodi selezionati
+		TreeSet<blackCircle> set=new TreeSet<blackCircle>(); 
+		for (blackCircle b: mappa.values()) {
+			if (b.getChosen()==true)
+				set.add(b);
+		}
+		return set;
+	}
 }
