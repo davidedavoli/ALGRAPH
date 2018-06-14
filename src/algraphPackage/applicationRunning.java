@@ -28,6 +28,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ListView;
+import javafx.collections.ObservableList;
+import javafx.collections.*;
 
 public class applicationRunning{
 	
@@ -103,9 +106,15 @@ public class applicationRunning{
         controller.manageButtonController(button4);
         controller.removeButtonController(button2);
     	
+        ListView<String> list = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList (
+            "Single", "Double", "Suite", "Family App","culo","tette","altroculo");
+        list.setItems(items);
+        list.getStylesheets().add(css);
+        items.add("ilmiopene");
     	
-    	vbox.getChildren().addAll(menuBar,hbox,pane);
-  
+    	vbox.getChildren().addAll(menuBar,hbox,pane,list);
+    	
     	Scene scene=new Scene(vbox);
     	scene.getStylesheets().add(css);
     	stage2.setScene(scene);

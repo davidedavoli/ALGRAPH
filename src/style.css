@@ -1,38 +1,4 @@
-.root{
-    -fx-font-size: 12pt;
-    -fx-font-family: "Calibri";
-    -fx-base: red;
-    -fx-background: white;
-    -fx-focus-color: yellow;
-}
-
-.button{
-	-fx-font-family: "Arial";
-	-fx-background-color: #263238;
-    -fx-text-fill: white;
-    -fx-border-color: white;
-    -fx-border-radius: 3;
-    -fx-border-width: 1;
-    -fx-border-insets: -1
-}
-.button:hover {
-    -fx-background-color: #455a64;
-}
-
-.button:pressed, .button:default:hover:pressed {
-  -fx-background-color: white;
-  -fx-text-fill: #1d1d1d;
-}
-
-.button:focused {
-    -fx-border-color: #455a64, white;
-    -fx-border-width: 1, 1;
-    -fx-border-style: solid, segments(1, 1);
-    -fx-border-radius: 1;
-    -fx-border-insets: 1 1 1 1, 0;
-}
-
-/* VARIABLE DEFINITIONS: Only these 4 variables have to be adjusted, the rest is copy-paste */
+/* VARIABLE DEFINITIONS */
 * {
     -fx-my-menu-color: #263238;                  
     -fx-my-menu-color-highlighted: #455a64;      
@@ -40,7 +6,41 @@
     -fx-my-menu-font-color-highlighted: #FFFFFF; 
    }
 
-/* MENU BAR + Top-level MENU BUTTONS */
+
+
+.root{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Verdana";
+    -fx-base: -fx-my-menu-color;
+    -fx-background: -fx-my-menu-font-color;
+}
+
+.button{
+	-fx-font-family: "Arial";
+	-fx-background-color: -fx-my-menu-color;
+    -fx-text-fill: -fx-my-menu-font-color;
+    -fx-border-color: -fx-my-menu-font-color;
+    -fx-border-radius: 3;
+    -fx-border-width: 1;
+    -fx-border-insets: -1
+}
+.button:hover {
+    -fx-background-color: -fx-my-menu-color-highlighted;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: -fx-my-menu-font-color;
+  -fx-text-fill: #1d1d1d;
+}
+
+.button:focused {
+    -fx-border-color: -fx-my-menu-color-highlighted, -fx-my-menu-font-color;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 1;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
 /* The menu bar itself */    
 .menu-bar {
     -fx-background-color: -fx-my-menu-color;
@@ -61,48 +61,64 @@
     -fx-opacity: 1.0;
 }
 
-/*** Top-level menu itself (selected / hovered) ***/
+/* Top-level menu itself (selected / hovered) */
 .menu-bar > .container > .menu-button:hover,
 .menu-bar > .container > .menu-button:focused,
 .menu-bar > .container > .menu-button:showing {
     -fx-background-color: -fx-my-menu-color-highlighted;
 }
 
-/*** Top-level menu's label (selected / hovered) ***/
+/* Top-level menu's label (selected / hovered) */
 .menu-bar > .container > .menu-button:hover > .label,
 .menu-bar > .container > .menu-button:focused > .label,
 .menu-bar > .container > .menu-button:showing > .label {
     -fx-text-fill: -fx-my-menu-font-color-highlighted;
 }
 
-/* MENU ITEM (children of a MENU BUTTON) */
-/*** The item itself (not hovered / focused) ***/    
+/* The item itself (not hovered / focused) */    
 .menu-item {
     -fx-background-color: -fx-my-menu-color; 
 }
 
-/*** The item's label (not hovered / focused) ***/   
+/* The item's label (not hovered / focused) */   
 .menu-item .label {
     -fx-text-fill: -fx-my-menu-font-color;
 }
 
-/*** The item's label (disabled) ***/   
+/* The item's label (disabled) */   
 .menu-item .label:disabled {
     -fx-opacity: 1.0;
 }    
 
-/*** The item itself (hovered / focused) ***/    
+/* The item itself (hovered / focused) */    
 .menu-item:focused, .menu-item:hovered {
     -fx-background-color: -fx-my-menu-color-highlighted; 
 }
 
-/*** The item's label (hovered / focused) ***/  
+/* The item's label (hovered / focused) */  
 .menu-item:focused .label, .menu-item:hovered .label {
     -fx-text-fill: -fx-my-menu-font-color-highlighted;
 }
 
-/* CONTEXT MENU */
-/*** The context menu that contains a menu's menu items ***/  
+/* The context menu that contains a menu's menu items */  
 .context-menu {
     -fx-background-color: -fx-my-menu-color; 
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #b8a194;  /*linear-gradient(#c2cfd6 0%, #a3b7c2 25%, #859fad 75%, #678898 100%);*/
+    -fx-text-fill: -fx-my-menu-font-color;
+}
+
+.list-cell:even {
+    -fx-background-color: #678898
+}
+
+.list-cell:odd {
+    -fx-background-color: #c2cfd6;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: -fx-my-menu-color-highlighted;
+    -fx-text-fill: -fx-my-menu-font-color;
 }
