@@ -33,6 +33,41 @@ public class Arrow {
 		label.setX(centerX-label.getLayoutBounds().getWidth()/2);
 	}
 	
+	
+	public void setStartX(double x) {
+		line1.setStartX(x);
+		managePointer();
+	}
+	public void setEndX(double x) {
+		line1.setEndX(x);
+		managePointer();
+
+	}
+	public void setStartY(double y) {
+		line1.setStartY(y);
+		managePointer();
+
+	}
+	public void setEndY(double y) {
+		line1.setEndY(y);
+		managePointer();
+
+	}
+	
+	public double getStartX() {
+		return line1.getStartX();
+	}
+	public double getStartY() {
+		return line1.getStartY();
+	}
+	public double getEndX() {
+		return line1.getEndX();
+	}
+	public double getEndY() {
+		return line1.getEndY();
+	}
+	
+	
 	public Arrow(blackCircle parent, blackCircle target, String l) {
 		line1 = new Line();
 		line2 = new Line();
@@ -41,12 +76,13 @@ public class Arrow {
 		manageArcTan3 = new Boolean(false);
 		line1.setStartX(parent.getCircle().getCenterX());
 		line1.setStartY(parent.getCircle().getCenterY());
-		line1.setStartX(parent.getCircle().getCenterX());
-		line1.setStartY(parent.getCircle().getCenterY());
+		line1.setEndX(target.getCircle().getCenterX());
+		line1.setEndY(target.getCircle().getCenterY());
 		label=new Text();
 		label.setX((line1.getEndX()-line1.getEndX())/2);
 		label.setY((line1.getEndY()-line1.getEndY())/2);
 		label.setText(l);
+		managePointer();
 	}
 	
 	public Line getLine1() {

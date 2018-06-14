@@ -82,7 +82,7 @@ public class Controller{
 				if (!mode) {
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
-					for (Arrow o : blackcircle.getList()) {
+					for (Arrow o : blackcircle.getOutList()) {
 						o.getLine1().setStartX(event.getX());
 						o.getLine1().setStartY(event.getY());
 					}
@@ -93,9 +93,9 @@ public class Controller{
 				}
 				else {
 					if (!draggedLine) {
-						blackcircle.getList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
+						blackcircle.getOutList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
 						blackcircle.incrementMaxList();
-						blackcircle.getList().get(blackcircle.getMaxList()-1).pushInPane(pane);
+						blackcircle.getOutList().get(blackcircle.getMaxList()-1).pushInPane(pane);
 						draggedLine = true;
 					}
 					pane.setOnMouseClicked(e -> {
@@ -104,14 +104,14 @@ public class Controller{
 						
 						draggedLine = false;
 					});
-					Line line = blackcircle.getList().get(blackcircle.getMaxList()-1).getLine1();
+					Line line = blackcircle.getOutList().get(blackcircle.getMaxList()-1).getLine1();
 					line.setStartX(blackcircle.getCircle().getCenterX());
 					line.setStartY(blackcircle.getCircle().getCenterY());
 					
 					line.setEndX(event.getX());
 					line.setEndY(event.getY());
 					
-					blackcircle.getList().get(blackcircle.getMaxList()-1).managePointer();
+					blackcircle.getOutList().get(blackcircle.getMaxList()-1).managePointer();
             	
 					boundsController(blackcircle, pane);
             	
@@ -161,10 +161,8 @@ public class Controller{
 			circle.setCenterY(bounds.getMinY()+circle.getRadius());
 		}
 		
-		Integer max = blackcircle.getMaxList()-1;
-		if (max>=0) {
-		Line line = blackcircle.getList().get(max).getLine1();
-		
+		for(Arrow line: blackcircle.getOutList())
+		{
 		if (line.getEndX() > (bounds.getMaxX()-circle.getRadius())) {
 			line.setEndX(bounds.getMaxX()-circle.getRadius());
 		}
@@ -178,8 +176,24 @@ public class Controller{
 			line.setEndY(bounds.getMinY()+circle.getRadius());
 		}
 		}
-	}
 	
+	for(Arrow line: blackcircle.getOutList()) {
+		if (line.getStartX() > (bounds.getMaxX()-circle.getRadius())) {
+			line.setStartX(bounds.getMaxX()-circle.getRadius());
+		}
+		if (line.getStartX() < (bounds.getMinX()+circle.getRadius())) {
+			line.setStartX(bounds.getMinX()+circle.getRadius());
+		}
+		if (line.getStartY() > (bounds.getMaxY()-circle.getRadius())) {
+			line.setStartY(bounds.getMaxY()-circle.getRadius());
+		}
+		if (line.getStartY() < (bounds.getMinY()+circle.getRadius())) {
+			line.setStartY(bounds.getMinY()+circle.getRadius());
+		}
+		
+		}
+	blackcircle.moveText();
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////
 	

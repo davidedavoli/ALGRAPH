@@ -181,11 +181,15 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		
 		
 	}
-	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw) {
+	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw, boolean dense) {
 		Random rand = new Random();
 		int nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;
 		int nedges;
+		if (dense)
 		nedges=rand.nextInt(nnodes*(nnodes-1)-(nnodes-1))+nnodes-1;
+		else
+			nedges=rand.nextInt(nnodes*3)+nnodes-1;
+			
 		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
 		for (Integer i=0; i<nnodes; i++) {
 			nodes.put(i, new Node<T>((T)i.toString()));
