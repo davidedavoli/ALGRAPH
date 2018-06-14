@@ -1,5 +1,7 @@
 package algraphPackage;
 
+import java.io.File;
+
 import graphPackage.Graph;
 import graphPackage.VisualGraph;
 import javafx.application.Application;
@@ -14,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.geometry.Insets;
@@ -45,13 +48,22 @@ public class applicationRunning{
 	
 	public applicationRunning() {
 		Graph<String> G=new Graph<String>();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(new java.io.File("."));
 		controller=new Controller();
 		menu();
 		if (start==1) {
 			G.randomGraph(10, 5, 20, 10, false);
 			G.print();
 		} //random graph
-		else if (start==2) {} //graph from file
+		else if (start==2) {
+			Stage fc=new Stage();
+			fc.setTitle("Input graph...");
+			File file = fileChooser.showOpenDialog(fc);
+            if (file != null) {
+                G.inGraph(file.getAbsolutePath());
+            }
+		} //graph from file
 		mainPage(G);
 	}
 	
@@ -128,8 +140,6 @@ public class applicationRunning{
 
 		visualGraph = new VisualGraph<String>(G, pane);
 		
-		System.out.println(stage.getWidth());
-		System.out.println(stage.getHeight());
 		Scene scene = new Scene(vbox);
 		scene.getStylesheets().add(css);
 
