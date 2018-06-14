@@ -20,7 +20,9 @@ public class blackCircle{
 	private List<Arrow> list;
 	private Integer maxList;
 	private Text text;
+	private Pane pane;
 	public blackCircle(Pane pane, String t) {
+		pane=pane;
 		text=new Text();
 		controller = new Controller();
 		list = new ArrayList<Arrow>();
@@ -36,6 +38,8 @@ public class blackCircle{
         text.setY(circle.getCenterY()-2*circle.getRadius());
         controller.circleOnMouseClickedController(this);
         controller.circleOnMouseDraggedController(this, pane);
+		pane.getChildren().add(this.getCircle());
+		pane.getChildren().add(this.getText());
 	}
 	
 	public List<Arrow> getList() {

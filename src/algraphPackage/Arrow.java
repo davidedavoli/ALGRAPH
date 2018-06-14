@@ -1,6 +1,7 @@
 package algraphPackage;
 
 import javafx.geometry.VPos;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -145,5 +146,10 @@ public class Arrow {
 			line3.setStartY(line3.getEndY()+(10/Math.sqrt(Math.pow(tanTeta3, 2)+1))*tanTeta3);
 		}
 	}
-	
+	public void pushInPane (Pane pane) {
+		pane.getChildren().add(getLine1());
+		pane.getChildren().add(getLine2());
+		pane.getChildren().add(getLine3());
+		pane.getChildren().add(getText());
+	}
 }
