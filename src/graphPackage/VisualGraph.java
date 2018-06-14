@@ -14,7 +14,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		super();
 		G=lucaserafini;
 		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(p));
+			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
@@ -27,7 +27,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 	public void insertNode(Node<T> u) {
 		// TODO Auto-generated method stub
 		G.insertNode(u);
-		mappa.put(u, new blackCircle(p));
+		mappa.put(u, new blackCircle(p, (String) u.getElement()));
 	}
 
 	public void deleteNode(Node<T> u) {

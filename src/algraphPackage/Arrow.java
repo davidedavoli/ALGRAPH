@@ -26,10 +26,10 @@ public class Arrow {
 		line1.setEndX(centerX+1);
 		line1.setEndY(centerY);
 		label=new Text();
-		label.setX(centerX);
 		label.setY(centerY);
-		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\n");
-		label.setTextAlignment(TextAlignment.CENTER);
+		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\nvucu");
+
+		label.setX(centerX-label.getLayoutBounds().getWidth()/2);
 	}
 	
 	public Arrow(blackCircle parent, blackCircle target, String l) {
@@ -96,7 +96,7 @@ public class Arrow {
 		line3.setEndX(line1.getEndX()-10*cosTeta);
 		line3.setEndY(line1.getEndY()-10*sinTeta);
 
-		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2);
+		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2-label.getLayoutBounds().getWidth()/2);
 		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2);
 		
 		double angle = Math.atan(tanTeta);

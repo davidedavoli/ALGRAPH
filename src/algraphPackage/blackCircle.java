@@ -2,6 +2,7 @@ package algraphPackage;
 
 import javafx.event.EventHandler;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -18,7 +19,9 @@ public class blackCircle{
 	private Boolean chosen;
 	private List<Arrow> list;
 	private Integer maxList;
-	public blackCircle(Pane pane) {
+	private Text text;
+	public blackCircle(Pane pane, String t) {
+		text=new Text();
 		controller = new Controller();
 		list = new ArrayList<Arrow>();
 		chosen = false;
@@ -28,12 +31,19 @@ public class blackCircle{
     	circle.setCursor(Cursor.MOVE);
         circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
         circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        text.setText(t);
+        text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
+        text.setY(circle.getCenterY()-2*circle.getRadius());
         controller.circleOnMouseClickedController(this);
         controller.circleOnMouseDraggedController(this, pane);
 	}
 	
 	public List<Arrow> getList() {
 		return list;
+	}
+	
+	public Text getText() {
+		return text;
 	}
 	
 	public Boolean getChosen() {
