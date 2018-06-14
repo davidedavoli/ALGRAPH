@@ -1,5 +1,6 @@
 package algraphPackage;
 
+import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
 import java.lang.Math;
@@ -7,6 +8,7 @@ import java.lang.Math;
 public class Arrow {
 	private Line line1, line2, line3;
 	private Boolean manageArcTan2, manageArcTan3;
+	public Label label;
 	
 	public Arrow(double centerX, double centerY) {
 		line1 = new Line();
@@ -18,6 +20,10 @@ public class Arrow {
 		line1.setStartY(centerY);
 		line1.setEndX(centerX+1);
 		line1.setEndY(centerY);
+		label=new Label();
+		label.setLayoutX(centerX);
+		label.setLayoutY(centerY);
+		label.setText("");
 	}
 	
 	public Line getLine1() {
@@ -30,6 +36,10 @@ public class Arrow {
 	
 	public Line getLine3() {
 		return line3;
+	}
+	
+	public void setText(String s) {
+		label.setText(s);
 	}
 	
 	public void setLines(blackCircle parent, blackCircle target) {
