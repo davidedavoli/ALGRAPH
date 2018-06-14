@@ -1,5 +1,7 @@
 package algraphPackage;
 
+import graphPackage.Graph;
+import graphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -37,14 +39,20 @@ public class applicationRunning{
 	private Stage stage,stage2;
 	private Integer start;
 	private Controller controller;
+	private VisualGraph<String> visualGraph;
+	
 	//variable for the graph
 	
 	public applicationRunning() {
+		Graph<String> G=new Graph<String>();
 		controller=new Controller();
 		menu();
-		if (start==1) {} //random graph
+		if (start==1) {
+			G.randomGraph(10, 5, 20, 10, false);
+			G.print();
+		} //random graph
 		else if (start==2) {} //graph from file
-		mainPage();
+		mainPage(G);
 	}
 	
 	public void setStart(Integer a) {
@@ -55,7 +63,7 @@ public class applicationRunning{
 		return stage;
 	}
 	
-	public void mainPage()
+	public void mainPage(Graph<String> G)
     {
 		String css = this.getClass().getResource("../style.css").toExternalForm();
 		stage2 = new Stage();
@@ -101,6 +109,8 @@ public class applicationRunning{
     	pane.setMinWidth(100);
     	pane.prefWidthProperty().bind(vbox.widthProperty());
     	pane.prefHeightProperty().bind(vbox.heightProperty());
+    
+    	
     	
         controller.addButtonController(button,pane);
         controller.manageButtonController(button4);
@@ -115,10 +125,19 @@ public class applicationRunning{
     	
     	vbox.getChildren().addAll(menuBar,hbox,pane,list);
     	
-    	Scene scene=new Scene(vbox);
-    	scene.getStylesheets().add(css);
+
+		visualGraph = new VisualGraph<String>(G, pane);
+		
+		System.out.println(stage.getWidth());
+		System.out.println(stage.getHeight());
+		Scene scene = new Scene(vbox);
+		scene.getStylesheets().add(css);
+
     	stage2.setScene(scene);
     	stage2.show();
+    	for (blackCircle b: visualGraph.circles()) {
+    	controller.boundsController(b, pane);
+    	}
     }
 	
     public void menu() {

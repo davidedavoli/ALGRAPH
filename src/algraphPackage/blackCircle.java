@@ -17,15 +17,17 @@ public class blackCircle{
 	private Circle circle;
 	private Controller controller;
 	private Boolean chosen;
-	private List<Arrow> list;
+	private List<Arrow> outList;
+	private List<Arrow> inList;
 	private Integer maxList;
 	private Text text;
 	private Pane pane;
 	public blackCircle(Pane pane, String t) {
-		pane=pane;
+		this.pane=pane;
 		text=new Text();
 		controller = new Controller();
-		list = new ArrayList<Arrow>();
+		outList = new ArrayList<Arrow>();
+		inList = new ArrayList<Arrow>();
 		chosen = false;
 		maxList = 0;
 		circle = new Circle(10);
@@ -42,8 +44,8 @@ public class blackCircle{
 		pane.getChildren().add(this.getText());
 	}
 	
-	public List<Arrow> getList() {
-		return list;
+	public List<Arrow> getOutList() {
+		return outList;
 	}
 	
 	public Text getText() {
@@ -71,15 +73,32 @@ public class blackCircle{
 	}
 	
 	public void bind(blackCircle target, String label) {
-		this.getList().add(new Arrow(this, target, label));
+		this.getOutList().add(new Arrow(this, target, label));
 		this.incrementMaxList();
+		this.outList.get(this.getMaxList()-1).pushInPane(pane);
+		target.getInList().add(this.getOutList().get(this.getOutList().size()-1));
 	}
 	
+	public List<Arrow> getInList() {
+		return inList;
+	}
+
+	public void setInList(List<Arrow> inList) {
+		this.inList = inList;
+	}
+
+	public void setOutList(List<Arrow> outList) {
+		this.outList = outList;
+	}
+	public void moveText() {
+		 text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
+	        text.setY(circle.getCenterY()-2*circle.getRadius());
+	}
 	public void deleteLink (blackCircle target) {
-		for (Arrow a : list) {
+		for (Arrow a : outList) {
 			if (a.getLine1().getEndX() == target.getCircle().getCenterX() && a.getLine1().getEndY() == target.getCircle().getCenterY())
 			{
-				list.remove(a);
+				outList.remove(a);
 			}
 		}
 	}

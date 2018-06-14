@@ -63,12 +63,8 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 	}
 	
-	public Set<blackCircle> circles(){
-		TreeSet<blackCircle> loquace=new TreeSet<blackCircle>();
-		for (Node<T> lambertosposini : mappa.keySet()) {
-			loquace.add(mappa.get(lambertosposini));
-		}
-		return loquace;
+	public Collection<blackCircle> circles(){
+		return mappa.values();
 	}
 	
 	public Graph<T> getGraph(){
