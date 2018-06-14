@@ -29,6 +29,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.Cursor;
 import javafx.scene.input.Dragboard;
 import javafx.scene.shape.Line;
+
+import java.awt.MenuItem;
 import java.lang.Boolean;
 import java.util.concurrent.atomic.AtomicBoolean;
 public class Controller{
@@ -73,7 +75,6 @@ public class Controller{
 		
 	}
 
-	
 	public void circleOnMouseDraggedController(blackCircle blackcircle, Pane pane) {
 		
 		blackcircle.getCircle().setOnMouseDragged(event -> {
