@@ -54,7 +54,7 @@ public class Controller{
 	
 	public void addButtonController(Button button, Pane pane) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane);
+			blackCircle blackcircle = new blackCircle(pane, "");
 			pane.getChildren().add(blackcircle.getCircle());
 			boundsController(blackcircle,pane);
     	});
