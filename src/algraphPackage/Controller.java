@@ -54,8 +54,7 @@ public class Controller{
 	
 	public void addButtonController(Button button, Pane pane) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane);
-			pane.getChildren().add(blackcircle.getCircle());
+			blackCircle blackcircle = new blackCircle(pane, "lollo");
 			boundsController(blackcircle,pane);
     	});
 	}
@@ -96,10 +95,7 @@ public class Controller{
 					if (!draggedLine) {
 						blackcircle.getList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
 						blackcircle.incrementMaxList();
-						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine1());
-						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine2());
-						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getLine3());
-						pane.getChildren().add(blackcircle.getList().get(blackcircle.getMaxList()-1).getText());
+						blackcircle.getList().get(blackcircle.getMaxList()-1).pushInPane(pane);
 						draggedLine = true;
 					}
 					pane.setOnMouseClicked(e -> {

@@ -1,6 +1,7 @@
 package algraphPackage;
 
 import javafx.geometry.VPos;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -26,10 +27,10 @@ public class Arrow {
 		line1.setEndX(centerX+1);
 		line1.setEndY(centerY);
 		label=new Text();
-		label.setX(centerX);
 		label.setY(centerY);
-		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\n");
-		label.setTextAlignment(TextAlignment.CENTER);
+		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\nvucu");
+
+		label.setX(centerX-label.getLayoutBounds().getWidth()/2);
 	}
 	
 	public Arrow(blackCircle parent, blackCircle target, String l) {
@@ -96,7 +97,7 @@ public class Arrow {
 		line3.setEndX(line1.getEndX()-10*cosTeta);
 		line3.setEndY(line1.getEndY()-10*sinTeta);
 
-		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2);
+		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2-label.getLayoutBounds().getWidth()/2);
 		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2);
 		
 		double angle = Math.atan(tanTeta);
@@ -145,5 +146,10 @@ public class Arrow {
 			line3.setStartY(line3.getEndY()+(10/Math.sqrt(Math.pow(tanTeta3, 2)+1))*tanTeta3);
 		}
 	}
-	
+	public void pushInPane (Pane pane) {
+		pane.getChildren().add(getLine1());
+		pane.getChildren().add(getLine2());
+		pane.getChildren().add(getLine3());
+		pane.getChildren().add(getText());
+	}
 }
