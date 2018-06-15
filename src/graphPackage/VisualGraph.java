@@ -1,6 +1,7 @@
 package graphPackage;
 import java.util.*;
 
+import algraphPackage.Arrow;
 import algraphPackage.blackCircle;
 import javafx.scene.layout.Pane;
 
@@ -31,7 +32,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 
 	public void deleteNode(Node<T> u) {
-		// TODO Auto-generated method stub
+		Arrow toRemove=null;
+		for (Node<T> lucaserafini : mappa.keySet()) {
+			for (Arrow a: mappa.get(lucaserafini).getInList()) {
+				if (a.getParent()==mappa.get(u)) {
+					toRemove=(a);
+				}
+			}
+			if(mappa.get(lucaserafini).getInList().contains(toRemove))
+			mappa.get(lucaserafini).getInList().remove(toRemove);
+		}
 		for (Node<T> lucaserafini : mappa.keySet()) {
 			for (Node<T> lucamariotti : G.adj(lucaserafini)) {
 				if (lucamariotti==u) {
@@ -55,12 +65,30 @@ public class VisualGraph<T  extends Comparable<T>> {
 		G.deleteEdge(u, v);
 	}
 	
-	public void deleteChoosenEdges() {
-		for(Node<T> lucamariotti: mappa.keySet()) {
-			if (mappa.get(lucamariotti).getChosen()) {
-				this.deleteNode(lucamariotti);
+	public void deleteChoosenNodes() {
+		Iterator<Node<T>> lucamariotti= mappa.keySet().iterator();
+		while( lucamariotti.hasNext()) {
+			Node<T> pollo=lucamariotti.next();
+			if (mappa.get(pollo).getChosen()) {
+				System.out.println(pollo.getElement());
+				this.deleteNode(pollo);
 			}
 		}
+		
+	}
+	
+	public void deleteChoosenNode() {
+		Node<T> toDelete=null;
+		for(Node<T> pollo: mappa.keySet()) {
+			if (mappa.get(pollo).getChosen()) {
+				System.out.println(pollo.getElement());
+				toDelete=pollo;
+			}
+		}
+		if (toDelete!=null)
+		this.deleteNode(toDelete);
+		if(this.countSelected()>0)
+		this.deleteChoosenNode();
 	}
 	
 	public Collection<blackCircle> circles(){
@@ -87,5 +115,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 				set.add(b);
 		}
 		return set;
+	}
+	public void visualize() {
+		for (blackCircle b: mappa.values()) {
+			b.pushInPane();
+		}
+		for (blackCircle b: mappa.values()) {
+		for (Arrow a: b.getOutList()) {
+			a.pushInPane(b.getPane());
+		}
+				
+		}
 	}
 }

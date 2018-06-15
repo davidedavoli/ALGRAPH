@@ -17,6 +17,8 @@ public class Arrow {
 	private Boolean manageArcTan2, manageArcTan3;
 	private Controller controller;
 	public Text label;
+	private blackCircle parent;
+	private blackCircle target;
 	
 	/*public Arrow(double centerX, double centerY) {
 		line1 = new Line();
@@ -36,6 +38,18 @@ public class Arrow {
 	}*/
 	
 	
+	public blackCircle getParent() {
+		return parent;
+	}
+	public void setParent(blackCircle parent) {
+		this.parent = parent;
+	}
+	public blackCircle getTarget() {
+		return target;
+	}
+	public void setTarget(blackCircle target) {
+		this.target = target;
+	}
 	public void setStartX(double x) {
 		line1.setStartX(x);
 		managePointer();
@@ -68,7 +82,7 @@ public class Arrow {
 	public double getEndY() {
 		return line1.getEndY();
 	}
-	
+	/*
 	public Arrow(Circle parent, Circle target, String l) {
 		line1 = new Line();
 		line2 = new Line();
@@ -85,12 +99,14 @@ public class Arrow {
 		label.setText(l);
 		controller.setOnArrowTextClickedController(this);
 		managePointer();
-	}
+	}*/
 	
 	public Arrow(blackCircle parent, blackCircle target, String l) {
 		line1 = new Line();
 		line2 = new Line();
 		line3 = new Line();
+		this.setParent(parent);
+		this.setTarget(target);
 		controller = new Controller();
 		manageArcTan2 = new Boolean(false);
 		manageArcTan3 = new Boolean(false);
@@ -155,7 +171,7 @@ public class Arrow {
 		line3.setEndY(line1.getEndY()-10*sinTeta);
 
 		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2-label.getLayoutBounds().getWidth()/2);
-		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2);
+		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2-10*(line1.getEndX()-line1.getStartX())/Math.abs((line1.getEndX()-line1.getStartX())));
 		
 		double angle = Math.atan(tanTeta);
 		double angle2 = angle + Math.PI/4;
