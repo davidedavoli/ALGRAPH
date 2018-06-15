@@ -1,6 +1,7 @@
 package algraphPackage;
 
 import javafx.application.Application;
+import graphPackage.*;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Platform;
@@ -68,8 +69,9 @@ public class Controller{
 	
 	public void addButtonController(Button button, Pane pane) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane);
+			blackCircle blackcircle = new blackCircle(pane,"culo");
 			boundsController(blackcircle,pane);
+			//items.add("Aggiunto un nodo"); //non ho la più pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
     	});
 	}
 	
