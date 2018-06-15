@@ -1,8 +1,10 @@
 package algraphPackage;
 
+import javafx.event.ActionEvent;
 import java.io.File;
 
-
+import graphPackage.Graph;
+import graphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -34,6 +36,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ListView;
 import javafx.collections.ObservableList;
+import javafx.css.Styleable;
 import javafx.collections.*;
 import graphPackage.*;
 
@@ -57,15 +60,22 @@ public class applicationRunning{
 			G.print();
 		} //random graph
 		else if (start==2) {
-			Stage fc=new Stage();
-			fc.setTitle("Input graph...");
-			File file = fileChooser.showOpenDialog(fc);
-            if (file != null) {
-                G.inGraph(file.getAbsolutePath());
-            }
+			graphFromFile(G);
 		} //graph from file
 		mainPage(G);
 	}
+	
+	public static void graphFromFile(Graph<String> G) {
+ 		FileChooser fileChooser = new FileChooser();
+ 		fileChooser.setInitialDirectory(new java.io.File("."));
+ 		Stage fc=new Stage();
+ 		fc.setTitle("Input graph...");
+ 		File file = fileChooser.showOpenDialog(fc);
+         if (file != null) {
+             G.inGraph(file.getAbsolutePath());
+         }
+ 	}
+
 	
 	public void setStart(Integer a) {
 		start=a;
@@ -85,10 +95,12 @@ public class applicationRunning{
     	final Menu menu2 = new Menu("Options");
     	final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
+    	final MenuItem otherMenuItem = new MenuItem("Save");
     	
-    	menuItem.getStyleClass().add(css);
+    	((Styleable)menuItem).getStyleClass().add(css);
     	
     	menu1.getItems().add(menuItem);
+    	menu1.getItems().add(otherMenuItem);
     	MenuBar menuBar = new MenuBar();
     	menuBar.getMenus().addAll(menu1, menu2, menu3);
     	Button button=new Button("Add node");
@@ -122,11 +134,26 @@ public class applicationRunning{
     	pane.prefWidthProperty().bind(vbox.widthProperty());
     	pane.prefHeightProperty().bind(vbox.heightProperty());
     
-    	
+
+		visualGraph = new VisualGraph<String>(G, pane);
     	
         controller.addButtonController(button,pane);
         controller.linkButtonController(button4, visualGraph);
-        controller.removeButtonController(button2);
+        controller.removeButtonController(button2, visualGraph, pane);
+        
+        controller.setOnSave(otherMenuItem, G);
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+ 			
+ 			@Override
+ 			public void handle(ActionEvent event) {
+ 				applicationRunning.graphFromFile(G);
+ 				pane.getChildren().remove(0, pane.getChildren().size());
+ 		        visualGraph=new VisualGraph<String>(G, pane);
+ 		        for (blackCircle b: visualGraph.circles()) {
+ 			    	controller.boundsController(b, pane);
+ 			    	}
+ 		                }
+ 		});
     	
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -138,7 +165,6 @@ public class applicationRunning{
     	vbox.getChildren().addAll(menuBar,hbox,pane,list);
     	
 
-		visualGraph = new VisualGraph<String>(G, pane);
 		
 		Scene scene = new Scene(vbox);
 		scene.getStylesheets().add(css);

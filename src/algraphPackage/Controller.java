@@ -5,6 +5,7 @@ import graphPackage.*;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.geometry.Bounds;
@@ -30,8 +32,13 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.Cursor;
 import javafx.scene.input.Dragboard;
 import javafx.scene.shape.Line;
+
+import java.io.File;
 import java.lang.Boolean;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import graphPackage.Graph;
+import graphPackage.VisualGraph;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.*;
@@ -108,6 +115,36 @@ public class Controller{
 		
 	}
 
+	public void setOnSave(MenuItem save, Graph<String> G) {
+		save.setOnAction(new EventHandler<ActionEvent>() {
+ 			
+ 			@Override
+ 			public void handle(ActionEvent event) {
+ 				// TODO Auto-generated method stub
+ 				 FileChooser fileChooser = new FileChooser();
+ 				 fileChooser.setInitialDirectory(new File("."));
+ 		           fileChooser.setTitle("Save graph...");
+ 		           File file = fileChooser.showSaveDialog(new Stage());
+ 		           if (file != null) {
+ 		                	G.outGraph(file.getPath().toString());
+ 		                
+ 		                }
+ 			}
+ 		});
+	}
+	
+	public boolean setOnOpen(MenuItem menuItem, Graph<String> G, Pane pane) {
+		
+		menuItem.setOnAction(new EventHandler<ActionEvent>() {
+ 			
+ 			@Override
+ 			public void handle(ActionEvent event) {
+ 				applicationRunning.graphFromFile(G);
+ 				pane.getChildren().remove(0, pane.getChildren().size());
+ 		                }
+ 		});
+		return true;
+	}
 	public void setOnArrowTextClickedController(Arrow arrow) {
 		arrow.getText().setOnMouseClicked(event -> {
 			Stage stage = new Stage();
@@ -210,7 +247,7 @@ public class Controller{
 		blackcircle.getCircle().setOnMouseClicked(event -> {
 			if (!draggedEvent) {
 				if (mode) {
-
+					System.out.println("cavallo");
 				if (!blackcircle.getChosen()) {
 					if (c==0) {
 						b1 = new blackCircle();
@@ -253,9 +290,11 @@ public class Controller{
 		});
 	}
 	
-	public void removeButtonController(Button button) {
+	public void removeButtonController(Button button, VisualGraph<String> visualGraph, Pane pane) {
 		button.setOnMouseClicked(event -> {
-			//function that looks for selected circles needed
+			visualGraph.deleteChoosenNode();
+			pane.getChildren().remove(0, pane.getChildren().size());
+			visualGraph.visualize();
 		});
 		
 	}

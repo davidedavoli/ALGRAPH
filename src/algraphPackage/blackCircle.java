@@ -9,8 +9,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.Pane;
 import java.util.concurrent.ThreadLocalRandom;
+
+import graphPackage.Node;
+
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 
 public class blackCircle{
@@ -49,6 +53,38 @@ public class blackCircle{
 		pane.getChildren().add(this.getText());
 	}
 	
+	public blackCircle(Pane pane, String string) {
+		c=c+1;
+		this.pane=pane;
+		text=new Text();
+		controller = new Controller();
+		outList = new ArrayList<Arrow>();
+		inList = new ArrayList<Arrow>();
+		chosen = false;
+		maxList = new Integer(0);
+		circle = new Circle(10);
+		circle.setFill(Color.BLACK);
+    	circle.setCursor(Cursor.MOVE);
+        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
+        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        text.setText(string);
+        text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
+        text.setY(circle.getCenterY()-2*circle.getRadius());
+        controller.circleOnMouseClickedController(this,pane);
+        controller.circleOnMouseDraggedController(this, pane);
+        controller.setOnCircleTextClickedController(this);
+		pane.getChildren().add(this.getCircle());
+		pane.getChildren().add(this.getText());
+	}
+	
+	public void pushInPane() {
+		pane.getChildren().add(this.getCircle());
+		pane.getChildren().add(this.getText());
+	}
+	
+	public Pane getPane() {
+		return pane;
+	}
 	public List<Arrow> getOutList() {
 		return outList;
 	}
@@ -105,11 +141,15 @@ public class blackCircle{
 	        text.setY(circle.getCenterY()-2*circle.getRadius());
 	}
 	public void deleteLink (blackCircle target) {
-		for (Arrow a : outList) {
-			if (a.getLine1().getEndX() == target.getCircle().getCenterX() && a.getLine1().getEndY() == target.getCircle().getCenterY())
+		Iterator<Arrow> a = this.outList.iterator();
+		List<Arrow> toRemove=new ArrayList<Arrow>();
+		while (a.hasNext()) {
+			Arrow p=a.next();
+			if (p.getTarget()==target)
 			{
-				outList.remove(a);
+				toRemove.add(p);
 			}
 		}
+		outList.removeAll(toRemove);
 	}
 }
