@@ -1,5 +1,6 @@
 package graphPackage;
 import java.util.*;
+import algraphPackage.*;
 
 import algraphPackage.blackCircle;
 import javafx.scene.layout.Pane;

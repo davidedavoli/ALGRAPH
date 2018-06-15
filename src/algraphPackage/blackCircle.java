@@ -24,10 +24,11 @@ public class blackCircle{
 	private Text text;
 	private Pane pane;
 	public blackCircle() {}
-	public blackCircle(Pane pane) {
+	public blackCircle(Pane pane, String name) {
 		c=c+1;
 		this.pane=pane;
 		text=new Text();
+		setText(name);
 		controller = new Controller();
 		outList = new ArrayList<Arrow>();
 		inList = new ArrayList<Arrow>();
