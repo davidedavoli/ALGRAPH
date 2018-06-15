@@ -2,12 +2,9 @@ package algraphPackage;
 
 import java.io.File;
 
-import graphPackage.Graph;
-import graphPackage.Node;
-import graphPackage.VisualGraph;
+
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -50,6 +47,8 @@ public class applicationRunning{
 	
 	public applicationRunning() {
 		Graph<String> G=new Graph<String>();
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(new java.io.File("."));
 		controller=new Controller();
 		menu();
 		if (start==1) {
@@ -57,20 +56,16 @@ public class applicationRunning{
 			G.print();
 		} //random graph
 		else if (start==2) {
-			graphFromFile(G);
+			Stage fc=new Stage();
+			fc.setTitle("Input graph...");
+			File file = fileChooser.showOpenDialog(fc);
+            if (file != null) {
+                G.inGraph(file.getAbsolutePath());
+            }
 		} //graph from file
 		mainPage(G);
 	}
-	public void graphFromFile(Graph<String> G) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new java.io.File("."));
-		Stage fc=new Stage();
-		fc.setTitle("Input graph...");
-		File file = fileChooser.showOpenDialog(fc);
-        if (file != null) {
-            G.inGraph(file.getAbsolutePath());
-        }
-	}
+	
 	public void setStart(Integer a) {
 		start=a;
 	}
@@ -89,13 +84,10 @@ public class applicationRunning{
     	final Menu menu2 = new Menu("Options");
     	final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
-    	final MenuItem otherMenuItem = new MenuItem("Save");
     	
     	menuItem.getStyleClass().add(css);
     	
     	menu1.getItems().add(menuItem);
-    	menu1.getItems().add(otherMenuItem);
-    	
     	MenuBar menuBar = new MenuBar();
     	menuBar.getMenus().addAll(menu1, menu2, menu3);
     	Button button=new Button("Add node");
@@ -132,39 +124,8 @@ public class applicationRunning{
     	
     	
         controller.addButtonController(button,pane);
-        controller.manageButtonController(button4);
+        controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2);
-        
-        otherMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				 FileChooser fileChooser = new FileChooser();
-				 fileChooser.setInitialDirectory(new File("."));
-		           fileChooser.setTitle("Save graph...");
-		           File file = fileChooser.showSaveDialog(new Stage());
-		           if (file != null) {
-		                	G.outGraph(file.getPath().toString());
-		                
-		                }
-			}
-		});
-    	menuItem.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				graphFromFile(G);
-					pane.getChildren().remove(0, pane.getChildren().size()-1);
-				visualGraph=new VisualGraph<String>(G, pane);
-
-		    	for (blackCircle b: visualGraph.circles()) {
-		    	controller.boundsController(b, pane);
-		    	}
-		                }
-		});
-    	
-    	
     	
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (

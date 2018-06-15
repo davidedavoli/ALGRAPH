@@ -29,19 +29,24 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.Cursor;
 import javafx.scene.input.Dragboard;
 import javafx.scene.shape.Line;
-
-import java.awt.MenuItem;
 import java.lang.Boolean;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import java.util.*;
 public class Controller{
 	
-	private Boolean draggedEvent,draggedLine;
-	private Boolean mode;
+	private Boolean draggedEvent,draggedLine,mode,b1Exists,b2Exists;
+	public static blackCircle b1;
+	public static blackCircle b2;
+	private static int c=0;
 	
 	public Controller() {
 		draggedEvent = new Boolean(false);
 		draggedLine = new Boolean(false);
-		mode = new Boolean(true);
+		mode = new Boolean(false);
+		b1Exists = new Boolean(false);
+		b2Exists = new Boolean(false);
 	}
 	 
 	public void setOnMouseTextController(Text text, Integer i, applicationRunning a) {
@@ -56,43 +61,118 @@ public class Controller{
 	
 	public void addButtonController(Button button, Pane pane) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane, "lollo");
+			blackCircle blackcircle = new blackCircle(pane);
 			boundsController(blackcircle,pane);
     	});
 	}
 	
-	public void manageButtonController(Button button) {
-		button.setOnMouseClicked(event ->{
+	public void linkButtonController(Button button, VisualGraph<String> visualGraph) {
+		button.setOnMouseClicked(event -> { //FUORI DA QUI, MODE NON VIENE MODIFICATO
 			if (!mode) {
-				button.setText("Move nodes");
+				button.setText("Normal Mode");
 				mode = true;
+				System.out.println(mode);
 			}
 			else {
-				button.setText("Move arrows");
+				button.setText("Link Mode");
 				mode = false;
+				System.out.println(mode);
 			}
 		});
+		/*button.setOnMouseClicked(event ->{
+			Stage stage = new Stage();
+			HBox hbox1 = new HBox();
+			HBox hbox2 = new HBox();
+			VBox vbox = new VBox();
+			Text text1 = new Text("Starting node ");
+			Text text2 = new Text("Target node ");
+			TextField textField1 = new TextField();
+			TextField textField2 = new TextField();
+			Button button2 = new Button("Apply");
+			hbox1.getChildren().addAll(text1,textField1);
+			hbox2.getChildren().addAll(text2,textField2);
+			vbox.getChildren().addAll(hbox1,hbox2,button2);
+			button2.setOnMouseClicked(e -> {
+				//function that gets the blackcircle with that label
+				/*Arrow arrow = new Arrow(blackcircle1, blackcircle2, string);
+				pane.getChildren().addAll(arrow.getLine1(), arrow.getLine2, arrow.getLine3());
+				stage.close();
+				
+			});
+			Scene scene = new Scene(vbox);
+			stage.setScene(scene);
+			stage.show();
+		});*/
 		
 	}
 
+	public void setOnArrowTextClickedController(Arrow arrow) {
+		arrow.getText().setOnMouseClicked(event -> {
+			Stage stage = new Stage();
+			HBox hbox = new HBox();
+			VBox vbox = new VBox();
+			Text text = new Text("New name");
+			TextField textField = new TextField();
+			Button button = new Button("Apply");
+			hbox.getChildren().addAll(text,textField);
+			vbox.getChildren().addAll(hbox,button);
+			button.setOnMouseClicked(e -> {
+				arrow.setText(textField.getText());
+				stage.close();
+			});
+			Scene scene = new Scene(vbox);
+			stage.setScene(scene);
+			stage.show();
+		});
+	}
+	
+	
+	public void setOnCircleTextClickedController(blackCircle blackcircle) {
+		blackcircle.getText().setOnMouseClicked(event -> {
+			Stage stage = new Stage();
+			HBox hbox = new HBox();
+			VBox vbox = new VBox();
+			Text text = new Text("New name");
+			TextField textField = new TextField();
+			Button button = new Button("Apply");
+			hbox.getChildren().addAll(text,textField);
+			vbox.getChildren().addAll(hbox,button);
+			button.setOnMouseClicked(e -> {
+				blackcircle.setText(textField.getText());
+				stage.close();
+			});
+			Scene scene = new Scene(vbox);
+			stage.setScene(scene);
+			stage.show();
+		});
+	}
+	
+	
+	
+	
 	public void circleOnMouseDraggedController(blackCircle blackcircle, Pane pane) {
 		
 		blackcircle.getCircle().setOnMouseDragged(event -> {
+			System.out.println(mode);
 			if (event.isPrimaryButtonDown()) {
 				
-				if (!mode) {
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
 					for (Arrow o : blackcircle.getOutList()) {
 						o.getLine1().setStartX(event.getX());
 						o.getLine1().setStartY(event.getY());
+						o.managePointer();
 					}
-            
+					for (Arrow o : blackcircle.getInList()) {
+						o.getLine1().setEndX(event.getX());
+						o.getLine1().setEndY(event.getY());
+						o.managePointer();
+					}
 					boundsController(blackcircle, pane);
             
 					draggedEvent = true;
-				}
-				else {
+				
+				/*else {
 					if (!draggedLine) {
 						blackcircle.getOutList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
 						blackcircle.incrementMaxList();
@@ -118,22 +198,55 @@ public class Controller{
             	
 					draggedEvent = true;
 
-				}
+				}*/
 			}
     });
 	}
 	
-	public void circleOnMouseClickedController(blackCircle blackcircle) {
+	public void circleOnMouseClickedController(blackCircle blackcircle,Pane pane) {
 		
 		blackcircle.getCircle().setOnMouseClicked(event -> {
-			
 			if (!draggedEvent) {
-				if (!blackcircle.getChosen()) blackcircle.getCircle().setFill(Color.GREY);
-				else blackcircle.getCircle().setFill(Color.BLACK);
+				if (mode) {
+
+				if (!blackcircle.getChosen()) {
+					if (c==0) {
+						b1 = new blackCircle();
+						blackcircle.getCircle().setFill(Color.GREY);
+						b1 = blackcircle;
+						
+					}
+					if (c==1) {
+						b2 = new blackCircle();
+						b2 = blackcircle;
+						b1.getOutList().add(new Arrow(b1,b2,"lol"));
+						b1.incrementMaxList();
+						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine1());
+						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine2());
+						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine3());
+						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getText());
+						
+						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));
+						b1.getCircle().setFill(Color.BLACK);
+					}
+					c = c+1;
+					if (c == 2) c=0;
+				}
+				}
+				else {
+					c = 0;
+					if (b1Exists) b1.getCircle().setFill(Color.BLACK);
+					if(!blackcircle.getChosen()) {
+						blackcircle.getCircle().setFill(Color.GREY);
+						blackcircle.changeChosen();
+					}
+					else {
+						blackcircle.getCircle().setFill(Color.BLACK);
+						blackcircle.changeChosen();
+					}
+				}
 			}
 			else draggedEvent = false;
-			
-			blackcircle.changeChosen();
 			
 		});
 	}
@@ -148,18 +261,23 @@ public class Controller{
 	public void boundsController(blackCircle blackcircle, Pane pane) {
 		Bounds bounds = pane.getLayoutBounds();
 		Circle circle = blackcircle.getCircle();
+		Text text = blackcircle.getText();
 		
 		if (circle.getCenterX() > (bounds.getMaxX()-circle.getRadius())) {
 			circle.setCenterX(bounds.getMaxX()-circle.getRadius());
+			text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
 		}
 		if (circle.getCenterX() < (bounds.getMinX()+circle.getRadius())) {
 			circle.setCenterX(bounds.getMinX()+circle.getRadius());
+			text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
 		}
 		if (circle.getCenterY() > (bounds.getMaxY()-circle.getRadius())) {
 			circle.setCenterY(bounds.getMaxY()-circle.getRadius());
+			text.setY(circle.getCenterY()-2*circle.getRadius());
 		}
 		if (circle.getCenterY() < (bounds.getMinY()+circle.getRadius())) {
 			circle.setCenterY(bounds.getMinY()+circle.getRadius());
+			text.setY(circle.getCenterY()-2*circle.getRadius());
 		}
 		
 		for(Arrow line: blackcircle.getOutList())

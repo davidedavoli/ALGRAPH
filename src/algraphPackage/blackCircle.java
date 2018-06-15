@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 
 public class blackCircle{
+	private static int c=0;
 	private Circle circle;
 	private Controller controller;
 	private Boolean chosen;
@@ -22,30 +23,38 @@ public class blackCircle{
 	private Integer maxList;
 	private Text text;
 	private Pane pane;
-	public blackCircle(Pane pane, String t) {
+	public blackCircle() {}
+	public blackCircle(Pane pane) {
+		c=c+1;
 		this.pane=pane;
 		text=new Text();
 		controller = new Controller();
 		outList = new ArrayList<Arrow>();
 		inList = new ArrayList<Arrow>();
 		chosen = false;
-		maxList = 0;
+		maxList = new Integer(0);
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
     	circle.setCursor(Cursor.MOVE);
         circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
         circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
-        text.setText(t);
+        text.setText(String.valueOf(c));
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());
-        controller.circleOnMouseClickedController(this);
+        controller.circleOnMouseClickedController(this,pane);
         controller.circleOnMouseDraggedController(this, pane);
+        controller.setOnCircleTextClickedController(this);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
 	
 	public List<Arrow> getOutList() {
 		return outList;
+	}
+	
+	public void setText(String t) {
+		text.setText(t);
+		text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
 	}
 	
 	public Text getText() {

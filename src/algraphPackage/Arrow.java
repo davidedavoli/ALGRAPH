@@ -1,6 +1,7 @@
 package algraphPackage;
 
 import javafx.geometry.VPos;
+import javafx.scene.shape.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -14,9 +15,10 @@ import java.time.format.TextStyle;
 public class Arrow {
 	private Line line1, line2, line3;
 	private Boolean manageArcTan2, manageArcTan3;
+	private Controller controller;
 	public Text label;
 	
-	public Arrow(double centerX, double centerY) {
+	/*public Arrow(double centerX, double centerY) {
 		line1 = new Line();
 		line2 = new Line();
 		line3 = new Line();
@@ -28,10 +30,10 @@ public class Arrow {
 		line1.setEndY(centerY);
 		label=new Text();
 		label.setY(centerY);
-		label.setText("lollopollo vinvo woiwnvoiwb nowvowuvb vsdouvb \nsovbwovb\nvucu");
+		label.setText("lollopollo");
 
 		label.setX(centerX-label.getLayoutBounds().getWidth()/2);
-	}
+	}*/
 	
 	
 	public void setStartX(double x) {
@@ -67,11 +69,29 @@ public class Arrow {
 		return line1.getEndY();
 	}
 	
+	public Arrow(Circle parent, Circle target, String l) {
+		line1 = new Line();
+		line2 = new Line();
+		line3 = new Line();
+		manageArcTan2 = new Boolean(false);
+		manageArcTan3 = new Boolean(false);
+		line1.setStartX(parent.getCenterX());
+		line1.setStartY(parent.getCenterY());
+		line1.setEndX(target.getCenterX());
+		line1.setEndY(target.getCenterY());
+		label=new Text();
+		label.setX((line1.getEndX()-line1.getEndX())/2);
+		label.setY((line1.getEndY()-line1.getEndY())/2);
+		label.setText(l);
+		controller.setOnArrowTextClickedController(this);
+		managePointer();
+	}
 	
 	public Arrow(blackCircle parent, blackCircle target, String l) {
 		line1 = new Line();
 		line2 = new Line();
 		line3 = new Line();
+		controller = new Controller();
 		manageArcTan2 = new Boolean(false);
 		manageArcTan3 = new Boolean(false);
 		line1.setStartX(parent.getCircle().getCenterX());
@@ -82,6 +102,7 @@ public class Arrow {
 		label.setX((line1.getEndX()-line1.getEndX())/2);
 		label.setY((line1.getEndY()-line1.getEndY())/2);
 		label.setText(l);
+		controller.setOnArrowTextClickedController(this);
 		managePointer();
 	}
 	
