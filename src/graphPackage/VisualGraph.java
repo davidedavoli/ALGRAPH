@@ -1,4 +1,4 @@
-package graphPackage;
+package algraphPackage;
 import java.util.*;
 import algraphPackage.*;
 
@@ -16,7 +16,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		super();
 		G=lucaserafini;
 		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
+			mappa.put(lucamariotti, new blackCircle(p));
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
@@ -29,7 +29,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 	public void insertNode(Node<T> u) {
 		// TODO Auto-generated method stub
 		G.insertNode(u);
-		mappa.put(u, new blackCircle(p, (String) u.getElement()));
+		mappa.put(u, new blackCircle(p));
 	}
 
 	public void deleteNode(Node<T> u) {
@@ -80,14 +80,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 	
 	public void deleteChoosenNode() {
 		Node<T> toDelete=null;
-		System.out.println(this.selectedCircles().toString());
 		for(Node<T> pollo: mappa.keySet()) {
 			if (mappa.get(pollo).getChosen()) {
+				System.out.println(pollo.getElement());
 				toDelete=pollo;
 			}
 		}
-		if (toDelete!=null)
-		this.deleteNode(toDelete);
+		if (toDelete!=null) {
+			//p.getChildren().remove(toDelete.getElement().);
+			this.deleteNode(toDelete);
+		}
 		if(this.countSelected()>0)
 		this.deleteChoosenNode();
 	}
@@ -103,18 +105,20 @@ public class VisualGraph<T  extends Comparable<T>> {
 	public int countSelected() {//conta i nodi selezionati 
 		int c=0;
 		for (blackCircle b: mappa.values()) {
+			System.out.println(b.getText());
 			if (b.getChosen()==true)
 				c++;
 		}
 		return c;
 	}
 	
-	public HashSet<blackCircle> selectedCircles(){//ritorna i nodi selezionati
-		HashSet<blackCircle> set=new HashSet<blackCircle>(); 
+	public List<blackCircle> selectedCircles(){//ritorna i nodi selezionati
+		List<blackCircle> set=new ArrayList<blackCircle>(); 
 		for (blackCircle b: mappa.values()) {
 			if (b.getChosen()==true)
 				set.add(b);
 		}
+		System.out.println(set.size());
 		return set;
 	}
 	public void visualize() {
