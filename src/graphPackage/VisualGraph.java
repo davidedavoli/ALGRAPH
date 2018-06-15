@@ -79,9 +79,9 @@ public class VisualGraph<T  extends Comparable<T>> {
 	
 	public void deleteChoosenNode() {
 		Node<T> toDelete=null;
+		System.out.println(this.selectedCircles().toString());
 		for(Node<T> pollo: mappa.keySet()) {
 			if (mappa.get(pollo).getChosen()) {
-				System.out.println(pollo.getElement());
 				toDelete=pollo;
 			}
 		}
@@ -108,8 +108,8 @@ public class VisualGraph<T  extends Comparable<T>> {
 		return c;
 	}
 	
-	public TreeSet<blackCircle> selectedCircles(){//ritorna i nodi selezionati
-		TreeSet<blackCircle> set=new TreeSet<blackCircle>(); 
+	public HashSet<blackCircle> selectedCircles(){//ritorna i nodi selezionati
+		HashSet<blackCircle> set=new HashSet<blackCircle>(); 
 		for (blackCircle b: mappa.values()) {
 			if (b.getChosen()==true)
 				set.add(b);
