@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.layout.Pane;
 import java.util.concurrent.ThreadLocalRandom;
 
-import graphPackage.Node;
+import algraphPackage.Node;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class blackCircle{
 	private Text text;
 	private Pane pane;
 	public blackCircle() {}
-	public blackCircle(Pane pane, String name) {
+	/*public blackCircle(Pane pane) {
 		c=c+1;
 		this.pane=pane;
 		text=new Text();
@@ -52,8 +52,8 @@ public class blackCircle{
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
-	
-	public blackCircle(Pane pane, String string) {
+	*/
+	public blackCircle(Pane pane) {
 		c=c+1;
 		this.pane=pane;
 		text=new Text();
@@ -67,7 +67,7 @@ public class blackCircle{
     	circle.setCursor(Cursor.MOVE);
         circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
         circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
-        text.setText(string);
+        text.setText(String.valueOf(c));
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());
         controller.circleOnMouseClickedController(this,pane);

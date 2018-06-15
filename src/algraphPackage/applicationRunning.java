@@ -3,8 +3,8 @@ package algraphPackage;
 import javafx.event.ActionEvent;
 import java.io.File;
 
-import graphPackage.Graph;
-import graphPackage.VisualGraph;
+import algraphPackage.Graph;
+import algraphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -38,7 +38,7 @@ import javafx.scene.control.ListView;
 import javafx.collections.ObservableList;
 import javafx.css.Styleable;
 import javafx.collections.*;
-import graphPackage.*;
+import algraphPackage.*;
 
 public class applicationRunning{
 	
@@ -106,7 +106,7 @@ public class applicationRunning{
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove node");
     	Button button3=new Button("Apply algorithm");
-    	Button button4=new Button("Move arrows");
+    	Button button4=new Button("Selection mode");
     	button.getStylesheets().add(css);
     	button2.getStylesheets().add(css);
     	button3.getStylesheets().add(css);
