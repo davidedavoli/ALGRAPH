@@ -89,6 +89,7 @@ public class blackCircle{
 		outList = new ArrayList<Arrow>();
 		inList = new ArrayList<Arrow>();
 		chosen = false;
+		hovered = new Boolean(false);
 		maxList = new Integer(0);
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
