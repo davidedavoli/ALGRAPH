@@ -72,6 +72,11 @@ public class applicationRunning{
 	public static void graphFromFile(Graph<String> G) {
  		FileChooser fileChooser = new FileChooser();
  		fileChooser.setInitialDirectory(new java.io.File("."));
+ 		fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("gph", "*.gph"),
+                new FileChooser.ExtensionFilter("txt", "*.txt")
+            );
  		Stage fc=new Stage();
  		fc.setTitle("Input graph...");
  		File file = fileChooser.showOpenDialog(fc);

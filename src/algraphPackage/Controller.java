@@ -139,7 +139,12 @@ public class Controller{
  				// TODO Auto-generated method stub
  				 FileChooser fileChooser = new FileChooser();
  				 fileChooser.setInitialDirectory(new File("."));
- 		           fileChooser.setTitle("Save graph...");
+ 		         fileChooser.setTitle("Save graph...");
+ 		         fileChooser.getExtensionFilters().addAll(
+ 		                 new FileChooser.ExtensionFilter("All Files", "*.*"),
+ 		                 new FileChooser.ExtensionFilter("gph", "*.gph"),
+ 		                 new FileChooser.ExtensionFilter("txt", "*.txt")
+ 		             );
  		           File file = fileChooser.showSaveDialog(new Stage());
  		           if (file != null) {
  		                	G.outGraph(file.getPath().toString());
