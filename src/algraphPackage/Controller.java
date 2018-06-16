@@ -1,7 +1,7 @@
 package algraphPackage;
 
 import javafx.application.Application;
-import algraphPackage.*;
+import graphPackage.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -78,7 +78,7 @@ public class Controller{
 			blackCircle blackcircle = new blackCircle(pane);
 			boundsController(blackcircle,pane);
 			items.add("Node called "+blackcircle.getText().getText()+" added");
-			//items.add("Aggiunto un nodo"); //non ho la pi� pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
+			//items.add("Aggiunto un nodo"); //non ho la piu' pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
     	});
 	}
 	
@@ -136,7 +136,6 @@ public class Controller{
  			
  			@Override
  			public void handle(ActionEvent event) {
- 				// TODO Auto-generated method stub
  				 FileChooser fileChooser = new FileChooser();
  				 fileChooser.setInitialDirectory(new File("."));
  		           fileChooser.setTitle("Save graph...");

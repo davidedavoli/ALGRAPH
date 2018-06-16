@@ -3,8 +3,8 @@ package algraphPackage;
 import javafx.event.ActionEvent;
 import java.io.File;
 
-import algraphPackage.Graph;
-import algraphPackage.VisualGraph;
+import graphPackage.Graph;
+import graphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

@@ -1,4 +1,4 @@
-package algraphPackage;
+package graphPackage;
 import java.util.*;
 import algraphPackage.*;
 
