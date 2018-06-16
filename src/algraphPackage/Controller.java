@@ -217,6 +217,7 @@ public class Controller{
 			button.setOnMouseClicked(e -> {
 				String tmp = blackcircle.getText().getText();
 				blackcircle.setText(textField.getText());
+				applicationRunning.getVisualGraph().renameNode(blackcircle, textField.getText());
 				items.add("Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
 				stage.close();
 			});
@@ -237,14 +238,10 @@ public class Controller{
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
 					for (Arrow o : blackcircle.getOutList()) {
-						o.getLine1().setStartX(event.getX());
-						o.getLine1().setStartY(event.getY());
-						o.managePointer();
+						o.setLines(o.getParent(), o.getTarget());
 					}
 					for (Arrow o : blackcircle.getInList()) {
-						o.getLine1().setEndX(event.getX());
-						o.getLine1().setEndY(event.getY());
-						o.managePointer();
+						o.setLines(o.getParent(), o.getTarget());
 					}
 					boundsController(blackcircle, pane);
             
@@ -333,12 +330,14 @@ public class Controller{
 						b2 = new blackCircle();
 						b2 = blackcircle;
 						b1.incrementMaxList();
+						
+						if (!b2.equals(b1)) {
 						applicationRunning.getVisualGraph().insertEdge(applicationRunning.getVisualGraph().getNode(b1), applicationRunning.getVisualGraph().getNode(b2),"1");
-
 						b1.changeHovered();
 						b1.circleExpand(1);
 						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));
 						items.add(b1.getText().getText()+" -> "+b2.getText().getText()+" succesfully linked");
+						}
 					}
 					c = c+1;
 					if (c == 2) c=0;
@@ -363,7 +362,8 @@ public class Controller{
 	
 	public void removeButtonController(Button button, VisualGraph<String> visualGraph, Pane pane) {
 		button.setOnMouseClicked(event -> {
-			visualGraph.deleteChoosenNode();
+			visualGraph.deleteChosenArrows();
+			visualGraph.deleteChosenNode();
 			pane.getChildren().remove(0, pane.getChildren().size());
 			visualGraph.visualize();
 		});

@@ -96,27 +96,40 @@ public class VisualGraph<T  extends Comparable<T>> {
 	public void insertEdge(Node<T> u, Node<T> v, String s) {
 		G.insertEdge(u, v, Integer.parseInt(s));
 		insertEdge(u, v);
-		
 	}
-
+	public Set<Arrow> chosenArrows() {
+		HashSet<Arrow> chosen=new HashSet<Arrow>();
+		for (blackCircle b: mappa.values()) {
+			for (Arrow a: b.getOutList()) {
+				if (a.getChosen()==true)
+					chosen.add(a);
+			}
+		}
+		return chosen;
+	}
 	public void deleteEdge(Node<T> u, Node<T> v) {
-		mappa.get(u).deleteLink(mappa.get(v));
 		G.deleteEdge(u, v);
+		mappa.get(u).deleteLink(mappa.get(v));
 	}
-	
-	public void deleteChoosenNodes() {
+	public void deleteChosenArrows() {
+		Iterator<Arrow> lucamariotti= chosenArrows().iterator();
+		while (lucamariotti.hasNext()) {
+			Arrow a=lucamariotti.next();
+			deleteEdge(getNode(a.getParent()), getNode(a.getTarget()));
+		}
+	}
+	public void deleteChosenNodes() {
 		Iterator<Node<T>> lucamariotti= mappa.keySet().iterator();
 		while( lucamariotti.hasNext()) {
 			Node<T> pollo=lucamariotti.next();
 			if (mappa.get(pollo).getChosen()) {
-				System.out.println(pollo.getElement());
 				this.deleteNode(pollo);
 			}
 		}
 		
 	}
 	
-	public void deleteChoosenNode() {
+	public void deleteChosenNode() {
 		Node<T> toDelete=null;
 		System.out.println(this.selectedCircles().toString());
 		for(Node<T> pollo: mappa.keySet()) {
@@ -127,7 +140,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		if (toDelete!=null)
 		this.deleteNode(toDelete);
 		if(this.countSelected()>0)
-		this.deleteChoosenNode();
+		this.deleteChosenNode();
 	}
 	
 	public Collection<blackCircle> circles(){
@@ -170,7 +183,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 	
 	public void renameNode(blackCircle n, String s) {
 		for (Node<T> b: mappa.keySet()) {
-				if (mappa.get(s).equals(n))
+				if (mappa.get(b).equals(n))
 					G.setNodeValue((Node<String>) b, s);
 		
 		}

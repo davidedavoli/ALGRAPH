@@ -17,6 +17,8 @@ public class Arrow {
 	private Line line1, line2, line3;
 	private Boolean manageArcTan2, manageArcTan3,chosen;
 	private Controller controller;
+	double sinTeta;
+	double cosTeta;
 	public Text label;
 	private blackCircle parent;
 	private blackCircle target;
@@ -119,10 +121,12 @@ public class Arrow {
 		controller = new Controller();
 		manageArcTan2 = new Boolean(false);
 		manageArcTan3 = new Boolean(false);
-		line1.setStartX(parent.getCircle().getCenterX());
-		line1.setStartY(parent.getCircle().getCenterY());
-		line1.setEndX(target.getCircle().getCenterX());
-		line1.setEndY(target.getCircle().getCenterY());
+		sinTeta= (double)(target.getCircle().getCenterY()-parent.getCircle().getCenterY())/Math.sqrt(Math.pow((target.getCircle().getCenterY()-parent.getCircle().getCenterY()),2)+ Math.pow((parent.getCircle().getCenterX()-target.getCircle().getCenterX()), 2));
+		cosTeta= (double)(target.getCircle().getCenterX()-parent.getCircle().getCenterX())/Math.sqrt(Math.pow((target.getCircle().getCenterY()-parent.getCircle().getCenterY()),2)+ Math.pow((parent.getCircle().getCenterX()-target.getCircle().getCenterX()), 2));
+		line1.setStartX(parent.getCircle().getCenterX()+10*cosTeta);
+		line1.setStartY(parent.getCircle().getCenterY()+10*sinTeta);
+		line1.setEndX(target.getCircle().getCenterX()-10*cosTeta);
+		line1.setEndY(target.getCircle().getCenterY()-10*sinTeta);
 		label=new Text();
 		label.setX((line1.getEndX()-line1.getEndX())/2);
 		label.setY((line1.getEndY()-line1.getEndY())/2);
@@ -154,11 +158,13 @@ public class Arrow {
 	}
 	
 	public void setLines(blackCircle parent, blackCircle target) {
-		line1 = new Line();
-		line1.setStartX(parent.getCircle().getCenterX());
-		line1.setStartY(parent.getCircle().getCenterY());
-		line1.setEndX(target.getCircle().getCenterX());
-		line1.setEndY(target.getCircle().getCenterY());
+		
+		sinTeta= (double)(target.getCircle().getCenterY()-parent.getCircle().getCenterY())/Math.sqrt(Math.pow((target.getCircle().getCenterY()-parent.getCircle().getCenterY()),2)+ Math.pow((parent.getCircle().getCenterX()-target.getCircle().getCenterX()), 2));
+		cosTeta= (double)(target.getCircle().getCenterX()-parent.getCircle().getCenterX())/Math.sqrt(Math.pow((target.getCircle().getCenterY()-parent.getCircle().getCenterY()),2)+ Math.pow((parent.getCircle().getCenterX()-target.getCircle().getCenterX()), 2));
+		line1.setStartX(parent.getCircle().getCenterX()+10*cosTeta);
+		line1.setStartY(parent.getCircle().getCenterY()+10*sinTeta);
+		line1.setEndX(target.getCircle().getCenterX()-10*cosTeta);
+		line1.setEndY(target.getCircle().getCenterY()-10*sinTeta);
 		this.managePointer();
 		//missing arrow
 		
@@ -172,14 +178,12 @@ public class Arrow {
 		line3.setEndX(line1.getEndX());
 		line3.setEndY(line1.getEndY());
 		
-		double sinTeta= (double)(line1.getEndY()-line1.getStartY())/Math.sqrt(Math.pow((line1.getEndY()-line1.getStartY()),2)+ Math.pow((line1.getStartX()-line1.getEndX()), 2));
-		double cosTeta= (double)(line1.getEndX()-line1.getStartX())/Math.sqrt(Math.pow((line1.getEndY()-line1.getStartY()),2)+ Math.pow((line1.getStartX()-line1.getEndX()), 2));
 		double tanTeta = (double)(line1.getStartY()-line1.getEndY())/(line1.getStartX()-line1.getEndX());
 		
-		line2.setEndX(line1.getEndX()-10*cosTeta);
-		line2.setEndY(line1.getEndY()-10*sinTeta);
-		line3.setEndX(line1.getEndX()-10*cosTeta);
-		line3.setEndY(line1.getEndY()-10*sinTeta);
+		line2.setEndX(line1.getEndX());
+		line2.setEndY(line1.getEndY());
+		line3.setEndX(line1.getEndX());
+		line3.setEndY(line1.getEndY());
 
 		label.setX(line1.getStartX()+(line1.getEndX()-line1.getStartX())/2-label.getLayoutBounds().getWidth()/2);
 		label.setY(line1.getStartY()+(line1.getEndY()-line1.getStartY())/2-10*(line1.getEndX()-line1.getStartX())/Math.abs((line1.getEndX()-line1.getStartX())));

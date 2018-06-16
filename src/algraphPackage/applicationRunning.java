@@ -108,7 +108,7 @@ public class applicationRunning{
     	MenuBar menuBar = new MenuBar();
     	menuBar.getMenus().addAll(menu1, menu2, menu3);
     	Button button=new Button("Add node");
-    	Button button2=new Button("Remove node");
+    	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
     	Button button4=new Button("Go to Selection mode");
     	button.getStylesheets().add(css);

@@ -179,6 +179,9 @@ public class blackCircle{
 	public void setOutList(List<Arrow> outList) {
 		this.outList = outList;
 	}
+	public void inListRemove(Arrow a) {
+		inList.remove(a);
+	}
 	public void moveText() {
 		 text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
 	        text.setY(circle.getCenterY()-2*circle.getRadius());
@@ -191,6 +194,7 @@ public class blackCircle{
 			if (p.getTarget()==target)
 			{
 				toRemove.add(p);
+				target.inListRemove(p);
 			}
 		}
 		outList.removeAll(toRemove);
