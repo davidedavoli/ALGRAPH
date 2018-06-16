@@ -158,7 +158,7 @@ public class blackCircle{
 	}
 	
 	public Integer getMaxList() {
-		return maxList;
+		return outList.size();
 	}
 	
 	public void bind(blackCircle target, String label) {

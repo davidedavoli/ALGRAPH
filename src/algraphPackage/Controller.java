@@ -332,12 +332,9 @@ public class Controller{
 					if (c==1) {
 						b2 = new blackCircle();
 						b2 = blackcircle;
-						b1.getOutList().add(new Arrow(b1,b2,"1"));
 						b1.incrementMaxList();
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine1());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine2());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine3());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getText());
+						applicationRunning.getVisualGraph().insertEdge(applicationRunning.getVisualGraph().getNode(b1), applicationRunning.getVisualGraph().getNode(b2),"1");
+
 						b1.changeHovered();
 						b1.circleExpand(1);
 						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));

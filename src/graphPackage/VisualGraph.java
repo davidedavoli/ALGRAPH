@@ -90,9 +90,12 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 
 	public void insertEdge(Node<T> u, Node<T> v) {
-		
 		mappa.get(u).bind(mappa.get(v), G.w(u, v).toString());
-		
+	}
+	
+	public void insertEdge(Node<T> u, Node<T> v, String s) {
+		G.insertEdge(u, v, Integer.parseInt(s));
+		insertEdge(u, v);
 		
 	}
 
