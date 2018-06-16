@@ -38,7 +38,7 @@ import javafx.scene.control.ListView;
 import javafx.collections.ObservableList;
 import javafx.css.Styleable;
 import javafx.collections.*;
-import algraphPackage.*;
+import graphPackage.*;
 
 public class applicationRunning{
 	
@@ -141,7 +141,7 @@ public class applicationRunning{
 
 		visualGraph = new VisualGraph<String>(G, pane);
     	
-        controller.addButtonController(button,pane);
+        controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2, visualGraph, pane);
         
@@ -150,12 +150,16 @@ public class applicationRunning{
  			
  			@Override
  			public void handle(ActionEvent event) {
+ 				G.removeAll();
+ 				System.out.println(G.V().size());
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
- 		        visualGraph=new VisualGraph<String>(G, pane);
+ 		        visualGraph.removeAll();
+ 		        visualGraph.readGraph(G, pane);
  		        for (blackCircle b: visualGraph.circles()) {
  			    	controller.boundsController(b, pane);
  			    	}
+ 				System.out.println(G.V().size());
  		                }
  		});
     	

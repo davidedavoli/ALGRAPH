@@ -16,6 +16,10 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	public void insertNode(Node<T> u) {
 		if (!pollo.containsKey(u))
 			pollo.put(u, new TreeMap<Node<T>, Integer>());
+		else {
+			pollo.remove(u);
+			pollo.put(u, new TreeMap<Node<T>, Integer>());
+		}
 	}
 
 	@Override
@@ -60,7 +64,9 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	public Set<Node<T>> V() {
 		return pollo.keySet();
 	}
-
+	public void setNodeValue(Node<String> n, String s) {
+		n.setValue(s);
+	}
 	@Override
 	public void print() {
 		// TODO Auto-generated method stub
@@ -181,6 +187,15 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		
 		
 	}
+	
+	public void removeAll() {
+		List<Node<T>> toRemove= new ArrayList<Node<T>>(); 
+		for (Node<T> key: pollo.keySet())
+			toRemove.add(key);
+		for (Node<T> key: toRemove)
+			pollo.remove(key);
+	}
+	
 	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw, boolean dense) {
 		Random rand = new Random();
 		int nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;

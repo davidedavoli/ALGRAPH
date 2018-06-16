@@ -2,6 +2,7 @@ package algraphPackage;
 
 import javafx.application.Application;
 import graphPackage.*;
+import graphPackage.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,12 +74,11 @@ public class Controller{
 	        text.setOnMouseExited(event ->{ text.setUnderline(false);});
 	    }
 	
-	public void addButtonController(Button button, Pane pane) {
+	public void addButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane);
-			boundsController(blackcircle,pane);
-			items.add("Node called "+blackcircle.getText().getText()+" added");
-			//items.add("Aggiunto un nodo"); //non ho la piu' pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
+			visualGraph.insertNode();
+			//items.add("Aggiunto un nodo"); //non ho la più pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
+			items.add("Node added");
     	});
 	}
 	
@@ -136,6 +136,7 @@ public class Controller{
  			
  			@Override
  			public void handle(ActionEvent event) {
+ 				// TODO Auto-generated method stub
  				 FileChooser fileChooser = new FileChooser();
  				 fileChooser.setInitialDirectory(new File("."));
  		           fileChooser.setTitle("Save graph...");
@@ -371,7 +372,7 @@ public class Controller{
 		
 	}
 	
-	public void boundsController(blackCircle blackcircle, Pane pane) {
+	public static void boundsController(blackCircle blackcircle, Pane pane) {
 		Bounds bounds = pane.getLayoutBounds();
 		Circle circle = blackcircle.getCircle();
 		Text text = blackcircle.getText();

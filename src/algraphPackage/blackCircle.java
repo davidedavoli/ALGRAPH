@@ -80,7 +80,30 @@ public class blackCircle{
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
-	
+		
+	public blackCircle(Pane pane, String string) {
+		c=c+1;
+		this.pane=pane;
+		text=new Text();
+		controller = new Controller();
+		outList = new ArrayList<Arrow>();
+		inList = new ArrayList<Arrow>();
+		chosen = false;
+		maxList = new Integer(0);
+		circle = new Circle(10);
+		circle.setFill(Color.BLACK);
+    	circle.setCursor(Cursor.MOVE);
+        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
+        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        text.setText(string);
+        text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
+        text.setY(circle.getCenterY()-2*circle.getRadius());
+        controller.circleOnMouseClickedController(this,pane);
+        controller.circleOnMouseDraggedController(this, pane);
+        controller.setOnCircleTextClickedController(this);
+		pane.getChildren().add(this.getCircle());
+		pane.getChildren().add(this.getText());
+	}
 	public void changeHovered() {
 		hovered = !hovered;
 	}
