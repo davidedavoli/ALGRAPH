@@ -198,13 +198,18 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	
 	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw, boolean dense) {
 		Random rand = new Random();
-		int nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;
+		int nnodes;
+		int wedge;
+		if (Mnodes==mnodes)
+			nnodes=mnodes;
+		else
+			nnodes=rand.nextInt(Mnodes-mnodes)+mnodes;
 		int nedges;
 		if (dense)
 		nedges=rand.nextInt(nnodes*(nnodes-1)-(nnodes-1))+nnodes-1;
-		else
+		else 
 			nedges=rand.nextInt(nnodes*3)+nnodes-1;
-			
+		nedges=Math.min(nedges, nnodes*(nnodes-1)/2);
 		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
 		for (Integer i=0; i<nnodes; i++) {
 			nodes.put(i, new Node<T>((T)i.toString()));
@@ -220,7 +225,10 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			do{
 				nodeb=rand.nextInt(nnodes);
 			}while (nodeb==nodea || pollo.get(nodes.get(nodea)).get(nodes.get(nodeb))!=null);
-			this.insertEdge(nodes.get(nodea), nodes.get(nodeb), rand.nextInt(Mw-mw)+mw);
+			if (Mw==mw)
+				this.insertEdge(nodes.get(nodea), nodes.get(nodeb), mw);
+			else
+				this.insertEdge(nodes.get(nodea), nodes.get(nodeb), rand.nextInt(Mw-mw)+mw);
 		}
 		
 	}
