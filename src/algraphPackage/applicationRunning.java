@@ -45,7 +45,7 @@ public class applicationRunning{
 	private Stage stage,stage2;
 	private Integer start;
 	private Controller controller;
-	private VisualGraph<String> visualGraph;
+	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ObservableList<String> items;
 	//variable for the graph
@@ -182,6 +182,10 @@ public class applicationRunning{
     	controller.boundsController(b, pane);
     	}
     }
+	
+	public static VisualGraph<String> getVisualGraph() {
+		return visualGraph;
+	}
 	
     public void menu() {
     	stage= new Stage();

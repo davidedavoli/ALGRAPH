@@ -173,6 +173,19 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 	}
 	
+	public Node<T> getNode(blackCircle b){
+		for (Node<T> nodo: mappa.keySet()) {
+			if (mappa.get(nodo)==b)
+				return nodo;
+				}
+		return null;
+	}
+	
+	public void renameEdge(blackCircle p, blackCircle t, Integer value) {
+		G.insertEdge(getNode(p), getNode(t), value);	
+		}
+		
+	
 	public blackCircle getBlackCircle(Node<T> n) {
 		return mappa.get(n);
 		

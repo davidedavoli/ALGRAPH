@@ -184,6 +184,7 @@ public class Controller{
 			button.setOnMouseClicked(e -> {
 				String tmp =  arrow.getText().getText();
 				arrow.setText(textField.getText());
+				applicationRunning.getVisualGraph().renameEdge(arrow.getParent(), arrow.getTarget(), Integer.parseInt(textField.getText()));
 				items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
 				stage.close();
 			});
