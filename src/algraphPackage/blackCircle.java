@@ -1,8 +1,10 @@
 package algraphPackage;
 
+import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -21,7 +23,7 @@ public class blackCircle{
 	private static int c=0;
 	private Circle circle;
 	private Controller controller;
-	private Boolean chosen;
+	private Boolean chosen,hovered;
 	private List<Arrow> outList;
 	private List<Arrow> inList;
 	private Integer maxList;
@@ -61,20 +63,37 @@ public class blackCircle{
 		outList = new ArrayList<Arrow>();
 		inList = new ArrayList<Arrow>();
 		chosen = false;
+		hovered = new Boolean(false);
 		maxList = new Integer(0);
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
     	circle.setCursor(Cursor.MOVE);
-        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
-        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        circle.setCenterX(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinX()+10,pane.getLayoutBounds().getMaxX()-10));
+        circle.setCenterY(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinY()+10,pane.getLayoutBounds().getMaxY()-10));
         text.setText(String.valueOf(c));
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());
         controller.circleOnMouseClickedController(this,pane);
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
+        controller.setOnCircleHovered(this);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
+	}
+	
+	public void changeHovered() {
+		hovered = !hovered;
+	}
+	
+	public Boolean getHovered() {
+		return hovered;
+	}
+	
+	public void circleExpand(double d) {
+		ScaleTransition st = new ScaleTransition(Duration.millis(500), this.getCircle());
+        st.setToX(d);
+        st.setToY(d);
+        st.playFromStart();
 	}
 	
 	public void pushInPane() {

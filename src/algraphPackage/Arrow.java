@@ -2,6 +2,7 @@ package algraphPackage;
 
 import javafx.geometry.VPos;
 import javafx.scene.shape.*;
+import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -14,7 +15,7 @@ import java.time.format.TextStyle;
 
 public class Arrow {
 	private Line line1, line2, line3;
-	private Boolean manageArcTan2, manageArcTan3;
+	private Boolean manageArcTan2, manageArcTan3,chosen;
 	private Controller controller;
 	public Text label;
 	private blackCircle parent;
@@ -37,6 +38,13 @@ public class Arrow {
 		label.setX(centerX-label.getLayoutBounds().getWidth()/2);
 	}*/
 	
+	public void changeChosen() {
+		chosen = !chosen;
+	}
+	
+	public Boolean getChosen() {
+		return chosen;
+	}
 	
 	public blackCircle getParent() {
 		return parent;
@@ -105,6 +113,7 @@ public class Arrow {
 		line1 = new Line();
 		line2 = new Line();
 		line3 = new Line();
+		chosen = new Boolean(false);
 		this.setParent(parent);
 		this.setTarget(target);
 		controller = new Controller();
@@ -118,6 +127,8 @@ public class Arrow {
 		label.setX((line1.getEndX()-line1.getEndX())/2);
 		label.setY((line1.getEndY()-line1.getEndY())/2);
 		label.setText(l);
+		this.getLine1().setCursor(Cursor.MOVE);
+		controller.arrowOnMouseClickedController(this);
 		controller.setOnArrowTextClickedController(this);
 		managePointer();
 	}

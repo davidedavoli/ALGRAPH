@@ -3,6 +3,7 @@ package algraphPackage;
 import javafx.application.Application;
 import algraphPackage.*;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.text.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -28,9 +30,10 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Circle;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.Cursor;
+import javafx.animation.*;
 import javafx.scene.input.Dragboard;
 import javafx.scene.shape.Line;
-import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.*;
 
 import java.io.File;
 import java.lang.Boolean;
@@ -41,18 +44,23 @@ import javafx.scene.layout.*;
 import java.util.*;
 public class Controller{
 	
-	private Boolean draggedEvent,draggedLine,b1Exists,b2Exists;
+	private Boolean draggedEvent;
 	private static Boolean mode;
 	public static blackCircle b1;
+	public static Boolean b1Exists;
 	public static blackCircle b2;
+	private static ObservableList<String> items;
 	private static int c=0;
 	
 	public Controller() {
 		draggedEvent = new Boolean(false);
-		draggedLine = new Boolean(false);
-		mode = new Boolean(true);
+	}
+	
+	public Controller(ObservableList<String> item) {
+		items = item;
+		draggedEvent = new Boolean(false);
 		b1Exists = new Boolean(false);
-		b2Exists = new Boolean(false);
+		mode = new Boolean(true);
 	}
 	 
 	public void setOnMouseTextController(Text text, Integer i, applicationRunning a) {
@@ -69,6 +77,7 @@ public class Controller{
 		button.setOnMouseClicked(event ->{
 			blackCircle blackcircle = new blackCircle(pane);
 			boundsController(blackcircle,pane);
+			items.add("Node called "+blackcircle.getText().getText()+" added");
 			//items.add("Aggiunto un nodo"); //non ho la pi� pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
     	});
 	}
@@ -77,12 +86,22 @@ public class Controller{
 	public void linkButtonController(Button button, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event -> { //FUORI DA QUI, MODE NON VIENE MODIFICATO
 			if (!mode) {
-				button.setText("Selection mode");
+				button.setText("Go to Selection mode");
 				mode = true;
+				if (c == 1) {
+					b1.circleExpand(1);
+					b1.changeHovered();
+				}
+				items.add("Switched to Link mode");
 			}
 			else {
-				button.setText("Link mode");
+				button.setText("Go to Link mode");
 				mode = false;
+				if (c == 1) {
+					b1.circleExpand(1);
+					b1.changeHovered();
+				}
+				items.add("Switched to Selection mode");
 			}
 		});
 		/*button.setOnMouseClicked(event ->{
@@ -124,7 +143,7 @@ public class Controller{
  		           File file = fileChooser.showSaveDialog(new Stage());
  		           if (file != null) {
  		                	G.outGraph(file.getPath().toString());
- 		                
+ 		                items.add("Graph saved succesfully to file");
  		                }
  			}
  		});
@@ -138,6 +157,7 @@ public class Controller{
  			public void handle(ActionEvent event) {
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
+ 				items.add("Graph opened succesfully");
  		                }
  		});
 		return true;
@@ -146,14 +166,25 @@ public class Controller{
 		arrow.getText().setOnMouseClicked(event -> {
 			Stage stage = new Stage();
 			HBox hbox = new HBox();
+			HBox hbox2 = new HBox();
 			VBox vbox = new VBox();
 			Text text = new Text("New name");
 			TextField textField = new TextField();
 			Button button = new Button("Apply");
 			hbox.getChildren().addAll(text,textField);
-			vbox.getChildren().addAll(hbox,button);
+			hbox2.getChildren().add(button);
+			hbox.setAlignment(Pos.CENTER);
+			hbox2.setAlignment(Pos.CENTER);
+			hbox.setMinWidth(300);
+			hbox.setMinHeight(80);
+			hbox.setSpacing(20);
+			hbox2.setMinWidth(300);
+			hbox2.setMinHeight(80);
+			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
+				String tmp =  arrow.getText().getText();
 				arrow.setText(textField.getText());
+				items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
 				stage.close();
 			});
 			Scene scene = new Scene(vbox);
@@ -167,14 +198,25 @@ public class Controller{
 		blackcircle.getText().setOnMouseClicked(event -> {
 			Stage stage = new Stage();
 			HBox hbox = new HBox();
+			HBox hbox2 = new HBox();
 			VBox vbox = new VBox();
 			Text text = new Text("New name");
 			TextField textField = new TextField();
 			Button button = new Button("Apply");
 			hbox.getChildren().addAll(text,textField);
-			vbox.getChildren().addAll(hbox,button);
+			hbox2.getChildren().add(button);
+			hbox.setAlignment(Pos.CENTER);
+			hbox2.setAlignment(Pos.CENTER);
+			hbox.setMinWidth(300);
+			hbox.setMinHeight(80);
+			hbox.setSpacing(20);
+			hbox2.setMinWidth(300);
+			hbox2.setMinHeight(80);
+			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
+				String tmp = blackcircle.getText().getText();
 				blackcircle.setText(textField.getText());
+				items.add("Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
 				stage.close();
 			});
 			Scene scene = new Scene(vbox);
@@ -190,7 +232,7 @@ public class Controller{
 		
 		blackcircle.getCircle().setOnMouseDragged(event -> {
 			if (event.isPrimaryButtonDown()) {
-				System.out.println(mode);
+				if (event.isDragDetect()) items.add("Dragging "+blackcircle.getText().getText()+"...");
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
 					for (Arrow o : blackcircle.getOutList()) {
@@ -238,6 +280,39 @@ public class Controller{
     });
 	}
 	
+	
+	public void setOnCircleHovered(blackCircle b) {
+		b.getCircle().setOnMouseEntered(event -> {
+			b.circleExpand(1.5);
+		});
+		b.getCircle().setOnMouseExited(event -> {
+			if (!b.getHovered()) {
+				b.circleExpand(1);
+			}
+		});
+	}
+	
+	
+	public void arrowOnMouseClickedController(Arrow arrow) {
+		arrow.getLine1().setOnMouseClicked(event -> {
+		if (!mode) {
+			if (!arrow.getChosen()) {
+				arrow.getLine1().setStroke(Color.GREY);
+				arrow.getLine2().setStroke(Color.GREY);
+				arrow.getLine3().setStroke(Color.GREY);
+				items.add("Arrow selected");
+			}
+			else {
+				arrow.getLine1().setStroke(Color.BLACK);
+				arrow.getLine2().setStroke(Color.BLACK);
+				arrow.getLine3().setStroke(Color.BLACK);
+				items.add("Arrow deselected");
+			}
+			arrow.changeChosen();
+		}
+		});
+	}
+	
 	public void circleOnMouseClickedController(blackCircle blackcircle,Pane pane) {
 		
 		
@@ -247,14 +322,10 @@ public class Controller{
 				System.out.println(mode);
 				if (mode) {
 					if (c==0) {
+						b1Exists = true;
 						b1 = new blackCircle();
-						DropShadow dropShadow = new DropShadow();
-						 dropShadow.setRadius(5.0);
-						 dropShadow.setOffsetX(3.0);
-						 dropShadow.setOffsetY(3.0);
-						 dropShadow.setColor(Color.color(0.4, 0.5, 0.5));  
-						blackcircle.getCircle().setEffect(dropShadow);
 						b1 = blackcircle;
+						b1.changeHovered();
 						
 					}
 					if (c==1) {
@@ -266,23 +337,25 @@ public class Controller{
 						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine2());
 						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine3());
 						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getText());
-						
+						b1.changeHovered();
+						b1.circleExpand(1);
 						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));
-						b1.getCircle().setFill(Color.BLACK);
+						items.add(b1.getText().getText()+" -> "+b2.getText().getText()+" succesfully linked");
 					}
 					c = c+1;
 					if (c == 2) c=0;
 				}
 				else {
 					c = 0;
-					if (b1Exists) b1.getCircle().setFill(Color.BLACK);
 					if(!blackcircle.getChosen()) {
 						blackcircle.getCircle().setFill(Color.GREY);
 						blackcircle.changeChosen();
+						items.add(blackcircle.getText().getText()+" selected");
 					}
 					else {
 						blackcircle.getCircle().setFill(Color.BLACK);
 						blackcircle.changeChosen();
+						items.add(blackcircle.getText().getText()+" deselected");
 					}
 				}
 			}
@@ -292,15 +365,9 @@ public class Controller{
 	
 	public void removeButtonController(Button button, VisualGraph<String> visualGraph, Pane pane) {
 		button.setOnMouseClicked(event -> {
-			//visualGraph.deleteChoosenNode();
-			//pane.getChildren().remove(0, pane.getChildren().size());
-			//visualGraph.visualize();
-			List<blackCircle> set=new ArrayList<blackCircle>();
-			System.out.println(visualGraph.countSelected());
-			set = visualGraph.selectedCircles();
-			for (blackCircle o : set) {
-				pane.getChildren().remove(o.getCircle());
-			}
+			visualGraph.deleteChoosenNode();
+			pane.getChildren().remove(0, pane.getChildren().size());
+			visualGraph.visualize();
 		});
 		
 	}

@@ -46,14 +46,18 @@ public class applicationRunning{
 	private Integer start;
 	private Controller controller;
 	private VisualGraph<String> visualGraph;
-	
+	private ListView<String> list;
+	private ObservableList<String> items;
 	//variable for the graph
 	
 	public applicationRunning() {
 		Graph<String> G=new Graph<String>();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new java.io.File("."));
-		controller=new Controller();
+		list = new ListView<String>();
+		items = FXCollections.observableArrayList ();
+		list.setItems(items);
+		controller=new Controller(items);
 		menu();
 		if (start==1) {
 			G.randomGraph(10, 5, 20, 10, false);
@@ -106,7 +110,7 @@ public class applicationRunning{
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove node");
     	Button button3=new Button("Apply algorithm");
-    	Button button4=new Button("Selection mode");
+    	Button button4=new Button("Go to Selection mode");
     	button.getStylesheets().add(css);
     	button2.getStylesheets().add(css);
     	button3.getStylesheets().add(css);
@@ -155,12 +159,11 @@ public class applicationRunning{
  		                }
  		});
     	
-        ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList (
-            "Single", "Double", "Suite", "Family App","culo","tette","altroculo");
-        list.setItems(items);
+        /*ListView<String> list = new ListView<String>();
+        ObservableList<String> items = FXCollections.observableArrayList ();
         list.getStylesheets().add(css);
-        items.add("ilmiopene");
+        list.setItems(items);
+        items.add("ilmiopene");*/
     	
     	vbox.getChildren().addAll(menuBar,hbox,pane,list);
     	
