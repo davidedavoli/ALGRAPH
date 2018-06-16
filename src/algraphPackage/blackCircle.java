@@ -102,6 +102,7 @@ public class blackCircle{
         controller.circleOnMouseClickedController(this,pane);
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
+        controller.setOnCircleHovered(this);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
