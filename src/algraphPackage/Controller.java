@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.*;
-public class Controller{
+public class Controller <T extends Comparable<T>>{
 	
 	private Boolean draggedEvent;
 	private static Boolean mode;
@@ -167,6 +167,44 @@ public class Controller{
  		});
 		return true;
 	}
+	
+	public void applyButtonController(VisualGraph<T> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6) {
+		if (visualGraph.countSelected()==0) items.add("Error: can't apply because there are no nodes selected");
+		else if (visualGraph.countSelected()>1) items.add("Error: can't apply because there are more than one nodes selected");
+		else {
+			button1.setDisable(false);
+			button2.setDisable(false);
+			button3.setDisable(true);
+			button4.setDisable(true);
+			button5.setDisable(true);
+			button6.setDisable(true);
+			GraphVisit graphVisit = new GraphVisit();
+			List<Node<T>> list = new LinkedList<Node<T>>();
+			list = graphVisit.detectNegativeCycles(visualGraph.getGraph(), visualGraph.getSelectedNode());
+			if (!list.isEmpty()) {   //////////////////////Colora i nodi selezionati e anche le frecce tra di loro
+				items.add("Error: negative cycle");
+				for (Node<T> node : list) {
+					visualGraph.getBlackCircle(node).getCircle().setFill(Color.GOLD);
+					/*for (Node<T> n : list) {
+						for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) { 
+							//errore: colora tutti le frecce del ciclo, se si vuole mettere a posto bene, se no cancellare questo for
+							
+							if (arrow.getTarget() == visualGraph.getBlackCircle(n)) {
+								arrow.getLine1().setStroke(Color.GOLD);
+								arrow.getLine2().setStroke(Color.GOLD);
+								arrow.getLine3().setStroke(Color.GOLD);
+							}
+						}
+					}*/ //questa è una cagata ma molto bella
+				}
+			}
+			else {
+				
+			}
+		}
+	}
+	
+	
 	public void setOnArrowTextClickedController(Arrow arrow) {
 		arrow.getText().setOnMouseClicked(event -> {
 			Stage stage = new Stage();
