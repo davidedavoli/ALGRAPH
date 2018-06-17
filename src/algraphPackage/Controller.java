@@ -187,7 +187,7 @@ public class Controller{
 			hbox2.setMinHeight(80);
 			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
-				if (!(textField.getText().matches("[0-9]+") && textField.getText().length() > 1)) {
+				if (!(textField.getText().matches("^-?\\d+$") && textField.getText().length() > 1)) {
 					items.add("Value inserted not valid");
 					stage.close();
 				}
