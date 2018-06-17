@@ -11,9 +11,9 @@ public class GraphTest {
 		GraphVisit<String> Positano=new GraphVisit<String>();
 		Tudor.randomGraph(10, 2, 10, -10, true);
 		Tudor.print();
-		LinkedList<Node<String>> t=(LinkedList<Node<String>>) Positano.detectNegativeCycles(Tudor);
+		LinkedList<Node<String>> t=(LinkedList<Node<String>>) Positano.detectNegativeCycles(Tudor, Tudor.getRoot(0));
 		System.out.println(t.toString());
-		Positano.BellmanFord(Tudor, true);
+		Positano.BellmanFord(Tudor);
 		Tudor.outGraph("src/tudor.txt");
 		Graph<String> Denis=new Graph<String>();
 		Denis.inGraph("src/tudor.txt");

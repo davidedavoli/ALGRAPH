@@ -3,6 +3,7 @@ package graphPackage;
 
 import java.io.*;
 import java.util.*;
+import algraphPackage.Controller;
 
 
 public class Graph<T extends Comparable<T>> implements IGraph<T>{
@@ -133,7 +134,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			System.out.println("EXCEPTION::OUT");
 		}
 	}
-	public void inGraph(String path) {
+	public String inGraph(String path) {
 		Integer i=0;
 		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
 		try {
@@ -141,12 +142,14 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			String inStr="";
 			inStr=in.readLine();
 			if (!inStr.equals("<N>") || inStr==null) {
+				throw new IOException("SyntaxError");
 				//Error.Inputfile();
 			}
 			inStr=in.readLine();
 			while (!inStr.equals("</N>")) {
 				String[] line=inStr.split(":");
 				if (line.length<2) {
+					throw new IOException("SyntaxError");
 					//Error.Inputfile();
 					}
 				Node<T> m=new Node<T>((T)line[1]);
@@ -157,12 +160,14 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			}
 			inStr=in.readLine();
 			if (!inStr.equals("<E>")) {
+				throw new IOException("SyntaxError");
 				//Error.Inputfile();
 			}
 			inStr=in.readLine();
 			while (!inStr.equals("</E>")) {
 				String[] line=inStr.split(":");
 				if (line.length!=2) {
+					throw new IOException("SyntaxError");
 					//Error.Inputfile()
 					}
 				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[2]));
@@ -181,9 +186,16 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			System.out.println("FILENOTFOUND");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			if(e.getMessage()=="Syntax error")
+			{
+				return e.getMessage();
+				}
+			else {
 			e.printStackTrace();
-			System.out.println("IOEXCEPTION");
+			return "Error in input file";
+					}
 		}
+		return "Graph successfuly imported";
 		
 		
 		

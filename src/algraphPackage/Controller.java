@@ -50,7 +50,7 @@ public class Controller{
 	public static blackCircle b1;
 	public static Boolean b1Exists;
 	public static blackCircle b2;
-	private static ObservableList<String> items;
+	public static ObservableList<String> items;
 	private static int c=0;
 	
 	public Controller() {
