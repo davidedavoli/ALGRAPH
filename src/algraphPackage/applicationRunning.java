@@ -221,6 +221,8 @@ public class applicationRunning{
     	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
     	Button button4=new Button("Go to Selection mode");
+    	Button button5=new Button("End of computation");
+    	Button button6=new Button("Next step");
     	button.getStylesheets().add(css);
     	button2.getStylesheets().add(css);
     	button3.getStylesheets().add(css);
@@ -233,10 +235,13 @@ public class applicationRunning{
     	button2.setMinWidth(130);
     	button3.setMinWidth(130);
     	button4.setMinWidth(130);*/
+    	button5.setDisable(true);
+    	button6.setDisable(true);
+    	
     	VBox vbox=new VBox();
     	
     	HBox hbox=new HBox();
-    	hbox.getChildren().addAll(button,button2,button3,button4);
+    	hbox.getChildren().addAll(button,button2,button3,button4,button5,button6);
     	hbox.setMinHeight(100);
     	//hbox.setMinWidth(100);
     	hbox.setAlignment(Pos.CENTER);
