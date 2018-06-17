@@ -1,5 +1,9 @@
 package graphPackage;
+import java.awt.Color;
 import java.util.*;
+
+import algraphPackage.Arrow;
+import javafx.scene.control.Button;
 
 
 public class GraphVisit<T extends Comparable<T>> {
@@ -62,6 +66,41 @@ public class GraphVisit<T extends Comparable<T>> {
 		}
 		// GraphVisualize(G, q, n, m, distances, parents);
 	}
+	
+	
+	public Integer GraphVisualize(Button next, Button end, VisualGraph<T> visualGraph) {
+		Integer b = new Integer(-1);
+		visualGraph.getBlackCircle(visualGraph.getSelectedNode()).getCircle().setFill(Color.GREEN); //colora il primo
+		end.setOnMouseClicked(event -> {
+			b = 1;
+			//considero q come la lista contenenti tutti i nodi per bellman
+			for (Node <T> node : q) {
+				visualGraph.getBlackCircle(node).getCircle().setFill(Color.RED); // colora nodi
+				//if (q non finita)
+				for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) {
+					if (arrow.getTarget() == visualGraph.getBlackCircle(q.get(q.indexOf(node)+1))){ //colora frecce
+						arrow.getLine1().setStroke(Color.RED);
+						arrow.getLine2().setStroke(Color.RED);
+						arrow.getLine3().setStroke(Color.RED);
+					}
+				}
+			}
+		});
+		next.setOnMouseClicked(event ->{
+			b = 0;
+			//considero n e m quelli da collegare
+			for (Arrow arrow : visualGraph.getBlackCircle(n).getOutList()) {
+				if (arrow.getTarget() == visualGraph.getBlackCircle(m)) {
+					arrow.getLine1().setStroke(Color.RED);
+					arrow.getLine2().setStroke(Color.RED);
+					arrow.getLine3().setStroke(Color.RED);
+				}
+			}
+			visualGraph.getBlackCircle(m);
+		});
+		if (b==0 || b==1) return b;
+	}
+	
 	
 	public List<Node<T>> detectNegativeCycles(Graph<T> G, Node<T> radice) {
 		List<Node<T>> cycleList=new LinkedList<Node<T>>();
