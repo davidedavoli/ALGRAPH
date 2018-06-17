@@ -1,0 +1,12 @@
+Cose da fare:
+	Aggiungere a mainPage due pulsanti, inizialmente disabilitati, "End of the computation" e "Next step", li si abilita entrambi solo dopo il click di Apply.
+	Far partire l'algoritmo di BFM cliccando il nodo radice. (si clicca il nodo, si schiaccia apply, l'algoritmo parte sse è stato selezionato uno ed un solo nodo).
+	Prima dell' esecuzione dell'algoritmo si esegue il metodo detectNegativeCycles per evidenziare la presenza di nodi negativi; in caso positivo, segnalarlo con un 	messaggio di errore e segnalare il ciclo (nel log, o a schermo).
+	graphVisualize ritorna un booleano: 1 sse "End of the computation" è stato premuto, 0 altrimenti. Alla fine del corpo della funzione si aspetta che venga 	premuto almeno uno dei due pulsanti.
+	Qualora venga premuto "End of the computation" almeno una volta, la funzione ritorna 1 senza eseguire la visualizzazione, altrimenti visualizza
+	
+Durante l'esecuzione di graphVisualize: 
+		Colorare di un colore particolare la radice.
+		Colorare di un altro colore tutti i nodi che si trovano della Queue.
+		Colorare di un determinato colore tutte le frece che fanno parte dell'albero dei padri.
+		Stampare a schermo in un'apposita area il vettore delle distanze.
