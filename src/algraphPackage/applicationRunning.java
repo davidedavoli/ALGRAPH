@@ -52,6 +52,7 @@ public class applicationRunning{
 	//variable for the graph
 	
 	public applicationRunning() {
+		String css = this.getClass().getResource("../style.css").toExternalForm();
 		Graph<String> G=new Graph<String>();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new java.io.File("."));
@@ -145,6 +146,7 @@ public class applicationRunning{
 				G.print();
 			});
 			Scene scene = new Scene(vbox);
+			scene.getStylesheets().add(css);
 			stage.setScene(scene);
 			stage.showAndWait();
 		} //random graph

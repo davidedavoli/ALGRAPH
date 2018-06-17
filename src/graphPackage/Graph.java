@@ -100,7 +100,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			FileWriter b=new FileWriter(path);
 			BufferedWriter out=new BufferedWriter(b);
 			out.write("<N>");
-			out.write("\r");
+			out.write("\n");
 				for (Node<T> n : pollo.keySet()) {
 					out.write(i.toString()+":");
 					out.write(((String) n.getElement()));
@@ -109,9 +109,9 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 					i++;
 				}
 			out.write("</N>");
-			out.write("\r");
+			out.write("\n");
 			out.write("<E>");
-			out.write("\r");
+			out.write("\n");
 			i=0;
 				for (Node<T> n : pollo.keySet()) {
 				for (Node<T> o : pollo.get(n).keySet()) {
@@ -120,7 +120,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 					out.write(nodes.get(o).toString());
 					out.write(":");
 					out.write(pollo.get(n).get(o).toString());
-					out.write("\r");
+					out.write("\n");
 				} 
 			}
 				out.write("</E>");
