@@ -79,7 +79,6 @@ public class Controller <T extends Comparable<T>>{
 	public void addButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event ->{
 			visualGraph.insertNode();
-			//items.add("Aggiunto un nodo"); //non ho la piï¿½ pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
 			items.add("Node added");
     	});
 	}
@@ -117,30 +116,6 @@ public class Controller <T extends Comparable<T>>{
 				items.add("Switched to Selection mode");
 			}
 		});
-		/*button.setOnMouseClicked(event ->{
-			Stage stage = new Stage();
-			HBox hbox1 = new HBox();
-			HBox hbox2 = new HBox();
-			VBox vbox = new VBox();
-			Text text1 = new Text("Starting node ");
-			Text text2 = new Text("Target node ");
-			TextField textField1 = new TextField();
-			TextField textField2 = new TextField();
-			Button button2 = new Button("Apply");
-			hbox1.getChildren().addAll(text1,textField1);
-			hbox2.getChildren().addAll(text2,textField2);
-			vbox.getChildren().addAll(hbox1,hbox2,button2);
-			button2.setOnMouseClicked(e -> {
-				//function that gets the blackcircle with that label
-				/*Arrow arrow = new Arrow(blackcircle1, blackcircle2, string);
-				pane.getChildren().addAll(arrow.getLine1(), arrow.getLine2, arrow.getLine3());
-				stage.close();
-				
-			});
-			Scene scene = new Scene(vbox);
-			stage.setScene(scene);
-			stage.show();
-		});*/
 		
 	}
 
@@ -149,7 +124,6 @@ public class Controller <T extends Comparable<T>>{
  			
  			@Override
  			public void handle(ActionEvent event) {
- 				// TODO Auto-generated method stub
  				 FileChooser fileChooser = new FileChooser();
  				 fileChooser.setInitialDirectory(new File("."));
  		         fileChooser.setTitle("Save graph...");
@@ -196,7 +170,7 @@ public class Controller <T extends Comparable<T>>{
 			List<Node<String>> list = new LinkedList<Node<String>>();
 			list = graphVisit.detectNegativeCycles(visualGraph.getGraph(), visualGraph.getSelectedNode());
 			
-			if (!list.isEmpty()) {   //////////////////////Colora i nodi selezionati e anche le frecce tra di loro
+			if (!list.isEmpty()) {   //Colora i nodi selezionati e anche le frecce tra di loro
 				items.add("Error: negative cycle");
 				for (Node<String> node : list) {
 					visualGraph.getBlackCircle(node).getCircle().setFill(Color.GOLD);
@@ -300,34 +274,6 @@ public class Controller <T extends Comparable<T>>{
 					boundsController(blackcircle, pane);
             
 					draggedEvent = true;
-				
-				/*else {
-					if (!draggedLine) {
-						blackcircle.getOutList().add(new Arrow(blackcircle.getCircle().getCenterX(), blackcircle.getCircle().getCenterY()));
-						blackcircle.incrementMaxList();
-						blackcircle.getOutList().get(blackcircle.getMaxList()-1).pushInPane(pane);
-						draggedLine = true;
-					}
-					pane.setOnMouseClicked(e -> {
-						
-						// if the event is dropped inside a blackcircle, 
-						
-						draggedLine = false;
-					});
-					Line line = blackcircle.getOutList().get(blackcircle.getMaxList()-1).getLine1();
-					line.setStartX(blackcircle.getCircle().getCenterX());
-					line.setStartY(blackcircle.getCircle().getCenterY());
-					
-					line.setEndX(event.getX());
-					line.setEndY(event.getY());
-					
-					blackcircle.getOutList().get(blackcircle.getMaxList()-1).managePointer();
-            	
-					boundsController(blackcircle, pane);x
-            	
-					draggedEvent = true;
-
-				}*/
 			}
     });
 	}
@@ -501,41 +447,11 @@ public class Controller <T extends Comparable<T>>{
 		
 		//visualGraph.setColor(Color.BLACK);
 		
-		//Bisogna trovaer un modo per fermare l'esecuzione sicché non viene premuto end o next
+		//Bisogna trovare un modo per fermare l'esecuzione sicché non viene premuto end o next
 		
 		//POI ABBIAMO FINITO
 		
 		
-		//colora il primo
-		/*end.setOnMouseClicked(event -> {
-			b = 1;
-			//considero q come la lista contenenti tutti i nodi per bellman
-			for (Node <T> node : q) {
-				visualGraph.getBlackCircle(node).getCircle().setFill(Color.RED); // colora nodi
-				//if (q non finita)
-				for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) {
-					if (arrow.getTarget() == visualGraph.getBlackCircle(q.get(q.indexOf(node)+1))){ //colora frecce
-						arrow.getLine1().setStroke(Color.RED);
-						arrow.getLine2().setStroke(Color.RED);
-						arrow.getLine3().setStroke(Color.RED);
-					}
-				}
-			}
-		});
-		next.setOnMouseClicked(event ->{
-			b = 0;
-			//considero n e m quelli da collegare
-			for (Arrow arrow : visualGraph.getBlackCircle(n).getOutList()) {
-				if (arrow.getTarget() == visualGraph.getBlackCircle(m)) {
-					arrow.getLine1().setStroke(Color.RED);
-					arrow.getLine2().setStroke(Color.RED);
-					arrow.getLine3().setStroke(Color.RED);
-				}
-			}
-			visualGraph.getBlackCircle(m);
-		});
-		if (b==0 || b==1) return b;*/
 	}
-	/////////////////////////////////////////////////////////////////////////////////
 	
 }
