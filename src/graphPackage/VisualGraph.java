@@ -88,6 +88,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		G.deleteNode(u);
 		mappa.remove(u);
 	}
+	
 
 	public void insertEdge(Node<T> u, Node<T> v) {
 		mappa.get(u).bind(mappa.get(v), G.w(u, v).toString());
@@ -194,6 +195,13 @@ public class VisualGraph<T  extends Comparable<T>> {
 			if (mappa.get(nodo)==b)
 				return nodo;
 				}
+		return null;
+	}
+	
+	public Node<T> getSelectedNode(){
+		for (Node<T> node : mappa.keySet()) {
+			if (mappa.get(node).getChosen()==true) return node;
+		}
 		return null;
 	}
 	
