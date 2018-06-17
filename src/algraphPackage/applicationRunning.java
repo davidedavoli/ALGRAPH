@@ -38,14 +38,15 @@ import javafx.scene.control.ListView;
 import javafx.collections.ObservableList;
 import javafx.css.Styleable;
 import javafx.collections.*;
-import algraphPackage.*;
+import graphPackage.*;
+import javafx.scene.control.*;;
 
 public class applicationRunning{
 	
 	private Stage stage,stage2;
 	private Integer start;
 	private Controller controller;
-	private VisualGraph<String> visualGraph;
+	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ObservableList<String> items;
 	//variable for the graph
@@ -60,8 +61,92 @@ public class applicationRunning{
 		controller=new Controller(items);
 		menu();
 		if (start==1) {
-			G.randomGraph(10, 5, 20, 10, false);
-			G.print();
+			Stage stage = new Stage();
+			Text text1 = new Text("Insert max nodes");
+			Text text2 = new Text("Insert min nodes");
+			Text text3 = new Text("Insert Mw");
+			Text text4 = new Text("Insert mw");
+			Text text5 = new Text("Density");
+			TextField textField1 = new TextField();
+			TextField textField2 = new TextField();
+			TextField textField3 = new TextField();
+			TextField textField4 = new TextField();
+			CheckBox checkBox = new CheckBox();
+			Button button = new Button("Continue");
+			HBox hbox1 = new HBox();
+			HBox hbox2 = new HBox();
+			HBox hbox3 = new HBox();
+			HBox hbox4 = new HBox();
+			HBox hbox5 = new HBox();
+			HBox hbox6 = new HBox();
+			VBox vbox = new VBox();
+			HBox box1 = new HBox();
+			HBox box2 = new HBox();
+			HBox box3 = new HBox();
+			HBox box4 = new HBox();
+			HBox box5 = new HBox();
+			HBox box6 = new HBox();
+			HBox box7 = new HBox();
+			HBox box8 = new HBox();
+			HBox box9 = new HBox();
+			HBox box10 = new HBox();
+			box1.getChildren().add(text1);
+			box1.setMinHeight(80);
+			box1.setMinWidth(300);
+			box1.setAlignment(Pos.CENTER);
+			box2.getChildren().add(textField1);
+			box2.setMinHeight(80);
+			box2.setMinWidth(300);
+			box2.setAlignment(Pos.CENTER);
+			box3.getChildren().add(text2);
+			box3.setMinHeight(80);
+			box3.setMinWidth(300);
+			box3.setAlignment(Pos.CENTER);
+			box4.getChildren().add(textField2);
+			box4.setMinHeight(80);
+			box4.setMinWidth(300);
+			box4.setAlignment(Pos.CENTER);
+			box5.getChildren().add(text3);
+			box5.setMinHeight(80);
+			box5.setMinWidth(300);
+			box5.setAlignment(Pos.CENTER);
+			box6.getChildren().add(textField3);
+			box6.setMinHeight(80);
+			box6.setMinWidth(300);
+			box6.setAlignment(Pos.CENTER);
+			box7.getChildren().add(text4);
+			box7.setMinHeight(80);
+			box7.setMinWidth(300);
+			box7.setAlignment(Pos.CENTER);
+			box8.getChildren().add(textField4);
+			box8.setMinHeight(80);
+			box8.setMinWidth(300);
+			box8.setAlignment(Pos.CENTER);
+			box9.getChildren().add(text5);
+			box9.setMinHeight(80);
+			box9.setMinWidth(300);
+			box9.setAlignment(Pos.CENTER);
+			box10.getChildren().add(checkBox);
+			box10.setMinHeight(80);
+			box10.setMinWidth(300);
+			box10.setAlignment(Pos.CENTER);
+			hbox1.getChildren().addAll(box1,box2);
+			hbox2.getChildren().addAll(box3,box4);
+			hbox3.getChildren().addAll(box5,box6);
+			hbox4.getChildren().addAll(box7,box8);
+			hbox5.getChildren().addAll(box9,box10);
+			hbox6.getChildren().add(button);
+			hbox6.setAlignment(Pos.CENTER);
+			hbox6.setMinHeight(80);
+			vbox.getChildren().addAll(hbox1,hbox2,hbox3,hbox4,hbox5,hbox6);
+			button.setOnMouseClicked(event -> {
+				G.randomGraph(Integer.valueOf(textField1.getText()), Integer.valueOf(textField2.getText()), Integer.valueOf(textField3.getText()), Integer.valueOf(textField4.getText()), checkBox.isSelected());
+				stage.close();
+				G.print();
+			});
+			Scene scene = new Scene(vbox);
+			stage.setScene(scene);
+			stage.showAndWait();
 		} //random graph
 		else if (start==2) {
 			graphFromFile(G);
@@ -72,6 +157,11 @@ public class applicationRunning{
 	public static void graphFromFile(Graph<String> G) {
  		FileChooser fileChooser = new FileChooser();
  		fileChooser.setInitialDirectory(new java.io.File("."));
+ 		fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("gph", "*.gph"),
+                new FileChooser.ExtensionFilter("txt", "*.txt")
+            );
  		Stage fc=new Stage();
  		fc.setTitle("Input graph...");
  		File file = fileChooser.showOpenDialog(fc);
@@ -108,7 +198,7 @@ public class applicationRunning{
     	MenuBar menuBar = new MenuBar();
     	menuBar.getMenus().addAll(menu1, menu2, menu3);
     	Button button=new Button("Add node");
-    	Button button2=new Button("Remove node");
+    	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
     	Button button4=new Button("Go to Selection mode");
     	button.getStylesheets().add(css);
@@ -141,7 +231,7 @@ public class applicationRunning{
 
 		visualGraph = new VisualGraph<String>(G, pane);
     	
-        controller.addButtonController(button,pane);
+        controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2, visualGraph, pane);
         
@@ -150,12 +240,16 @@ public class applicationRunning{
  			
  			@Override
  			public void handle(ActionEvent event) {
+ 				G.removeAll();
+ 				System.out.println(G.V().size());
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
- 		        visualGraph=new VisualGraph<String>(G, pane);
+ 		        visualGraph.removeAll();
+ 		        visualGraph.readGraph(G, pane);
  		        for (blackCircle b: visualGraph.circles()) {
  			    	controller.boundsController(b, pane);
  			    	}
+ 				System.out.println(G.V().size());
  		                }
  		});
     	
@@ -178,6 +272,10 @@ public class applicationRunning{
     	controller.boundsController(b, pane);
     	}
     }
+	
+	public static VisualGraph<String> getVisualGraph() {
+		return visualGraph;
+	}
 	
     public void menu() {
     	stage= new Stage();

@@ -1,9 +1,6 @@
 package graphPackage;
 import java.util.*;
 import algraphPackage.*;
-
-import algraphPackage.Arrow;
-import algraphPackage.blackCircle;
 import javafx.scene.layout.Pane;
 
 public class VisualGraph<T  extends Comparable<T>> {
@@ -16,7 +13,31 @@ public class VisualGraph<T  extends Comparable<T>> {
 		super();
 		G=lucaserafini;
 		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(p));
+			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
+		}
+		for (Node<T> lucamariotti : lucaserafini.V()){
+			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
+				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo), G.w(lucamariotti, lucacontalbo).toString());
+				
+			}
+		}
+		this.p=p;
+	}
+	
+	public void removeAll() {
+		G=null;
+		p=null;
+		List<Node<T>> toRemove= new ArrayList<Node<T>>(); 
+		for (Node<T> key: mappa.keySet())
+			toRemove.add(key);
+		for (Node<T> key: toRemove)
+			mappa.remove(key);
+	}
+	
+	public void readGraph(Graph<T> lucaserafini, Pane p) {
+		G=lucaserafini;
+		for (Node<T> lucamariotti : lucaserafini.V()) {
+			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
@@ -30,8 +51,22 @@ public class VisualGraph<T  extends Comparable<T>> {
 		// TODO Auto-generated method stub
 		G.insertNode(u);
 		mappa.put(u, new blackCircle(p));
+		System.out.println(G.V().size());
 	}
-
+	
+	public void insertNode() {
+		// TODO Auto-generated method stub
+		Node<String> u=new Node<String>(String.valueOf(G.V().size()+1));
+		G.insertNode((Node<T>) u);
+		mappa.put((Node<T>) u, new blackCircle(p, (String) u.getElement()));
+		Controller.boundsController(mappa.get(u), mappa.get(u).getPane());
+		System.out.println(G.V().size());
+	}
+	
+	
+	public void renameNode(Node<String> n, String s) {
+		G.setNodeValue(n, s);
+	}
 	public void deleteNode(Node<T> u) {
 		Arrow toRemove=null;
 		for (Node<T> lucaserafini : mappa.keySet()) {
@@ -55,43 +90,57 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 
 	public void insertEdge(Node<T> u, Node<T> v) {
-		
 		mappa.get(u).bind(mappa.get(v), G.w(u, v).toString());
-		
-		
-	}
-
-	public void deleteEdge(Node<T> u, Node<T> v) {
-		mappa.get(u).deleteLink(mappa.get(v));
-		G.deleteEdge(u, v);
 	}
 	
-	public void deleteChoosenNodes() {
+	public void insertEdge(Node<T> u, Node<T> v, String s) {
+		G.insertEdge(u, v, Integer.parseInt(s));
+		insertEdge(u, v);
+	}
+	public Set<Arrow> chosenArrows() {
+		HashSet<Arrow> chosen=new HashSet<Arrow>();
+		for (blackCircle b: mappa.values()) {
+			for (Arrow a: b.getOutList()) {
+				if (a.getChosen()==true)
+					chosen.add(a);
+			}
+		}
+		return chosen;
+	}
+	public void deleteEdge(Node<T> u, Node<T> v) {
+		G.deleteEdge(u, v);
+		mappa.get(u).deleteLink(mappa.get(v));
+	}
+	public void deleteChosenArrows() {
+		Iterator<Arrow> lucamariotti= chosenArrows().iterator();
+		while (lucamariotti.hasNext()) {
+			Arrow a=lucamariotti.next();
+			deleteEdge(getNode(a.getParent()), getNode(a.getTarget()));
+		}
+	}
+	public void deleteChosenNodes() {
 		Iterator<Node<T>> lucamariotti= mappa.keySet().iterator();
 		while( lucamariotti.hasNext()) {
 			Node<T> pollo=lucamariotti.next();
 			if (mappa.get(pollo).getChosen()) {
-				System.out.println(pollo.getElement());
 				this.deleteNode(pollo);
 			}
 		}
 		
 	}
 	
-	public void deleteChoosenNode() {
+	public void deleteChosenNode() {
 		Node<T> toDelete=null;
+		System.out.println(this.selectedCircles().toString());
 		for(Node<T> pollo: mappa.keySet()) {
 			if (mappa.get(pollo).getChosen()) {
-				System.out.println(pollo.getElement());
 				toDelete=pollo;
 			}
 		}
-		if (toDelete!=null) {
-			//p.getChildren().remove(toDelete.getElement().);
-			this.deleteNode(toDelete);
-		}
+		if (toDelete!=null)
+		this.deleteNode(toDelete);
 		if(this.countSelected()>0)
-		this.deleteChoosenNode();
+		this.deleteChosenNode();
 	}
 	
 	public Collection<blackCircle> circles(){
@@ -112,13 +161,12 @@ public class VisualGraph<T  extends Comparable<T>> {
 		return c;
 	}
 	
-	public List<blackCircle> selectedCircles(){//ritorna i nodi selezionati
-		List<blackCircle> set=new ArrayList<blackCircle>(); 
+	public HashSet<blackCircle> selectedCircles(){//ritorna i nodi selezionati
+		HashSet<blackCircle> set=new HashSet<blackCircle>(); 
 		for (blackCircle b: mappa.values()) {
 			if (b.getChosen()==true)
 				set.add(b);
 		}
-		System.out.println(set.size());
 		return set;
 	}
 	public void visualize() {
@@ -131,5 +179,31 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 				
 		}
+	}
+	
+	public void renameNode(blackCircle n, String s) {
+		for (Node<T> b: mappa.keySet()) {
+				if (mappa.get(b).equals(n))
+					G.setNodeValue((Node<String>) b, s);
+		
+		}
+	}
+	
+	public Node<T> getNode(blackCircle b){
+		for (Node<T> nodo: mappa.keySet()) {
+			if (mappa.get(nodo)==b)
+				return nodo;
+				}
+		return null;
+	}
+	
+	public void renameEdge(blackCircle p, blackCircle t, Integer value) {
+		G.insertEdge(getNode(p), getNode(t), value);	
+		}
+		
+	
+	public blackCircle getBlackCircle(Node<T> n) {
+		return mappa.get(n);
+		
 	}
 }

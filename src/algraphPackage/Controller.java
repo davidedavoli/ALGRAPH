@@ -2,6 +2,7 @@ package algraphPackage;
 
 import javafx.application.Application;
 import graphPackage.*;
+import graphPackage.*;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,12 +74,11 @@ public class Controller{
 	        text.setOnMouseExited(event ->{ text.setUnderline(false);});
 	    }
 	
-	public void addButtonController(Button button, Pane pane) {
+	public void addButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event ->{
-			blackCircle blackcircle = new blackCircle(pane);
-			boundsController(blackcircle,pane);
-			items.add("Node called "+blackcircle.getText().getText()+" added");
-			//items.add("Aggiunto un nodo"); //non ho la piu' pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
+			visualGraph.insertNode();
+			//items.add("Aggiunto un nodo"); //non ho la pi� pallida idea di come e dove inserire items.add() per mettere il log nella lista. -Simone
+			items.add("Node added");
     	});
 	}
 	
@@ -136,9 +136,15 @@ public class Controller{
  			
  			@Override
  			public void handle(ActionEvent event) {
+ 				// TODO Auto-generated method stub
  				 FileChooser fileChooser = new FileChooser();
  				 fileChooser.setInitialDirectory(new File("."));
- 		           fileChooser.setTitle("Save graph...");
+ 		         fileChooser.setTitle("Save graph...");
+ 		         fileChooser.getExtensionFilters().addAll(
+ 		                 new FileChooser.ExtensionFilter("All Files", "*.*"),
+ 		                 new FileChooser.ExtensionFilter("gph", "*.gph"),
+ 		                 new FileChooser.ExtensionFilter("txt", "*.txt")
+ 		             );
  		           File file = fileChooser.showSaveDialog(new Stage());
  		           if (file != null) {
  		                	G.outGraph(file.getPath().toString());
@@ -181,10 +187,17 @@ public class Controller{
 			hbox2.setMinHeight(80);
 			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
-				String tmp =  arrow.getText().getText();
-				arrow.setText(textField.getText());
-				items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
-				stage.close();
+				if (!(textField.getText().matches("[0-9]+") && textField.getText().length() > 1)) {
+					items.add("Value inserted not valid");
+					stage.close();
+				}
+				else {
+					String tmp =  arrow.getText().getText();
+					applicationRunning.getVisualGraph().renameEdge(arrow.getParent(), arrow.getTarget(), Integer.parseInt(textField.getText()));
+					arrow.setText(textField.getText());
+					items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
+					stage.close();
+				}
 			});
 			Scene scene = new Scene(vbox);
 			stage.setScene(scene);
@@ -215,6 +228,7 @@ public class Controller{
 			button.setOnMouseClicked(e -> {
 				String tmp = blackcircle.getText().getText();
 				blackcircle.setText(textField.getText());
+				applicationRunning.getVisualGraph().renameNode(blackcircle, textField.getText());
 				items.add("Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
 				stage.close();
 			});
@@ -235,14 +249,10 @@ public class Controller{
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
 					for (Arrow o : blackcircle.getOutList()) {
-						o.getLine1().setStartX(event.getX());
-						o.getLine1().setStartY(event.getY());
-						o.managePointer();
+						o.setLines(o.getParent(), o.getTarget());
 					}
 					for (Arrow o : blackcircle.getInList()) {
-						o.getLine1().setEndX(event.getX());
-						o.getLine1().setEndY(event.getY());
-						o.managePointer();
+						o.setLines(o.getParent(), o.getTarget());
 					}
 					boundsController(blackcircle, pane);
             
@@ -330,16 +340,15 @@ public class Controller{
 					if (c==1) {
 						b2 = new blackCircle();
 						b2 = blackcircle;
-						b1.getOutList().add(new Arrow(b1,b2,"1"));
 						b1.incrementMaxList();
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine1());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine2());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getLine3());
-						pane.getChildren().add(b1.getOutList().get(b1.getMaxList()-1).getText());
+						
+						if (!b2.equals(b1)) {
+						applicationRunning.getVisualGraph().insertEdge(applicationRunning.getVisualGraph().getNode(b1), applicationRunning.getVisualGraph().getNode(b2),"1");
 						b1.changeHovered();
 						b1.circleExpand(1);
 						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));
 						items.add(b1.getText().getText()+" -> "+b2.getText().getText()+" succesfully linked");
+						}
 					}
 					c = c+1;
 					if (c == 2) c=0;
@@ -364,14 +373,15 @@ public class Controller{
 	
 	public void removeButtonController(Button button, VisualGraph<String> visualGraph, Pane pane) {
 		button.setOnMouseClicked(event -> {
-			visualGraph.deleteChoosenNode();
+			visualGraph.deleteChosenArrows();
+			visualGraph.deleteChosenNode();
 			pane.getChildren().remove(0, pane.getChildren().size());
 			visualGraph.visualize();
 		});
 		
 	}
 	
-	public void boundsController(blackCircle blackcircle, Pane pane) {
+	public static void boundsController(blackCircle blackcircle, Pane pane) {
 		Bounds bounds = pane.getLayoutBounds();
 		Circle circle = blackcircle.getCircle();
 		Text text = blackcircle.getText();

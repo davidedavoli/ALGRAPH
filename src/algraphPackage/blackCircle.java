@@ -80,7 +80,32 @@ public class blackCircle{
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
-	
+		
+	public blackCircle(Pane pane, String string) {
+		c=c+1;
+		this.pane=pane;
+		text=new Text();
+		controller = new Controller();
+		outList = new ArrayList<Arrow>();
+		inList = new ArrayList<Arrow>();
+		chosen = false;
+		hovered = new Boolean(false);
+		maxList = new Integer(0);
+		circle = new Circle(10);
+		circle.setFill(Color.BLACK);
+    	circle.setCursor(Cursor.MOVE);
+        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
+        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        text.setText(string);
+        text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
+        text.setY(circle.getCenterY()-2*circle.getRadius());
+        controller.circleOnMouseClickedController(this,pane);
+        controller.circleOnMouseDraggedController(this, pane);
+        controller.setOnCircleTextClickedController(this);
+        controller.setOnCircleHovered(this);
+		pane.getChildren().add(this.getCircle());
+		pane.getChildren().add(this.getText());
+	}
 	public void changeHovered() {
 		hovered = !hovered;
 	}
@@ -134,7 +159,7 @@ public class blackCircle{
 	}
 	
 	public Integer getMaxList() {
-		return maxList;
+		return outList.size();
 	}
 	
 	public void bind(blackCircle target, String label) {
@@ -155,6 +180,9 @@ public class blackCircle{
 	public void setOutList(List<Arrow> outList) {
 		this.outList = outList;
 	}
+	public void inListRemove(Arrow a) {
+		inList.remove(a);
+	}
 	public void moveText() {
 		 text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
 	        text.setY(circle.getCenterY()-2*circle.getRadius());
@@ -167,6 +195,7 @@ public class blackCircle{
 			if (p.getTarget()==target)
 			{
 				toRemove.add(p);
+				target.inListRemove(p);
 			}
 		}
 		outList.removeAll(toRemove);
