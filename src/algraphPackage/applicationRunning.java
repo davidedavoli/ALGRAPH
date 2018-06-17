@@ -45,7 +45,7 @@ public class applicationRunning{
 	
 	private Stage stage,stage2;
 	private Integer start;
-	private Controller controller;
+	private Controller<String> controller;
 	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ObservableList<String> items;
@@ -59,7 +59,7 @@ public class applicationRunning{
 		list = new ListView<String>();
 		items = FXCollections.observableArrayList ();
 		list.setItems(items);
-		controller=new Controller(items);
+		controller=new Controller<String>(items);
 		menu();
 		controller.items.add("Welcome to Algraph");
 		if (start==1) {
@@ -259,10 +259,16 @@ public class applicationRunning{
         controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2, visualGraph, pane);
-        
         controller.setOnSave(otherMenuItem, G);
-        menuItem.setOnAction(new EventHandler<ActionEvent>() {
- 			
+        controller.endButtonController(button5, pane, visualGraph);
+        controller.nextButtonController(button6, pane, visualGraph);
+        button3.setOnMouseClicked(event ->{
+			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6);
+    	});
+        
+        
+ 				
+ 		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
  			@Override
  			public void handle(ActionEvent event) {
  				G.removeAll();

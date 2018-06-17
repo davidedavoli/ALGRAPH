@@ -3,14 +3,16 @@ import java.awt.Color;
 import java.util.*;
 
 import algraphPackage.Arrow;
+import algraphPackage.Controller;
 import javafx.scene.control.Button;
 
 
 public class GraphVisit<T extends Comparable<T>> {
-	
-	
-	public void BellmanFord(Graph<T> G) {
+	public GraphVisit() {}
+	public void BellmanFord(VisualGraph<T> visualGraph, Node<T> radice) {
+		Controller<T> c=new Controller<>();
 		int i=0;
+		Graph<T> G=visualGraph.getGraph();
 		//boolean tuttoalvolo;
 		TreeMap<Node<T>, Integer> index=new TreeMap<Node<T>, Integer>();
 		for(Node<T> n : G.V()) {
@@ -28,7 +30,7 @@ public class GraphVisit<T extends Comparable<T>> {
 		for (Node<T> n : G.V())
 			parents[index.get(n)]=null;
 		
-		Node<T> radice=G.getRoot(0);
+		//Node<T> radice=G.getRoot(0);
 		
 		distances[index.get(radice)]=0;
 		
@@ -40,23 +42,19 @@ public class GraphVisit<T extends Comparable<T>> {
 		
 		while (!q.isEmpty()) {
 			Node<T> n=q.pop();
-			//if (!tuttoalvolo)
-			//tuttoalvolo=GraphVisualize(G, q, n, m, distances, parents))
+			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
+			
 				for(Node<T> m : G.adj(n)){
-					//if (!tuttoalvolo)
-					// tuttoalvolo=GraphVisualize(G, q, n, m, distances, parents);
+					c.GraphVisualize(visualGraph, radice,q, n, m, distances, parents, index);
 					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
 						if (!q.contains(m)) {
 							q.addLast(m);
-							//if (!tuttoalvolo)
-							// tuttoalvolo=GraphVisualize(G, q, n, m, distances, parents);
+							c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 							}
 						parents[index.get(m)]=n;
-						//if (!tuttoalvolo)
-						// tuttoalvolo=GraphVisualize(G, q, n, m, distances, parents);
+						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
-						//if (!tuttoalvolo)
-						// tuttoalvolo=GraphVisualize(G, q, n, m, distances, parents);
+						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						
 					}	
 				}
@@ -64,41 +62,6 @@ public class GraphVisit<T extends Comparable<T>> {
 				if (counter==G.V().size()*G.V().size())
 					break;
 		}
-		// GraphVisualize(G, q, n, m, distances, parents);
-	}
-	
-	
-	public Integer GraphVisualize(Button next, Button end, VisualGraph<T> visualGraph) {
-		Integer b = new Integer(-1);
-		visualGraph.getBlackCircle(visualGraph.getSelectedNode()).getCircle().setFill(Color.GREEN); //colora il primo
-		end.setOnMouseClicked(event -> {
-			b = 1;
-			//considero q come la lista contenenti tutti i nodi per bellman
-			for (Node <T> node : q) {
-				visualGraph.getBlackCircle(node).getCircle().setFill(Color.RED); // colora nodi
-				//if (q non finita)
-				for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) {
-					if (arrow.getTarget() == visualGraph.getBlackCircle(q.get(q.indexOf(node)+1))){ //colora frecce
-						arrow.getLine1().setStroke(Color.RED);
-						arrow.getLine2().setStroke(Color.RED);
-						arrow.getLine3().setStroke(Color.RED);
-					}
-				}
-			}
-		});
-		next.setOnMouseClicked(event ->{
-			b = 0;
-			//considero n e m quelli da collegare
-			for (Arrow arrow : visualGraph.getBlackCircle(n).getOutList()) {
-				if (arrow.getTarget() == visualGraph.getBlackCircle(m)) {
-					arrow.getLine1().setStroke(Color.RED);
-					arrow.getLine2().setStroke(Color.RED);
-					arrow.getLine3().setStroke(Color.RED);
-				}
-			}
-			visualGraph.getBlackCircle(m);
-		});
-		if (b==0 || b==1) return b;
 	}
 	
 	

@@ -13,7 +13,6 @@ public class GraphTest {
 		Tudor.print();
 		LinkedList<Node<String>> t=(LinkedList<Node<String>>) Positano.detectNegativeCycles(Tudor, Tudor.getRoot(0));
 		System.out.println(t.toString());
-		Positano.BellmanFord(Tudor);
 		Tudor.outGraph("src/tudor.txt");
 		Graph<String> Denis=new Graph<String>();
 		Denis.inGraph("src/tudor.txt");

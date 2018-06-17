@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -24,8 +23,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
 import javafx.scene.Group;
-import javafx.scene.layout.GridPane; 
-import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Circle;
@@ -52,9 +50,13 @@ public class Controller <T extends Comparable<T>>{
 	public static blackCircle b2;
 	public static ObservableList<String> items;
 	private static int c=0;
+	private boolean end;
+	private boolean next;
 	
 	public Controller() {
 		draggedEvent = new Boolean(false);
+		next=false;
+		end=false;
 	}
 	
 	public Controller(ObservableList<String> item) {
@@ -82,6 +84,17 @@ public class Controller <T extends Comparable<T>>{
     	});
 	}
 	
+	public void nextButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
+		button.setOnMouseClicked(event ->{
+			next=true;
+    	});
+	}
+	
+	public void endButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
+		button.setOnMouseClicked(event ->{
+			end=true;
+    	});
+	}
 	
 	public void linkButtonController(Button button, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event -> { //FUORI DA QUI, MODE NON VIENE MODIFICATO
@@ -168,38 +181,29 @@ public class Controller <T extends Comparable<T>>{
 		return true;
 	}
 	
-	public void applyButtonController(VisualGraph<T> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6) {
+	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6) {
+		System.out.println(visualGraph.countSelected());
 		if (visualGraph.countSelected()==0) items.add("Error: can't apply because there are no nodes selected");
 		else if (visualGraph.countSelected()>1) items.add("Error: can't apply because there are more than one nodes selected");
 		else {
-			button1.setDisable(false);
-			button2.setDisable(false);
+			button1.setDisable(true);
+			button2.setDisable(true);
 			button3.setDisable(true);
 			button4.setDisable(true);
-			button5.setDisable(true);
-			button6.setDisable(true);
-			GraphVisit graphVisit = new GraphVisit();
-			List<Node<T>> list = new LinkedList<Node<T>>();
+			button5.setDisable(false);
+			button6.setDisable(false);
+			GraphVisit<String> graphVisit = new GraphVisit<String>();
+			List<Node<String>> list = new LinkedList<Node<String>>();
 			list = graphVisit.detectNegativeCycles(visualGraph.getGraph(), visualGraph.getSelectedNode());
+			
 			if (!list.isEmpty()) {   //////////////////////Colora i nodi selezionati e anche le frecce tra di loro
 				items.add("Error: negative cycle");
-				for (Node<T> node : list) {
+				for (Node<String> node : list) {
 					visualGraph.getBlackCircle(node).getCircle().setFill(Color.GOLD);
-					/*for (Node<T> n : list) {
-						for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) { 
-							//errore: colora tutti le frecce del ciclo, se si vuole mettere a posto bene, se no cancellare questo for
-							
-							if (arrow.getTarget() == visualGraph.getBlackCircle(n)) {
-								arrow.getLine1().setStroke(Color.GOLD);
-								arrow.getLine2().setStroke(Color.GOLD);
-								arrow.getLine3().setStroke(Color.GOLD);
-							}
-						}
-					}*/ //questa Ã¨ una cagata ma molto bella
-				}
+					}
 			}
 			else {
-				
+				graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode());
 			}
 		}
 	}
@@ -225,16 +229,17 @@ public class Controller <T extends Comparable<T>>{
 			hbox2.setMinHeight(80);
 			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
-				if (!(textField.getText().matches("^-?\\d+$") && textField.getText().length() > 1)) {
-					items.add("Value inserted not valid");
-					stage.close();
-				}
-				else {
+			try {
 					String tmp =  arrow.getText().getText();
 					applicationRunning.getVisualGraph().renameEdge(arrow.getParent(), arrow.getTarget(), Integer.parseInt(textField.getText()));
 					arrow.setText(textField.getText());
 					items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
 					stage.close();
+				} catch (NumberFormatException except){
+					Alert alert=new Alert(Alert.AlertType.ERROR);
+					alert.setContentText("Invalid value.");
+					items.add("Invalid value");
+					alert.showAndWait();
 				}
 			});
 			Scene scene = new Scene(vbox);
@@ -475,6 +480,62 @@ public class Controller <T extends Comparable<T>>{
 	blackcircle.moveText();
 	}
 	
+	
+	public void GraphVisualize(VisualGraph<T> visualGraph, Node<T> radice, LinkedList<Node<T>> queue, Node<T> poppedNode, Node<T> adjNode,Integer[] distances,Node<T>[] parents, TreeMap<Node<T>, Integer> index) {
+		if (!end) {
+		visualGraph.getBlackCircle(radice).getCircle().setFill(Color.RED);
+		visualGraph.getBlackCircle(poppedNode).getCircle().setFill(Color.BLUE);
+		if (adjNode!=null)
+			visualGraph.getBlackCircle(adjNode).getCircle().setFill(Color.GREEN);
+		for (Node<T> n: visualGraph.getGraph().V()) {
+			for (Arrow arrow: visualGraph.getArrows()) {
+				if (parents[index.get(n)]!=null && arrow.getParent()==visualGraph.getBlackCircle(n) && arrow.getTarget()==visualGraph.getBlackCircle(parents[index.get(n)])) {//dovrebbe colorare le frecce del vettore dei padri
+					arrow.setColor(Color.RED);
+				}
+			}
+		}
+		}
+		
+		
+		//Bisogna trovare un modo di vedere il vettore delle distanze
+		
+		//visualGraph.setColor(Color.BLACK);
+		
+		//Bisogna trovaer un modo per fermare l'esecuzione sicché non viene premuto end o next
+		
+		//POI ABBIAMO FINITO
+		
+		
+		//colora il primo
+		/*end.setOnMouseClicked(event -> {
+			b = 1;
+			//considero q come la lista contenenti tutti i nodi per bellman
+			for (Node <T> node : q) {
+				visualGraph.getBlackCircle(node).getCircle().setFill(Color.RED); // colora nodi
+				//if (q non finita)
+				for (Arrow arrow : visualGraph.getBlackCircle(node).getOutList()) {
+					if (arrow.getTarget() == visualGraph.getBlackCircle(q.get(q.indexOf(node)+1))){ //colora frecce
+						arrow.getLine1().setStroke(Color.RED);
+						arrow.getLine2().setStroke(Color.RED);
+						arrow.getLine3().setStroke(Color.RED);
+					}
+				}
+			}
+		});
+		next.setOnMouseClicked(event ->{
+			b = 0;
+			//considero n e m quelli da collegare
+			for (Arrow arrow : visualGraph.getBlackCircle(n).getOutList()) {
+				if (arrow.getTarget() == visualGraph.getBlackCircle(m)) {
+					arrow.getLine1().setStroke(Color.RED);
+					arrow.getLine2().setStroke(Color.RED);
+					arrow.getLine3().setStroke(Color.RED);
+				}
+			}
+			visualGraph.getBlackCircle(m);
+		});
+		if (b==0 || b==1) return b;*/
+	}
 	/////////////////////////////////////////////////////////////////////////////////
 	
 }

@@ -2,6 +2,7 @@ package graphPackage;
 import java.util.*;
 import algraphPackage.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class VisualGraph<T  extends Comparable<T>> {
 	
@@ -209,9 +210,25 @@ public class VisualGraph<T  extends Comparable<T>> {
 		G.insertEdge(getNode(p), getNode(t), value);	
 		}
 		
+	public List<Arrow> getArrows (){
+		List<Arrow> a=new LinkedList<Arrow>();
+		for (blackCircle n: mappa.values()) {
+			a.addAll(n.getOutList());
+		}
+		return a;
+	}
 	
 	public blackCircle getBlackCircle(Node<T> n) {
 		return mappa.get(n);
 		
+	}
+	
+	public void setColor(Color c) {
+		for (blackCircle b: mappa.values()) {
+			b.getCircle().setStroke(c);
+		}
+		for (Arrow a: getArrows()) {
+			a.setColor(c);
+		}
 	}
 }
