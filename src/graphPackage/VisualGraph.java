@@ -199,6 +199,14 @@ public class VisualGraph<T  extends Comparable<T>> {
 		return null;
 	}
 	
+	public Integer getIndexNode (blackCircle b) {
+		for (Node<T> nodo: mappa.keySet()) {
+			if (mappa.get(nodo).get==b)
+				return nodo;
+				}
+		return null;
+	}
+	
 	public Node<T> getSelectedNode(){
 		for (Node<T> node : mappa.keySet()) {
 			if (mappa.get(node).getChosen()==true) return node;
@@ -218,6 +226,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 		return a;
 	}
 	
+	
 	public blackCircle getBlackCircle(Node<T> n) {
 		return mappa.get(n);
 		
@@ -229,6 +238,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 		}
 		for (Arrow a: getArrows()) {
 			a.setColor(c);
+		}
+	}
+	public void allBlack() {
+		for(Node<T> n : G.V()) {
+			mappa.get(n).getCircle().setFill(Color.BLACK);
+			for (Arrow arrow : mappa.get(n).getOutList()) {
+				arrow.getLine1().setStroke(Color.BLACK);
+				arrow.getLine2().setStroke(Color.BLACK);
+				arrow.getLine3().setStroke(Color.BLACK);
+			}
 		}
 	}
 }

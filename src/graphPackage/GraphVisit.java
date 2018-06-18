@@ -8,8 +8,18 @@ import javafx.scene.control.Button;
 
 
 public class GraphVisit<T extends Comparable<T>> {
+	private int counter=0;
+	public static Integer[] distances;
 	public GraphVisit() {}
-	public void BellmanFord(VisualGraph<T> visualGraph, Node<T> radice) {
+	
+	public List<Integer> getDistances() {
+		List list = new ArrayList<Integer>();
+		for (Integer a : distances) {
+			list.add(a);
+		}
+		return list;
+	}
+	public void BellmanFord(VisualGraph<T> visualGraph, Node<T> radice, Button end, Button next, Button button1, Button button2, Button button3, Button button4) {
 		Controller<T> c=new Controller<>();
 		int i=0;
 		Graph<T> G=visualGraph.getGraph();
@@ -21,7 +31,7 @@ public class GraphVisit<T extends Comparable<T>> {
 		}
 		i=0;
 		
-		Integer[] distances= new Integer[G.V().size()];
+		distances= new Integer[G.V().size()];
 		for (Node<T> n : G.V())
 			distances[index.get(n)]=null;
 		
@@ -37,10 +47,10 @@ public class GraphVisit<T extends Comparable<T>> {
 		LinkedList<Node<T>> q=new LinkedList<Node<T>>();
 		q.add(radice);
 		
-		int counter=0;
 		
-		
+		end.setOnMouseClicked(event -> {
 		while (!q.isEmpty()) {
+			
 			Node<T> n=q.pop();
 			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
 			
@@ -58,10 +68,49 @@ public class GraphVisit<T extends Comparable<T>> {
 						
 					}	
 				}
-				counter++;
-				if (counter==G.V().size()*G.V().size())
+				counter = counter+1;
+				if (counter==G.V().size()*G.V().size()) {
+					counter = 0;
 					break;
+				}
 		}
+		end.setDisable(true);
+		next.setDisable(true);
+		button1.setDisable(false);
+		button2.setDisable(false);
+		button3.setDisable(false);
+		button4.setDisable(false);
+	});
+		next.setOnMouseClicked(event -> {
+			Node<T> n=q.pop();
+			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
+			
+				for(Node<T> m : G.adj(n)){
+					c.GraphVisualize(visualGraph, radice,q, n, m, distances, parents, index);
+					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
+						if (!q.contains(m)) {
+							q.addLast(m);
+							c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
+							}
+						parents[index.get(m)]=n;
+						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
+						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
+						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
+						
+					}	
+				}
+				counter = counter+1;
+				if (counter==G.V().size()*G.V().size() || q.isEmpty()) {
+					counter = 0;
+					end.setDisable(true);
+					next.setDisable(true);
+					button1.setDisable(false);
+					button2.setDisable(false);
+					button3.setDisable(false);
+					button4.setDisable(false);
+					}
+		});
+		
 	}
 	
 	

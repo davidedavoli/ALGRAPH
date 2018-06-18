@@ -245,5 +245,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		}
 		
 	}
-
+	public TreeMap<Node<T>, TreeMap<Node<T>, Integer>> getTreeMap(){
+		return pollo;
+	}
 }
