@@ -215,19 +215,15 @@ public class applicationRunning{
     	stage2.setMaximized(true);
     	stage2.setTitle("Algraph");
     	final Menu menu1 = new Menu("File");
-    	final Menu menu2 = new Menu("Other");
-    	//final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
     	final MenuItem otherMenuItem = new MenuItem("Save");
-    	final MenuItem vettdis = new MenuItem("Vettore Distanze");
     	
     	((Styleable)menuItem).getStyleClass().add(css);
     	
     	menu1.getItems().add(menuItem);
     	menu1.getItems().add(otherMenuItem);
-    	menu2.getItems().add(vettdis);
     	MenuBar menuBar = new MenuBar();
-    	menuBar.getMenus().addAll(menu1 , menu2); //, menu3);
+    	menuBar.getMenus().addAll(menu1); 
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
@@ -245,8 +241,8 @@ public class applicationRunning{
     	button6.setDisable(true);
     	VBox vbox=new VBox();
     	HBox contliste = new HBox();
-    	list.setPrefWidth(100000000);
-    	lacoda.setPrefWidth(100000000);
+    	list.prefWidthProperty().bind(vbox.widthProperty());
+    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
     	contliste.getChildren().addAll(list,lacoda);
     	
     	HBox hbox=new HBox();
@@ -259,7 +255,7 @@ public class applicationRunning{
     	Pane pane=new Pane();
     	pane.setMinHeight(100);
     	pane.setMinWidth(100);
-    	vbox.getChildren().addAll(menuBar,hbox,pane,list);
+    	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
     	pane.prefWidthProperty().bind(vbox.widthProperty());
     	pane.prefHeightProperty().bind(vbox.heightProperty());
     
@@ -297,7 +293,7 @@ public class applicationRunning{
  		});
     	
     	
-    	vbox.getChildren().addAll(contliste);
+    	//vbox.getChildren().addAll(contliste);
     	
 
 
