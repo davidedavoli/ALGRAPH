@@ -174,28 +174,6 @@ public class Controller <T extends Comparable<T>>{
 	}
 	
 
-	public void setOnVettDis (MenuItem vettdis, GraphVisit graphvisit) {
-		
-		String css = this.getClass().getResource("../style.css").toExternalForm();
-		Stage stage = new Stage();
-		stage.setTitle("Vettore delle Distanze");
-		VBox panel = new VBox();
-		Scene scene = new Scene(panel);
-		String vettore = null;
-		for (int i = 0; i < graphvisit.getLength(); i++)
-		{
-			vettore = vettore + graphvisit.distances[i] + " ";
-			
-		}
-		
-		Text text = new Text(vettore);
-		Text titolino = new Text("Questo è il vettore delle distanze");
-
-		panel.getChildren().addAll(titolino,text);
-		scene.getStylesheets().add(css);
-		stage.setScene(scene);
-		stage.show();
-	}
 	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6,Button button7, ObservableList<String> qu) {
 
 		button3.setOnMouseClicked(event ->{
