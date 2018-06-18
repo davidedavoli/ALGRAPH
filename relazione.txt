@@ -1,10 +1,10 @@
 ALGRAPH
 
 Il programma:
-Algraph è un applicativo in grade di monitorare a schermo l'esecuzione dell'algoritmo di Bellman Ford Moore su di un grafo. Il codice è stato scritto in java e l'interfaccia grafica è stata realizzata mediante JavaFX. L'algoritmo può essere eseguito in due modalità: passo dopo passo o in un unico passo.
+Algraph è un applicativo in grado di monitorare a schermo l'esecuzione dell'algoritmo di Bellman Ford Moore su di un grafo. Il codice è stato scritto in java e l'interfaccia grafica è stata realizzata mediante JavaFX. L'algoritmo può essere eseguito in due modalità: passo dopo passo o in un unico passo.
 
 Caratteristiche:
-Per la realizzazione di questo progetto abbiamo scelto di sfruttare più ampiamente possibile le risorse che JavaFX ci metteva a disposizone: per il monitoraggio delle strutture di dati utilizzate dall'algoritmo di Bellman Ford Moore, anziché darne un semplice output testauale, ove possibile, abbiamo scelto di darne una visualizzazione concreta sullo schermo colorando di colore diverso i vari elementi del grafo:
+Per la realizzazione di questo progetto abbiamo scelto di sfruttare più ampiamente possibile le risorse che JavaFX ci metteva a disposizone: per il monitoraggio delle strutture di dati utilizzate dall'algoritmo di Bellman Ford Moore, anziché darne un semplice output testauale, ove possibile, abbiamo scelto di darne una visualizzazione concreta sullo schermo colorando diversamente i vari elementi del grafo:
 
 	GIALLO: rappresenta i nodi coinvolti o adiacenti ad un ciclo negativo.
 	ROSSO: rappresenta la radice dell'albero di copertua calcolato dall'algoritmo e contrassegna gli archi che lo compongono.	
@@ -21,17 +21,17 @@ Da menu principale scegliere una delle seguenti voci:
 
 Generate Graph Manually aprirà la finestra principale del programma in cui sarà possibile lavorare al grafo mediante le seguenti interazioni:
 	-Add node: Aggiunge un nodo
-	-Switch to [mode] mode: permette di scgliere fra le due modalità di modifica: Selection e Link.
+	-Switch to [mode] mode: permette di scegliere fra le due modalità di modifica: Selection e Link.
 		--Selection mode: cliccando su uno degli elementi del grafo, questo viene selezionato.
 		--Link mode: cliccando su due nodi viene creato un arco orientato fra questi due nodi dal primo al secondo che si ha cliccato.
 	-Remove: elimina ogni elemento selezionato.
-Cliccando sulle etichette degli elementi sarà aperta una finestra di dialogo che permetterà di reimpostare il peso dell'arco o l'etichetta del nodo. La posizione dei nodi di default è casule, ma trascinandoli sullo schermo sarà possibile cambiare la suddetta per dare al grafo un layout più gradevole.
-Grenerate Random Graph aprirà una finestra di dialogo in cui sarà possibile settare alcuni parametri per la generazione del grafo: 
+Cliccando sulle etichette degli elementi sarà aperta una finestra di dialogo che permetterà di reimpostare il peso dell'arco o l'etichetta del nodo. La posizione dei nodi di default è casuale, ma trascinandoli sullo schermo sarà possibile cambiare la suddetta per dare al grafo un layout più gradevole.
+Generate Random Graph aprirà una finestra di dialogo in cui sarà possibile settare alcuni parametri per la generazione del grafo: 
 	-Max Nodes
 	-Min Nodes
 	-Max Weight
 	-Min Weight
-Max Nodes è un intero positivo che stabilisce il numero massimo di nodi; Min Nodes stabilisce il minimo, Max weight e Min weight sono due interi (positivi, nulli o negativi) che permettono di limitare il peso degli archi. Density, infine, permette di aumentare il numero di archi totali del grafo: selezionandolo sarà più probabile che l'algoritmo generi grafi densi. nel caso sia spuntato, l'algoritmo potrà generare un numero di archi compreso fra [#nodes, #nodes*(#nodes-1)], mentre bel caso non sia spuntato, l'intervallo sarà [#nodes, 4*(#nodes-1)]
+Max Nodes è un intero positivo che stabilisce il numero massimo di nodi; Min Nodes stabilisce il minimo, Max weight e Min weight sono due interi (positivi, nulli o negativi) che permettono di limitare il peso degli archi. Density, infine, permette di aumentare il numero di archi totali del grafo: selezionandolo sarà più probabile che l'algoritmo generi grafi densi. nel caso sia spuntato, l'algoritmo potrà generare un numero di archi compreso fra [#nodes, #nodes*(#nodes-1)], mentre nel caso non sia spuntato, l'intervallo sarà [#nodes, 4*(#nodes-1)]
 
 Import Graph From File:
 Mediante una finestra è possibile selezionare quale file importare e, una volta effettuata la scelta, verrà aperta la pagina principale del programma.
@@ -41,20 +41,20 @@ In questa pagina, oltre che alle funzionalità di modifica di un grafo precedente
 	-Save, per il salvataggio dei file
 	-Open, per l'apertura dei file
 
-Apply Algorithm è un pulsante che lancia l'esecuzione dell'algoritmo dal nodo selezionato; qualora ve ne sia più di uno, o vi siano dei cicli negativi l'algoritmo non parte, ma mostra a schermo i nodi coinvolti in tali cicli. Qualora parta, mediante la log bar segnala quale passo dell'algoritmo si sta eseguendo e secondo la legenda precedentemente indicata colora i nodi dello schermo in base al loro stato. Nella parte destra dello scehrmo viene visualizzata la coda utilizzata dall'algoritmo per iterare il relax sui nodi.
+Apply Algorithm è un pulsante che lancia l'esecuzione dell'algoritmo dal nodo selezionato: qualora ve ne sia più di uno o vi siano dei cicli negativi, l'algoritmo non parte, ma mostra a schermo i nodi coinvolti in tali cicli. Qualora parta, mediante la log bar segnala quale passo dell'algoritmo si sta eseguendo e secondo la legenda precedentemente indicata colora i nodi dello schermo in base al loro stato. Nella parte destra dello schermo viene visualizzata la coda utilizzata dall'algoritmo per iterare il relax sui nodi.
 
 Classi implementate:
 
 Graph Package:
-In questo package sono implementate tutte le strutture dati relative all' interazione con i grafi.
+In questo package sono implementate tutte le strutture dati relative all' iterazione con i grafi.
 Node: Rappresenta il tipo di dato del nodo generico del grafo.
 Graph: Questa classe è la classe elementare del grafo con gli stessi metodi previsti dalla specifica dataci a lezione ed i metodi per la generazione dei grafi casuali e da file.
 GraphVisit: implementa i metodi di visita del grafo, in particolar modo quello di Bellman Ford Moore e quello per l'individuazione di cicli negativi.
 IGraph: Interfaccia che è implementata da Graph.
-VisualGraph: gestisce la biezione fra il grafo e la sua interfaccia a schermo, associando ad ogni nodo un clackCircle, ad ogni arco un Arrow, implementando i metodi per restituire ad ognuno di questi quattro tipi di dati il corrispondente nella biezione ed altri per restituire i blackCircle selezionati, per rinominare e cancellare archi e nodi ed i loro corrispettivi a schermo in modo che fra questi vi sia una corretta biezione, cosicché ad una determinata azione sull'interfaccia grafica ne corrispona una analoga nella struttura di dati su cui verrà seguito l'algoritmo.
+VisualGraph: gestisce la biezione fra il grafo e la sua interfaccia a schermo, associando ad ogni nodo un blackCircle, ad ogni arco un Arrow, implementando i metodi per restituire ad ognuno di questi quattro tipi di dati il corrispondente nella biezione ed altri per restituire i blackCircle selezionati, per rinominare e cancellare archi e nodi ed i loro corrispettivi a schermo in modo che fra questi vi sia una corretta biezione, cosicché ad una determinata azione sull'interfaccia grafica ne corrispona una analoga nella struttura di dati su cui verrà seguito l'algoritmo.
 
 Algraph Package:
-In questo package sono implementare le classi che gestiscono l'esecuzione del programma e la sua effettiva visulizzazione a schermo.
+In questo package sono implementate le classi che gestiscono l'esecuzione del programma e la sua effettiva visualizzazione a schermo.
 Algraph: contiene il metodo main e chiama da costruttore l'esecuzione di tutte le altre classi del package.
 ApplicationRuning: gestisce l'interfaccia a schermo dell'applicazione, implementando un metodo per ogni schermata e chiamando i metodi della classe controller per gestire l'interazione dell'utente con gli oggetti visualizzati.
 Arrow: classe specifica per la gestione della visualizzazione a schermo degli archi, che prevede metodi per la costruzione di tali frecce e per la gestione del loro orientamento sullo schermo e delle loro etichette.
