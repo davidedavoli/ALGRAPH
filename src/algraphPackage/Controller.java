@@ -195,16 +195,18 @@ public class Controller <T extends Comparable<T>>{
 		}
 	}
 	
-	public void distanceShow (blackCircle b) {
-		List list = new ArrayList<Integer>();
-		if (applyMode) {
+	public void distanceShow (VisualGraph<T> visualGraph, TreeMap<Node<T>, Integer> index) {
+		for (blackCircle b: visualGraph.circles())
 		b.getCircle().setOnMouseClicked(event -> {
 			Stage stage = new Stage();
 			HBox hbox = new HBox();
-			Text text = new Text("Distance: "+GraphVisit.distances[visualGraph.getGraph().getTreeMap().get);
+			Text text = new Text("Distance: "+GraphVisit.distances[index.get(visualGraph.getNode(b))]);
+			hbox.getChildren().add(text);
+			Scene scene = new Scene(hbox);
+			stage.setScene(scene);
+			stage.show();
 			//Pensavo di mettere che se ci si clicca, ti apre una finestra che ti dice la distanza, ma ora non ci riesco e  ho sonno
 		});
-		}
 	}
 	
 	
@@ -463,14 +465,16 @@ public class Controller <T extends Comparable<T>>{
 	}
 	
 	public void GraphVisualize(VisualGraph<T> visualGraph, Node<T> radice, LinkedList<Node<T>> queue, Node<T> poppedNode, Node<T> adjNode,Integer[] distances,Node<T>[] parents, TreeMap<Node<T>, Integer> index) {
-		
+
+		visualGraph.setColor(Color.BLACK);
+		distanceShow(visualGraph, index);
 		visualGraph.getBlackCircle(radice).getCircle().setFill(Color.RED);
 		visualGraph.getBlackCircle(poppedNode).getCircle().setFill(Color.BLUE);
 		if (adjNode!=null)
 			visualGraph.getBlackCircle(adjNode).getCircle().setFill(Color.GREEN);
 		for (Node<T> n: visualGraph.getGraph().V()) {
 			for (Arrow arrow: visualGraph.getArrows()) {
-				if (parents[index.get(n)]!=null && arrow.getParent()==visualGraph.getBlackCircle(n) && arrow.getTarget()==visualGraph.getBlackCircle(parents[index.get(n)])) {//dovrebbe colorare le frecce del vettore dei padri
+				if (parents[index.get(n)]!=null && arrow.getTarget()==visualGraph.getBlackCircle(n) && arrow.getParent()==visualGraph.getBlackCircle(parents[index.get(n)])) {//dovrebbe colorare le frecce del vettore dei padri
 					arrow.setColor(Color.RED);
 				}
 			}
@@ -478,7 +482,6 @@ public class Controller <T extends Comparable<T>>{
 		
 		//Bisogna trovare un modo di vedere il vettore delle distanze
 		
-		//visualGraph.setColor(Color.BLACK);
 		
 		//Bisogna trovare un modo per fermare l'esecuzione sicch� non viene premuto end o next
 		

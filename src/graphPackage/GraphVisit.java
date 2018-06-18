@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 public class GraphVisit<T extends Comparable<T>> {
 	private int counter=0;
 	public static Integer[] distances;
+	public TreeMap<Node<T>, Integer> index;
 	public GraphVisit() {}
 	
 	public List<Integer> getDistances() {
@@ -20,9 +21,9 @@ public class GraphVisit<T extends Comparable<T>> {
 		return list;
 	}
 	public void BellmanFord(VisualGraph<T> visualGraph, Node<T> radice, Button end, Button next, Button button1, Button button2, Button button3, Button button4) {
-		Controller<T> c=new Controller<>();
 		int i=0;
 		Graph<T> G=visualGraph.getGraph();
+		 Controller<T> c=new Controller<T>();
 		//boolean tuttoalvolo;
 		TreeMap<Node<T>, Integer> index=new TreeMap<Node<T>, Integer>();
 		for(Node<T> n : G.V()) {
@@ -47,23 +48,27 @@ public class GraphVisit<T extends Comparable<T>> {
 		LinkedList<Node<T>> q=new LinkedList<Node<T>>();
 		q.add(radice);
 		
-		
+		Controller.items.add(0, "Computation Started");
 		end.setOnMouseClicked(event -> {
 		while (!q.isEmpty()) {
 			
 			Node<T> n=q.pop();
 			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
-			
+			Controller.items.add(0, "Pop of node "+n.getElement()+" from queue");
 				for(Node<T> m : G.adj(n)){
 					c.GraphVisualize(visualGraph, radice,q, n, m, distances, parents, index);
+					Controller.items.add(0, "Analysis of adjacent node "+m.getElement());
 					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
 						if (!q.contains(m)) {
+							Controller.items.add(0, "Node "+m.getElement()+" enqueued");
 							q.addLast(m);
 							c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 							}
 						parents[index.get(m)]=n;
+						Controller.items.add(0, "Parent of node "+m.getElement()+" updated. New parent: "+n.getElement());
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
+						Controller.items.add(0, "Distance of node "+m.getElement()+" updated. New distance: "+distances[index.get(m)]);
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						
 					}	
@@ -84,17 +89,21 @@ public class GraphVisit<T extends Comparable<T>> {
 		next.setOnMouseClicked(event -> {
 			Node<T> n=q.pop();
 			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
-			
+			Controller.items.add(0, "Pop of node "+n.getElement()+" from queue");
 				for(Node<T> m : G.adj(n)){
 					c.GraphVisualize(visualGraph, radice,q, n, m, distances, parents, index);
+					Controller.items.add(0, "Analysis of adjacent node "+m.getElement());
 					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
 						if (!q.contains(m)) {
+							Controller.items.add(0, "Node "+m.getElement()+" enqueued");
 							q.addLast(m);
 							c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 							}
 						parents[index.get(m)]=n;
+						Controller.items.add(0, "Parent of node "+m.getElement()+" updated. New parent: "+n.getElement());
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
+						Controller.items.add(0, "Distance of node "+m.getElement()+" updated. New distance: "+distances[index.get(m)]);
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						
 					}	

@@ -167,10 +167,10 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			while (!inStr.equals("</E>")) {
 				String[] line=inStr.split(":");
 				if (line.length!=2) {
-					throw new IOException("SyntaxError");
 					//Error.Inputfile()
 					}
 				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[2]));
+				
 				inStr=in.readLine();
 				
 				
@@ -191,9 +191,10 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 				return e.getMessage();
 				}
 			else {
-			e.printStackTrace();
 			return "Error in input file";
 					}
+		}catch (NumberFormatException e) {
+			return "Error in input file";
 		}
 		return "Graph successfuly imported";
 		

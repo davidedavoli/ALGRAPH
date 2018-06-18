@@ -55,6 +55,7 @@ public class applicationRunning{
 		String css = this.getClass().getResource("../style.css").toExternalForm();
 		Graph<String> G=new Graph<String>();
 		FileChooser fileChooser = new FileChooser();
+		controller=new Controller<String>();
 		fileChooser.setInitialDirectory(new java.io.File("."));
 		list = new ListView<String>();
 		items = FXCollections.observableArrayList ();
