@@ -285,17 +285,7 @@ public class applicationRunning{
  			public void handle(ActionEvent event) {
  				G.removeAll();
  				System.out.println(G.V().size());
- 				
- 				
- 				
- 				
- 				//non so cosa sia successo
- 				//controller.a(applicationRunning.graphFromFile(G));
- 				//pls fix
- 				
- 				
- 				
- 				
+ 				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
  		        visualGraph.removeAll();
  		        visualGraph.readGraph(G, pane);
@@ -307,7 +297,7 @@ public class applicationRunning{
  		});
     	
     	
-    	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
+    	vbox.getChildren().addAll(contliste);
     	
 
 

@@ -501,7 +501,7 @@ public class Controller <T extends Comparable<T>>{
 		});
 	}
 	
-	public void GraphVisualize(VisualGraph<T> visualGraph, Node<T> radice, LinkedList<Node<T>> queue, Node<T> poppedNode, Node<T> adjNode,Integer[] distances,Node<T>[] parents, TreeMap<Node<T>, Integer> index) {
+	public void GraphVisualize(VisualGraph<T> visualGraph, Node<T> radice, LinkedList<Node<T>> q, Node<T> poppedNode, Node<T> adjNode,Integer[] distances,Node<T>[] parents, TreeMap<Node<T>, Integer> index) {
 
 		visualGraph.setColor(Color.BLACK);
 		visualGraph.getBlackCircle(radice).getCircle().setFill(Color.RED);
@@ -516,6 +516,11 @@ public class Controller <T extends Comparable<T>>{
 			}
 		
 		}
+		
+		Controller.queue.remove(0, queue.size());
+		queue.add("Coda:");
+		for (Node<T> a: q)
+		queue.add(a.toString());
 		//Bisogna trovare un modo di vedere il vettore delle distanze
 		
 		
