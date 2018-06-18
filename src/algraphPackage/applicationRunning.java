@@ -45,7 +45,7 @@ public class applicationRunning{
 	
 	private Stage stage,stage2;
 	private Integer start;
-	private Controller controller;
+	private Controller<String> controller;
 	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ObservableList<String> items;
@@ -59,14 +59,14 @@ public class applicationRunning{
 		list = new ListView<String>();
 		items = FXCollections.observableArrayList ();
 		list.setItems(items);
-		controller=new Controller(items);
+		//controller=new Controller<String>(items);
 		menu();
-		controller.items.add("Welcome to Algraph");
+		items.add("Welcome to Algraph");
 		if (start==1) {
 			randomWindow(G, css);
 		} //random graph
 		else if (start==2) {
-			controller.items.add(graphFromFile(G));
+			items.add(graphFromFile(G));
 		} //graph from file
 		mainPage(G);
 	}
@@ -170,16 +170,16 @@ public class applicationRunning{
 		button.setOnMouseClicked(event -> {
 			try {
 				if(Integer.valueOf(textField1.getText())<Integer.valueOf(textField2.getText()) || Integer.valueOf(textField1.getText())<Integer.valueOf(textField2.getText()) )
-					throw new RuntimeException("Max must greater than min");
+					throw new RuntimeException("Max must be greater than min");
 			G.randomGraph(Integer.valueOf(textField1.getText()), Integer.valueOf(textField2.getText()), Integer.valueOf(textField3.getText()), Integer.valueOf(textField4.getText()), checkBox.isSelected());
 			}catch(NumberFormatException e) {
 				Alert alert=new Alert(Alert.AlertType.ERROR);
-				alert.setContentText("Invalid vales.");
+				alert.setContentText("Invalid values.");
 				alert.showAndWait();
 				randomWindow(G, css);
 			}catch(RuntimeException e) {
 				Alert alert=new Alert(Alert.AlertType.ERROR);
-				alert.setContentText("Invalid vales."+e.getMessage());
+				alert.setContentText("Invalid values."+e.getMessage());
 				alert.showAndWait();
 				randomWindow(G, css);
 			}
@@ -206,8 +206,8 @@ public class applicationRunning{
     	stage2.setMaximized(true);
     	stage2.setTitle("Algraph");
     	final Menu menu1 = new Menu("File");
-    	final Menu menu2 = new Menu("Options");
-    	final Menu menu3 = new Menu("Help");
+    	//final Menu menu2 = new Menu("Options");   se non fanno niente togliamoli...
+    	//final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
     	final MenuItem otherMenuItem = new MenuItem("Save");
     	
@@ -216,32 +216,27 @@ public class applicationRunning{
     	menu1.getItems().add(menuItem);
     	menu1.getItems().add(otherMenuItem);
     	MenuBar menuBar = new MenuBar();
-    	menuBar.getMenus().addAll(menu1, menu2, menu3);
+    	menuBar.getMenus().addAll(menu1); //, menu2, menu3);
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
     	Button button4=new Button("Go to Selection mode");
     	Button button5=new Button("End of computation");
     	Button button6=new Button("Next step");
+    	Button button7=new Button("Clear color");
     	button.getStylesheets().add(css);
     	button2.getStylesheets().add(css);
     	button3.getStylesheets().add(css);
     	button4.getStylesheets().add(css);
-    	/*button.setPadding(new Insets(10,10,10,10));
-    	button2.setPadding(new Insets(10,10,10,10));
-    	button3.setPadding(new Insets(10,10,10,10));
-    	button4.setPadding(new Insets(10,10,10,10));
-    	button.setMinWidth(130);
-    	button2.setMinWidth(130);
-    	button3.setMinWidth(130);
-    	button4.setMinWidth(130);*/
+    	button5.getStylesheets().add(css);
+    	button6.getStylesheets().add(css);
     	button5.setDisable(true);
     	button6.setDisable(true);
-    	
+    	button7.setDisable(true);
     	VBox vbox=new VBox();
     	
     	HBox hbox=new HBox();
-    	hbox.getChildren().addAll(button,button2,button3,button4,button5,button6);
+    	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
     	hbox.setMinHeight(100);
     	//hbox.setMinWidth(100);
     	hbox.setAlignment(Pos.CENTER);
@@ -255,14 +250,22 @@ public class applicationRunning{
     
 
 		visualGraph = new VisualGraph<String>(G, pane);
+		controller = new Controller<String>(items,visualGraph);
     	
         controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2, visualGraph, pane);
-        
         controller.setOnSave(otherMenuItem, G);
-        menuItem.setOnAction(new EventHandler<ActionEvent>() {
- 			
+        controller.endButtonController(button5);
+        controller.nextButtonController(button6);
+        controller.clearColorButtonController(button7,visualGraph);
+        button3.setOnMouseClicked(event ->{
+			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6);
+    	});
+        
+        
+ 				
+ 		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
  			@Override
  			public void handle(ActionEvent event) {
  				G.removeAll();
@@ -278,11 +281,6 @@ public class applicationRunning{
  		                }
  		});
     	
-        /*ListView<String> list = new ListView<String>();
-        ObservableList<String> items = FXCollections.observableArrayList ();
-        list.getStylesheets().add(css);
-        list.setItems(items);
-        items.add("ilmiopene");*/
     	
     	vbox.getChildren().addAll(menuBar,hbox,pane,list);
     	
@@ -303,6 +301,7 @@ public class applicationRunning{
 	}
 	
     public void menu() {
+    	String css = this.getClass().getResource("../style.css").toExternalForm();
     	stage= new Stage();
     	stage.setTitle("Algraph");
     	GridPane grid=new GridPane();
@@ -323,6 +322,7 @@ public class applicationRunning{
         controller.setOnMouseTextController(text3,2,this);
         
         Scene scene=new Scene(grid);
+        scene.getStylesheets().add(css);
     	stage.setScene(scene);
     	stage.showAndWait();
     }

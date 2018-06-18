@@ -77,6 +77,7 @@ public class blackCircle{
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
         controller.setOnCircleHovered(this);
+        controller.distanceShow(this);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
@@ -103,6 +104,7 @@ public class blackCircle{
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
         controller.setOnCircleHovered(this);
+        controller.distanceShow(this);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}

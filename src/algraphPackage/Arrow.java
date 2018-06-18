@@ -240,4 +240,11 @@ public class Arrow {
 		pane.getChildren().add(getLine3());
 		pane.getChildren().add(getText());
 	}
+	
+	public void setColor(Color c) {
+		line1.setStroke(c);
+		line2.setStroke(c);
+		line3.setStroke(c);
+		
+	}
 }
