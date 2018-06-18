@@ -49,6 +49,7 @@ public class Controller <T extends Comparable<T>>{
 	public static Boolean b1Exists;
 	public static blackCircle b2;
 	public static ObservableList<String> items;
+	public static ObservableList<String> queue;
 	private static int c=0;
 	private static Boolean applyMode;
 	private static Boolean end;
@@ -59,8 +60,9 @@ public class Controller <T extends Comparable<T>>{
 		draggedEvent = new Boolean(false);
 	}
 	
-	public Controller(ObservableList<String> item, VisualGraph visualGraph) {
+	public Controller(ObservableList<String> item, ObservableList<String> qu, VisualGraph visualGraph) {
 		items = item;
+		queue = qu;
 		draggedEvent = new Boolean(false);
 		b1Exists = new Boolean(false);
 		mode = new Boolean(true);
@@ -167,7 +169,29 @@ public class Controller <T extends Comparable<T>>{
 		return true;
 	}
 	
-	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6) {
+	public void setOnVettDis (MenuItem vettdis, GraphVisit graphvisit) {
+		
+		String css = this.getClass().getResource("../style.css").toExternalForm();
+		Stage stage = new Stage();
+		stage.setTitle("Vettore delle Distanze");
+		VBox panel = new VBox();
+		Scene scene = new Scene(panel);
+		String vettore = null;
+		for (int i = 0; i < graphvisit.getLength(); i++)
+		{
+			vettore = vettore + graphvisit.distances[i] + " ";
+			
+		}
+		
+		Text text = new Text(vettore);
+		Text titolino = new Text("Questo è il vettore delle distanze");
+
+		panel.getChildren().addAll(titolino,text);
+		scene.getStylesheets().add(css);
+		stage.setScene(scene);
+		stage.show();
+	}
+	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6, ObservableList<String> qu) {
 		
 		if (visualGraph.countSelected()==0) items.add("Error: can't apply because there are no nodes selected");
 		else if (visualGraph.countSelected()>1) items.add("Error: can't apply because there are more than one nodes selected");
@@ -190,7 +214,7 @@ public class Controller <T extends Comparable<T>>{
 			}
 			else {
 				applyMode = true;
-				graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode(),button5,button6,button1,button2,button3,button4);
+				graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode(),button5,button6,button1,button2,button3,button4,qu);
 			}
 		}
 	}
@@ -478,16 +502,14 @@ public class Controller <T extends Comparable<T>>{
 					arrow.setColor(Color.RED);
 				}
 			}
-		}
 		
+		}
 		//Bisogna trovare un modo di vedere il vettore delle distanze
 		
 		
 		//Bisogna trovare un modo per fermare l'esecuzione sicchï¿½ non viene premuto end o next
 		
 		//POI ABBIAMO FINITO
-		
-		
 	}
 	
 }

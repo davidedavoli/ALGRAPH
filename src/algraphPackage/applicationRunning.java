@@ -2,6 +2,7 @@ package algraphPackage;
 
 import javafx.event.ActionEvent;
 import java.io.File;
+import java.util.List;
 
 import graphPackage.Graph;
 import graphPackage.VisualGraph;
@@ -48,7 +49,9 @@ public class applicationRunning{
 	private Controller<String> controller;
 	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
+	private ListView<String> lacoda;
 	private ObservableList<String> items;
+	private ObservableList<String> qu;
 	//variable for the graph
 	
 	public applicationRunning() {
@@ -60,9 +63,14 @@ public class applicationRunning{
 		list = new ListView<String>();
 		items = FXCollections.observableArrayList ();
 		list.setItems(items);
+		lacoda = new ListView<String>();
+		qu = FXCollections.observableArrayList();
+		lacoda.setItems(qu);
+		
 		//controller=new Controller<String>(items);
 		menu();
 		items.add("Welcome to Algraph");
+		qu.add("Coda dell' algoritmo");
 		if (start==1) {
 			randomWindow(G, css);
 		} //random graph
@@ -207,17 +215,19 @@ public class applicationRunning{
     	stage2.setMaximized(true);
     	stage2.setTitle("Algraph");
     	final Menu menu1 = new Menu("File");
-    	//final Menu menu2 = new Menu("Options");   se non fanno niente togliamoli...
+    	final Menu menu2 = new Menu("Other");
     	//final Menu menu3 = new Menu("Help");
     	final MenuItem menuItem = new MenuItem("Open");
     	final MenuItem otherMenuItem = new MenuItem("Save");
+    	final MenuItem vettdis = new MenuItem("Vettore Distanze");
     	
     	((Styleable)menuItem).getStyleClass().add(css);
     	
     	menu1.getItems().add(menuItem);
     	menu1.getItems().add(otherMenuItem);
+    	menu2.getItems().add(vettdis);
     	MenuBar menuBar = new MenuBar();
-    	menuBar.getMenus().addAll(menu1); //, menu2, menu3);
+    	menuBar.getMenus().addAll(menu1 , menu2); //, menu3);
     	Button button=new Button("Add node");
     	Button button2=new Button("Remove");
     	Button button3=new Button("Apply algorithm");
@@ -235,6 +245,10 @@ public class applicationRunning{
     	button6.setDisable(true);
     	button7.setDisable(true);
     	VBox vbox=new VBox();
+    	HBox contliste = new HBox();
+    	list.setPrefWidth(100000000);
+    	lacoda.setPrefWidth(100000000);
+    	contliste.getChildren().addAll(list,lacoda);
     	
     	HBox hbox=new HBox();
     	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
@@ -251,7 +265,7 @@ public class applicationRunning{
     
 
 		visualGraph = new VisualGraph<String>(G, pane);
-		controller = new Controller<String>(items,visualGraph);
+		controller = new Controller<String>(items,qu,visualGraph);
     	
         controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
@@ -261,7 +275,7 @@ public class applicationRunning{
         controller.nextButtonController(button6);
         controller.clearColorButtonController(button7,visualGraph);
         button3.setOnMouseClicked(event ->{
-			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6);
+			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,qu);
     	});
         
         
@@ -271,7 +285,17 @@ public class applicationRunning{
  			public void handle(ActionEvent event) {
  				G.removeAll();
  				System.out.println(G.V().size());
- 				controller.items.add(applicationRunning.graphFromFile(G));
+ 				
+ 				
+ 				
+ 				
+ 				//non so cosa sia successo
+ 				//controller.a(applicationRunning.graphFromFile(G));
+ 				//pls fix
+ 				
+ 				
+ 				
+ 				
  				pane.getChildren().remove(0, pane.getChildren().size());
  		        visualGraph.removeAll();
  		        visualGraph.readGraph(G, pane);
@@ -283,7 +307,7 @@ public class applicationRunning{
  		});
     	
     	
-    	vbox.getChildren().addAll(menuBar,hbox,pane,list);
+    	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
     	
 
 		
