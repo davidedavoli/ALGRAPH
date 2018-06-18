@@ -1,5 +1,0 @@
-Cose da fare:
-Fare in modo che il pulsante Next Step esegua un'istruzione alla volta anziché un ciclo alla volta
-Far visualizzare la coda dei nodi (e magari anche il vettore dei padri)
-Sostituire tutti i controller.items.add("...") con Sostituire tutti i controller.items.add(0, "...")
-Cambiare i messaggi del log con le linee in pseudocodice (dovrebbe essere previsto dalla specifica)
