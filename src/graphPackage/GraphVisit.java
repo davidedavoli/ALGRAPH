@@ -19,6 +19,7 @@ public class GraphVisit<T extends Comparable<T>> {
 	public TreeMap<Node<T>, Integer> index;
 	public GraphVisit() {}
 	
+
 	public List<Integer> getDistances() {
 		List list = new ArrayList<Integer>();
 		for (Integer a : distances) {
@@ -34,12 +35,14 @@ public class GraphVisit<T extends Comparable<T>> {
 		return this.length;
 	}
 	
+	
 	public void BellmanFord(VisualGraph<T> visualGraph, Node<T> radice, Button end, Button next, Button button1, Button button2, Button button3, Button button4, ObservableList<String> qu) {
+
 		int i=0;
 		Graph<T> G=visualGraph.getGraph();
 		 Controller<T> c=new Controller<T>();
 		//boolean tuttoalvolo;
-		TreeMap<Node<T>, Integer> index=new TreeMap<Node<T>, Integer>();
+		 index=new TreeMap<Node<T>, Integer>();
 		for(Node<T> n : G.V()) {
 			index.put(n, i);
 			i=i+1;

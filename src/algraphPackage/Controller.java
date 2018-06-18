@@ -54,13 +54,15 @@ public class Controller <T extends Comparable<T>>{
 	private static Boolean applyMode;
 	private static Boolean end;
 	private static Boolean next;
-	private static VisualGraph visualGraph;
+	private static VisualGraph<String> visualGraph;
+	private static GraphVisit<String> graphVisit;
 	
 	public Controller() {
 		draggedEvent = new Boolean(false);
 	}
 	
 	public Controller(ObservableList<String> item, ObservableList<String> qu, VisualGraph visualGraph) {
+
 		items = item;
 		queue = qu;
 		draggedEvent = new Boolean(false);
@@ -85,6 +87,7 @@ public class Controller <T extends Comparable<T>>{
 	public void addButtonController(Button button, Pane pane, VisualGraph<String> visualGraph) {
 		button.setOnMouseClicked(event ->{
 			visualGraph.insertNode();
+			applyMode = false;
 			items.add("Node added");
     	});
 	}
@@ -129,6 +132,7 @@ public class Controller <T extends Comparable<T>>{
 				}
 				items.add("Switched to Selection mode");
 			}
+			applyMode = false;
 		});
 		
 	}
@@ -169,6 +173,7 @@ public class Controller <T extends Comparable<T>>{
 		return true;
 	}
 	
+
 	public void setOnVettDis (MenuItem vettdis, GraphVisit graphvisit) {
 		
 		String css = this.getClass().getResource("../style.css").toExternalForm();
@@ -191,8 +196,10 @@ public class Controller <T extends Comparable<T>>{
 		stage.setScene(scene);
 		stage.show();
 	}
-	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6, ObservableList<String> qu) {
-		
+	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6,Button button7, ObservableList<String> qu) {
+
+		button3.setOnMouseClicked(event ->{
+
 		if (visualGraph.countSelected()==0) items.add("Error: can't apply because there are no nodes selected");
 		else if (visualGraph.countSelected()>1) items.add("Error: can't apply because there are more than one nodes selected");
 		else {
@@ -202,7 +209,8 @@ public class Controller <T extends Comparable<T>>{
 			button4.setDisable(true);
 			button5.setDisable(false);
 			button6.setDisable(false);
-			GraphVisit<String> graphVisit = new GraphVisit<String>();
+			button7.setDisable(true);
+			graphVisit = new GraphVisit<String>();
 			List<Node<String>> list = new LinkedList<Node<String>>();
 			list = graphVisit.detectNegativeCycles(visualGraph.getGraph(), visualGraph.getSelectedNode());
 			
@@ -217,20 +225,21 @@ public class Controller <T extends Comparable<T>>{
 				graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode(),button5,button6,button1,button2,button3,button4,qu);
 			}
 		}
+		});
 	}
 	
-	public void distanceShow (VisualGraph<T> visualGraph, TreeMap<Node<T>, Integer> index) {
-		for (blackCircle b: visualGraph.circles())
-		b.getCircle().setOnMouseClicked(event -> {
+	public void distanceShow (blackCircle b) {
 			Stage stage = new Stage();
 			HBox hbox = new HBox();
-			Text text = new Text("Distance: "+GraphVisit.distances[index.get(visualGraph.getNode(b))]);
+			Text text  = new Text("placeholder finchè non si fixa l'altro");
+		//	Text text = new Text("Distance: "+GraphVisit.distances[graphVisit.getIndex().get(visualGraph.getNode(b))]);
 			hbox.getChildren().add(text);
+			hbox.setMinHeight(100);
+			hbox.setMinWidth(300);
+			hbox.setAlignment(Pos.CENTER);
 			Scene scene = new Scene(hbox);
 			stage.setScene(scene);
 			stage.show();
-			//Pensavo di mettere che se ci si clicca, ti apre una finestra che ti dice la distanza, ma ora non ci riesco e  ho sonno
-		});
 	}
 	
 	
@@ -266,6 +275,7 @@ public class Controller <T extends Comparable<T>>{
 					items.add("Invalid value");
 					alert.showAndWait();
 				}
+			applyMode = false;
 			});
 			Scene scene = new Scene(vbox);
 			stage.setScene(scene);
@@ -368,8 +378,8 @@ public class Controller <T extends Comparable<T>>{
 		
 		blackcircle.getCircle().setOnMouseClicked(event -> {
 			if (!draggedEvent) {
-				System.out.println(mode);
-				if (mode) {
+				if (applyMode) distanceShow(blackcircle);
+				else if (mode) {
 					if (c==0) {
 						b1Exists = true;
 						b1 = new blackCircle();
@@ -392,6 +402,7 @@ public class Controller <T extends Comparable<T>>{
 					}
 					c = c+1;
 					if (c == 2) c=0;
+					
 				}
 				else {
 					c = 0;
@@ -413,6 +424,7 @@ public class Controller <T extends Comparable<T>>{
 	
 	public void removeButtonController(Button button, VisualGraph<String> visualGraph, Pane pane) {
 		button.setOnMouseClicked(event -> {
+			applyMode = false;
 			visualGraph.deleteChosenArrows();
 			visualGraph.deleteChosenNode();
 			pane.getChildren().remove(0, pane.getChildren().size());
@@ -479,6 +491,7 @@ public class Controller <T extends Comparable<T>>{
 	
 	public void clearColorButtonController(Button b, VisualGraph<T> visualGraph) {
 		b.setOnMouseClicked(event -> {
+			applyMode = false;
 			HashSet<blackCircle> set=new HashSet<blackCircle>();
 			set = visualGraph.selectedCircles();
 			for (blackCircle o : set) {
@@ -491,7 +504,6 @@ public class Controller <T extends Comparable<T>>{
 	public void GraphVisualize(VisualGraph<T> visualGraph, Node<T> radice, LinkedList<Node<T>> queue, Node<T> poppedNode, Node<T> adjNode,Integer[] distances,Node<T>[] parents, TreeMap<Node<T>, Integer> index) {
 
 		visualGraph.setColor(Color.BLACK);
-		distanceShow(visualGraph, index);
 		visualGraph.getBlackCircle(radice).getCircle().setFill(Color.RED);
 		visualGraph.getBlackCircle(poppedNode).getCircle().setFill(Color.BLUE);
 		if (adjNode!=null)
