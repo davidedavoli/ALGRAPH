@@ -233,7 +233,6 @@ public class applicationRunning{
     	button6.getStylesheets().add(css);
     	button5.setDisable(true);
     	button6.setDisable(true);
-    	button7.setDisable(true);
     	VBox vbox=new VBox();
     	
     	HBox hbox=new HBox();
@@ -246,6 +245,7 @@ public class applicationRunning{
     	Pane pane=new Pane();
     	pane.setMinHeight(100);
     	pane.setMinWidth(100);
+    	vbox.getChildren().addAll(menuBar,hbox,pane,list);
     	pane.prefWidthProperty().bind(vbox.widthProperty());
     	pane.prefHeightProperty().bind(vbox.heightProperty());
     
@@ -260,9 +260,7 @@ public class applicationRunning{
         controller.endButtonController(button5);
         controller.nextButtonController(button6);
         controller.clearColorButtonController(button7,visualGraph);
-        button3.setOnMouseClicked(event ->{
-			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6);
-    	});
+		controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7);
         
         
  				
@@ -282,9 +280,7 @@ public class applicationRunning{
  		                }
  		});
     	
-    	
-    	vbox.getChildren().addAll(menuBar,hbox,pane,list);
-    	
+    	    	
 
 		
 		Scene scene = new Scene(vbox);
