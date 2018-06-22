@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.geometry.Insets;
@@ -241,26 +242,71 @@ public class applicationRunning{
     	button6.setDisable(true);
     	VBox vbox=new VBox();
     	HBox contliste = new HBox();
-    	list.prefWidthProperty().bind(vbox.widthProperty());
-    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
-    	contliste.getChildren().addAll(list,lacoda);
-    	
     	HBox hbox=new HBox();
     	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
     	hbox.setMinHeight(100);
-    	//hbox.setMinWidth(100);
     	hbox.setAlignment(Pos.CENTER);
     	hbox.setSpacing(10);
-
     	Pane pane=new Pane();
-    	pane.setMinHeight(100);
-    	pane.setMinWidth(100);
+    	contliste.getChildren().addAll(list,lacoda);
+    	contliste.setMinHeight(100);
     	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
-    	pane.prefWidthProperty().bind(vbox.widthProperty());
-    	pane.prefHeightProperty().bind(vbox.heightProperty());
+    	
     
 
-		visualGraph = new VisualGraph<String>(G, pane);
+		
+        
+        
+ 				
+ 		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
+ 			@Override
+ 			public void handle(ActionEvent event) {
+ 				G.removeAll();
+ 				
+ 				applicationRunning.graphFromFile(G);
+ 				pane.getChildren().remove(0, pane.getChildren().size());
+ 		        visualGraph.removeAll();
+ 		        visualGraph.readGraph(G, pane);
+ 		        for (blackCircle b: visualGraph.circles()) {
+ 			    	controller.boundsController(b, pane);
+ 			    	}
+ 			
+ 		                }
+ 		});
+    	
+    	
+    	
+    	
+
+
+		
+		Scene scene = new Scene(vbox);
+		scene.getStylesheets().add(css);
+
+    	stage2.setScene(scene);
+    	
+    	stage2.setX(Screen.getPrimary().getVisualBounds().getMinX());
+    	stage2.setY(Screen.getPrimary().getVisualBounds().getMinY());
+    	stage2.setWidth(Screen.getPrimary().getVisualBounds().getWidth());
+    	stage2.setHeight(Screen.getPrimary().getVisualBounds().getHeight());
+    	
+    	vbox.prefWidthProperty().bind(stage2.widthProperty());
+    	vbox.prefHeightProperty().bind(stage2.heightProperty());
+    	
+    	contliste.setMaxHeight(100);
+    	
+    	list.prefWidthProperty().bind(vbox.widthProperty());
+    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
+    	//list.prefHeightProperty().bind(vbox.heightProperty());
+    	//lacoda.prefHeightProperty().bind(vbox.heightProperty());
+
+    	
+    	pane.prefWidthProperty().bind(vbox.widthProperty());
+    	pane.prefHeightProperty().bind(vbox.heightProperty());
+    	
+    	stage2.show();
+    	
+    	visualGraph = new VisualGraph<String>(G, pane);
 		controller = new Controller<String>(items,qu,visualGraph);
     	
         controller.addButtonController(button,pane, visualGraph);
@@ -273,36 +319,7 @@ public class applicationRunning{
         button3.setOnMouseClicked(event ->{
 			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu);
     	});
-        
-        
- 				
- 		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
- 			@Override
- 			public void handle(ActionEvent event) {
- 				G.removeAll();
- 				System.out.println(G.V().size());
- 				applicationRunning.graphFromFile(G);
- 				pane.getChildren().remove(0, pane.getChildren().size());
- 		        visualGraph.removeAll();
- 		        visualGraph.readGraph(G, pane);
- 		        for (blackCircle b: visualGraph.circles()) {
- 			    	controller.boundsController(b, pane);
- 			    	}
- 				System.out.println(G.V().size());
- 		                }
- 		});
     	
-    	
-    	//vbox.getChildren().addAll(contliste);
-    	
-
-
-		
-		Scene scene = new Scene(vbox);
-		scene.getStylesheets().add(css);
-
-    	stage2.setScene(scene);
-    	stage2.show();
     	for (blackCircle b: visualGraph.circles()) {
     	controller.boundsController(b, pane);
     	}
