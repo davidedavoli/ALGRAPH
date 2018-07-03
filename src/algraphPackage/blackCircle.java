@@ -77,6 +77,7 @@ public class blackCircle{
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
         controller.setOnCircleHovered(this);
+        controller.boundsController(this, pane);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
@@ -94,8 +95,8 @@ public class blackCircle{
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
     	circle.setCursor(Cursor.MOVE);
-        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
-        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        circle.setCenterX(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinX()+10,pane.getLayoutBounds().getMaxX()-10));
+        circle.setCenterY(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinY()+10,pane.getLayoutBounds().getMaxY()-10));
         text.setText(string);
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());
@@ -103,6 +104,7 @@ public class blackCircle{
         controller.circleOnMouseDraggedController(this, pane);
         controller.setOnCircleTextClickedController(this);
         controller.setOnCircleHovered(this);
+        controller.boundsController(this, pane);
 		pane.getChildren().add(this.getCircle());
 		pane.getChildren().add(this.getText());
 	}
