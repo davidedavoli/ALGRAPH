@@ -4,8 +4,6 @@ import javafx.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 
-import graphPackage.Graph;
-import graphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -50,7 +48,9 @@ public class applicationRunning{
 	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ListView<String> lacoda;
+	private ListView<String> ledist;
 	private ObservableList<String> items;
+	private ObservableList<String> dist;
 	private ObservableList<String> qu;
 	//variable for the graph
 	
@@ -66,11 +66,15 @@ public class applicationRunning{
 		lacoda = new ListView<String>();
 		qu = FXCollections.observableArrayList();
 		lacoda.setItems(qu);
+		ledist = new ListView<String>();
+		dist = FXCollections.observableArrayList ();
+		ledist.setItems(dist);
 		
 		//controller=new Controller<String>(items);
 		menu();
 		items.add("Welcome to Algraph");
 		qu.add("Coda dell' algoritmo");
+		dist.add("Distanze dei nodi");
 		if (start==1) {
 			randomWindow(G, css);
 		} //random graph
@@ -243,7 +247,8 @@ public class applicationRunning{
     	HBox contliste = new HBox();
     	list.prefWidthProperty().bind(vbox.widthProperty());
     	lacoda.prefWidthProperty().bind(vbox.widthProperty());
-    	contliste.getChildren().addAll(list,lacoda);
+    	ledist.prefWidthProperty().bind(vbox.widthProperty());
+    	contliste.getChildren().addAll(list,lacoda, ledist);
     	
     	HBox hbox=new HBox();
     	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
@@ -261,21 +266,19 @@ public class applicationRunning{
     
 
 		visualGraph = new VisualGraph<String>(G, pane);
-		controller = new Controller<String>(items,qu,visualGraph);
+		controller = new Controller<String>(items, qu, dist, visualGraph);
+		BellmanFordMoore<String> bellmanFord=new BellmanFordMoore<>(visualGraph, null);
     	
         controller.addButtonController(button,pane, visualGraph);
         controller.linkButtonController(button4, visualGraph);
         controller.removeButtonController(button2, visualGraph, pane);
         controller.setOnSave(otherMenuItem, G);
-        controller.endButtonController(button5);
-        controller.nextButtonController(button6);
+        controller.endButtonController(button, button2, button3, button4, button5, button6,button7, bellmanFord);
         controller.clearColorButtonController(button7,visualGraph);
-        button3.setOnMouseClicked(event ->{
-			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu);
-    	});
+		controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu, bellmanFord);
+        controller.nextButtonController(button6, bellmanFord);
+               
         
-        
- 				
  		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
  			@Override
  			public void handle(ActionEvent event) {

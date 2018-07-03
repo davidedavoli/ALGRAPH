@@ -14,7 +14,7 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	private TreeMap<Node<T>, Integer> index;
 	private Integer[] distances;
 	private Node<T>[] parents;
-	private Node<T>[] radice;
+	private Node<T> radice;
 	private LinkedList<Node<T>> q;
 	private Node<T> n;
 	private Iterator<Node<T>> iter;
@@ -22,7 +22,7 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	
 	
 	
-	BellmanFordMoore(VisualGraph<T> vg, Node<T> radice){
+	public BellmanFordMoore(VisualGraph<T> vg, Node<T> radice){
 		visualGraph=vg;
 		G=visualGraph.getGraph();
 		pc=0;
@@ -48,12 +48,11 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 		
 		//Node<T> radice=G.getRoot(0);
 		
+		if (radice!=null)
 		distances[index.get(radice)]=0;
 		
 		q=new LinkedList<Node<T>>();
 		q.add(radice);
-		
-		Controller.items.add(0, "Computation Started");
 	}
 	public int getPc() {
 		return pc;
@@ -67,12 +66,12 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	public Node<T>[] getParents() {
 		return parents;
 	}
-	public Node<T>[] getRadice() {
+	public Node<T> getRadice() {
 		return radice;
 	}
 	
 	
-	void programCounter() {
+	public void programCounter() {
 		switch (pc) {
 		case 0:
 			popQueue();
@@ -103,11 +102,14 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	void popQueue() {
 		if (!q.isEmpty()) {
 		n=q.pop();
+		iter=G.adj(n).iterator();
 		Controller.items.add(0, "n=Q.dequeue() //deuqueue of node "+n.getElement()+" from queue");
 		pc++;
 		}
-		else
+		else {
 			Controller.items.add(0, "End of computation");
+			Controller.setEnd(true);
+		}
 	}
 	
 	public LinkedList<Node<T>> getQ() {
@@ -121,19 +123,17 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	}
 	void forNodesCondition() {
 		Controller.items.add(0, "for (m: adj(n)) //evaluation of cycle condition");
-		iter=G.adj(n).iterator();
 		if (iter.hasNext()) {
 			pc++;
 			setM();
 			}
 		else
 			pc=0;
-		Controller.items.add(0, "Go to line"+pc);
 	}
 	
 	void setM() {
 		m=iter.next();
-		Controller.items.add(0, "m=adj(n) //set M");
+		Controller.items.add(0, "m=adj(n) //set M="+m.getElement());
 	}
 	
 	void relaxCondition() {
@@ -145,14 +145,13 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 		}
 		else {
 			Controller.items.add(0, "D[m]<D[n]+w(n,m) //"+m.getElement()+" is already nearer");
-			setM();
 			pc=1;
 			
 		}
 	}
 	
 	void qContains() {
-		if (q.contains(m)) {
+		if (!q.contains(m)) {
 			Controller.items.add(0, "!Q.contains(m)=true //"+m.getElement()+" is not in the queue");
 			pc++;
 		}
@@ -177,5 +176,45 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 		Controller.items.add(0, "D[m]=d[m]+ G.w(n,m) //Distance of node "+m.getElement()+" updated. New distance: "+distances[index.get(m)]);
 		pc=0;
 	}
+	
+	public void setRadice(Node<T> r) {
+		radice=r;
+		pc=0;
+		
+		Graph<T> G=visualGraph.getGraph();
+		index=new TreeMap<Node<T>, Integer>();
+		
+		int i=0;
+		for(Node<T> n : G.V()) {
+			index.put(n, i);
+			i=i+1;
+		}
+		i=0;
+		
+		distances= new Integer[G.V().size()];
+		for (Node<T> n : G.V())
+			distances[index.get(n)]=null;
+		
+		
+		parents= new Node[G.V().size()];
+		for (Node<T> n : G.V())
+			parents[index.get(n)]=null;
+		
+		//Node<T> radice=G.getRoot(0);
+		
+		if (radice!=null)
+		distances[index.get(radice)]=0;
+		
+		q=new LinkedList<Node<T>>();
+		q.add(radice);
+		
+		Controller.items.add(0, "Computation Started");
+	}
+	
+	
+	public VisualGraph<T> getVisualGraph() {
+		return visualGraph;
+	}
+	
 	
 }

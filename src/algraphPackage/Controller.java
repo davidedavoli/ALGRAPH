@@ -50,6 +50,7 @@ public class Controller <T extends Comparable<T>>{
 	public static blackCircle b2;
 	public static ObservableList<String> items;
 	public static ObservableList<String> queue;
+	public static ObservableList<String> dist;
 	private static int c=0;
 	private static Boolean applyMode;
 	private static Boolean end;
@@ -61,10 +62,11 @@ public class Controller <T extends Comparable<T>>{
 		draggedEvent = new Boolean(false);
 	}
 	
-	public Controller(ObservableList<String> item, ObservableList<String> qu, VisualGraph visualGraph) {
+	public Controller(ObservableList<String> item, ObservableList<String> qu, ObservableList<String> ledist,  VisualGraph visualGraph) {
 
 		items = item;
 		queue = qu;
+		dist= ledist;
 		draggedEvent = new Boolean(false);
 		b1Exists = new Boolean(false);
 		mode = new Boolean(true);
@@ -88,24 +90,41 @@ public class Controller <T extends Comparable<T>>{
 		button.setOnMouseClicked(event ->{
 			visualGraph.insertNode();
 			applyMode = false;
-			items.add("Node added");
+			items.add(0, "Node added");
     	});
 	}
 	
-	public void nextButtonController(Button button) {
+	public void nextButtonController(Button button, BellmanFordMoore<T> bellmanFord) {
 		button.setOnMouseClicked(event ->{
 			next=true;
+			bellmanFord.programCounter();
+			GraphVisualize(bellmanFord.getVisualGraph(), bellmanFord.getRadice(), bellmanFord.getQ(), bellmanFord.getN(), bellmanFord.getM(), bellmanFord.getDistances(), bellmanFord.getParents(), bellmanFord.getIndex());
     	});
 	}
 	
-	public void endButtonController(Button button) {
-		button.setOnMouseClicked(event ->{
-			end=true;
-    	});
+	public void endButtonController(Button button,Button button2,Button button3,Button button4,Button button5,Button button6,Button button7,BellmanFordMoore<T> bellmanFord) {
+		button5.setOnMouseClicked(event ->{
+			while (end==false) {
+				bellmanFord.programCounter();
+			}
+			GraphVisualize(bellmanFord.getVisualGraph(), bellmanFord.getRadice(), bellmanFord.getQ(), bellmanFord.getN(), bellmanFord.getM(), bellmanFord.getDistances(), bellmanFord.getParents(), bellmanFord.getIndex());
+        	Controller.setEnd(false);
+			button.setDisable(false);
+			button2.setDisable(false);
+			button3.setDisable(false);
+			button4.setDisable(false);
+			button5.setDisable(true);
+			button6.setDisable(true);
+			button7.setDisable(false);
+		});
 	}
 	
-	public Boolean getEnd() {
+	public static Boolean getEnd() {
 		return end;
+	}
+	
+	public static void setEnd(boolean b) {
+		end=b;
 	}
 	
 	public Boolean getNext() {
@@ -121,7 +140,7 @@ public class Controller <T extends Comparable<T>>{
 					b1.circleExpand(1);
 					b1.changeHovered();
 				}
-				items.add("Switched to Link mode");
+				items.add(0, "Switched to Link mode");
 			}
 			else {
 				button.setText("Go to Link mode");
@@ -130,7 +149,7 @@ public class Controller <T extends Comparable<T>>{
 					b1.circleExpand(1);
 					b1.changeHovered();
 				}
-				items.add("Switched to Selection mode");
+				items.add(0, "Switched to Selection mode");
 			}
 			applyMode = false;
 		});
@@ -153,7 +172,7 @@ public class Controller <T extends Comparable<T>>{
  		           File file = fileChooser.showSaveDialog(new Stage());
  		           if (file != null) {
  		                	G.outGraph(file.getPath().toString());
- 		                items.add("Graph saved succesfully to file");
+ 		                items.add(0, "Graph saved succesfully to file");
  		                }
  			}
  		});
@@ -167,7 +186,7 @@ public class Controller <T extends Comparable<T>>{
  			public void handle(ActionEvent event) {
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
- 				items.add("Graph opened succesfully");
+ 				items.add(0, "Graph opened succesfully");
  		                }
  		});
 		return true;
@@ -196,50 +215,37 @@ public class Controller <T extends Comparable<T>>{
 		stage.setScene(scene);
 		stage.show();
 	}
-	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6,Button button7, ObservableList<String> qu) {
+	public void applyButtonController(VisualGraph<String> visualGraph, Button button1, Button button2, Button button3, Button button4, Button button5, Button button6,Button button7, ObservableList<String> qu,BellmanFordMoore<String> bellmanFord) {
 
 		button3.setOnMouseClicked(event ->{
 
-		if (visualGraph.countSelected()==0) items.add("Error: can't apply because there are no nodes selected");
-		else if (visualGraph.countSelected()>1) items.add("Error: can't apply because there are more than one nodes selected");
+		if (visualGraph.countSelected()==0) items.add(0, "Error: can't apply because there are no nodes selected");
+		else if (visualGraph.countSelected()>1) items.add(0, "Error: can't apply because there are more than one nodes selected");
 		else {
-			button1.setDisable(true);
-			button2.setDisable(true);
-			button3.setDisable(true);
-			button4.setDisable(true);
-			button5.setDisable(false);
-			button6.setDisable(false);
-			button7.setDisable(true);
-			graphVisit = new GraphVisit<String>();
+			graphVisit=new GraphVisit<String>();
 			List<Node<String>> list = new LinkedList<Node<String>>();
 			list = graphVisit.detectNegativeCycles(visualGraph.getGraph(), visualGraph.getSelectedNode());
 			
 			if (!list.isEmpty()) {   //Colora i nodi selezionati e anche le frecce tra di loro
-				items.add("Error: negative cycle");
+				items.add(0, "Error: negative cycle");
 				for (Node<String> node : list) {
 					visualGraph.getBlackCircle(node).getCircle().setFill(Color.GOLD);
 					}
 			}
 			else {
 				applyMode = true;
-				graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode(),button5,button6,button1,button2,button3,button4,qu);
+				button1.setDisable(true);
+				button2.setDisable(true);
+				button3.setDisable(true);
+				button4.setDisable(true);
+				button5.setDisable(false);
+				button6.setDisable(false);
+				button7.setDisable(true);
+				bellmanFord.setRadice(visualGraph.getSelectedNode());
+				//graphVisit.BellmanFord(visualGraph, visualGraph.getSelectedNode(),button5,button6,button1,button2,button3,button4,qu);
 			}
 		}
 		});
-	}
-	
-	public void distanceShow (blackCircle b) {
-			Stage stage = new Stage();
-			HBox hbox = new HBox();
-			Text text  = new Text("placeholder finchè non si fixa l'altro");
-		//	Text text = new Text("Distance: "+GraphVisit.distances[graphVisit.getIndex().get(visualGraph.getNode(b))]);
-			hbox.getChildren().add(text);
-			hbox.setMinHeight(100);
-			hbox.setMinWidth(300);
-			hbox.setAlignment(Pos.CENTER);
-			Scene scene = new Scene(hbox);
-			stage.setScene(scene);
-			stage.show();
 	}
 	
 	
@@ -267,12 +273,12 @@ public class Controller <T extends Comparable<T>>{
 					String tmp =  arrow.getText().getText();
 					applicationRunning.getVisualGraph().renameEdge(arrow.getParent(), arrow.getTarget(), Integer.parseInt(textField.getText()));
 					arrow.setText(textField.getText());
-					items.add("Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
+					items.add(0, "Arrow value changed succesfully from "+tmp+" to "+arrow.getText().getText());
 					stage.close();
 				} catch (NumberFormatException except){
 					Alert alert=new Alert(Alert.AlertType.ERROR);
 					alert.setContentText("Invalid value.");
-					items.add("Invalid value");
+					items.add(0, "Invalid value");
 					alert.showAndWait();
 				}
 			applyMode = false;
@@ -307,7 +313,7 @@ public class Controller <T extends Comparable<T>>{
 				String tmp = blackcircle.getText().getText();
 				blackcircle.setText(textField.getText());
 				applicationRunning.getVisualGraph().renameNode(blackcircle, textField.getText());
-				items.add("Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
+				items.add(0, "Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
 				stage.close();
 			});
 			Scene scene = new Scene(vbox);
@@ -323,7 +329,7 @@ public class Controller <T extends Comparable<T>>{
 		
 		blackcircle.getCircle().setOnMouseDragged(event -> {
 			if (event.isPrimaryButtonDown()) {
-				if (event.isDragDetect()) items.add("Dragging "+blackcircle.getText().getText()+"...");
+				if (event.isDragDetect()) items.add(0, "Dragging "+blackcircle.getText().getText()+"...");
 					blackcircle.getCircle().setCenterX(event.getX());
 					blackcircle.getCircle().setCenterY(event.getY());
 					for (Arrow o : blackcircle.getOutList()) {
@@ -359,13 +365,13 @@ public class Controller <T extends Comparable<T>>{
 				arrow.getLine1().setStroke(Color.GREY);
 				arrow.getLine2().setStroke(Color.GREY);
 				arrow.getLine3().setStroke(Color.GREY);
-				items.add("Arrow selected");
+				items.add(0, "Arrow selected");
 			}
 			else {
 				arrow.getLine1().setStroke(Color.BLACK);
 				arrow.getLine2().setStroke(Color.BLACK);
 				arrow.getLine3().setStroke(Color.BLACK);
-				items.add("Arrow deselected");
+				items.add(0, "Arrow deselected");
 			}
 			arrow.changeChosen();
 		}
@@ -378,7 +384,7 @@ public class Controller <T extends Comparable<T>>{
 		
 		blackcircle.getCircle().setOnMouseClicked(event -> {
 			if (!draggedEvent) {
-				if (applyMode) distanceShow(blackcircle);
+				if (applyMode) {}
 				else if (mode) {
 					if (c==0) {
 						b1Exists = true;
@@ -397,7 +403,7 @@ public class Controller <T extends Comparable<T>>{
 						b1.changeHovered();
 						b1.circleExpand(1);
 						b2.getInList().add(b1.getOutList().get(b1.getMaxList()-1));
-						items.add(b1.getText().getText()+" -> "+b2.getText().getText()+" succesfully linked");
+						items.add(0, b1.getText().getText()+" -> "+b2.getText().getText()+" succesfully linked");
 						}
 					}
 					c = c+1;
@@ -409,12 +415,12 @@ public class Controller <T extends Comparable<T>>{
 					if(!blackcircle.getChosen()) {
 						blackcircle.getCircle().setFill(Color.GREY);
 						blackcircle.changeChosen();
-						items.add(blackcircle.getText().getText()+" selected");
+						items.add(0, blackcircle.getText().getText()+" selected");
 					}
 					else {
 						blackcircle.getCircle().setFill(Color.BLACK);
 						blackcircle.changeChosen();
-						items.add(blackcircle.getText().getText()+" deselected");
+						items.add(0, blackcircle.getText().getText()+" deselected");
 					}
 				}
 			}
@@ -521,11 +527,14 @@ public class Controller <T extends Comparable<T>>{
 		queue.add("Coda:");
 		for (Node<T> a: q)
 		queue.add(a.toString());
+		
+		Controller.dist.remove(0, dist.size());
+		for (Node<T> n: visualGraph.getGraph().V()) {
+			dist.add( n.getElement()+": "+distances[index.get(n)]);
+			
+		}
 		//Bisogna trovare un modo di vedere il vettore delle distanze
-		
-		
-		//Bisogna trovare un modo per fermare l'esecuzione sicchï¿½ non viene premuto end o next
-		
+			
 		//POI ABBIAMO FINITO
 	}
 	
