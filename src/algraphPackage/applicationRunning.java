@@ -4,8 +4,6 @@ import javafx.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 
-import graphPackage.Graph;
-import graphPackage.VisualGraph;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -19,7 +17,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.geometry.Insets;
@@ -51,7 +48,9 @@ public class applicationRunning{
 	private static VisualGraph<String> visualGraph;
 	private ListView<String> list;
 	private ListView<String> lacoda;
+	private ListView<String> ledist;
 	private ObservableList<String> items;
+	private ObservableList<String> dist;
 	private ObservableList<String> qu;
 	//variable for the graph
 	
@@ -67,11 +66,15 @@ public class applicationRunning{
 		lacoda = new ListView<String>();
 		qu = FXCollections.observableArrayList();
 		lacoda.setItems(qu);
+		ledist = new ListView<String>();
+		dist = FXCollections.observableArrayList ();
+		ledist.setItems(dist);
 		
 		//controller=new Controller<String>(items);
 		menu();
 		items.add("Welcome to Algraph");
 		qu.add("Coda dell' algoritmo");
+		dist.add("Distanze dei nodi");
 		if (start==1) {
 			randomWindow(G, css);
 		} //random graph
@@ -242,27 +245,45 @@ public class applicationRunning{
     	button6.setDisable(true);
     	VBox vbox=new VBox();
     	HBox contliste = new HBox();
+    	list.prefWidthProperty().bind(vbox.widthProperty());
+    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
+    	ledist.prefWidthProperty().bind(vbox.widthProperty());
+    	contliste.getChildren().addAll(list,lacoda, ledist);
+    	
     	HBox hbox=new HBox();
     	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
     	hbox.setMinHeight(100);
+    	//hbox.setMinWidth(100);
     	hbox.setAlignment(Pos.CENTER);
     	hbox.setSpacing(10);
+
     	Pane pane=new Pane();
-    	contliste.getChildren().addAll(list,lacoda);
-    	contliste.setMinHeight(100);
+    	pane.setMinHeight(100);
+    	pane.setMinWidth(100);
     	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
-    	
+    	pane.prefWidthProperty().bind(vbox.widthProperty());
+    	pane.prefHeightProperty().bind(vbox.heightProperty());
     
 
-		
+		visualGraph = new VisualGraph<String>(G, pane);
+		controller = new Controller<String>(items, qu, dist, visualGraph);
+		BellmanFordMoore<String> bellmanFord=new BellmanFordMoore<>(visualGraph, null);
+    	
+        controller.addButtonController(button,pane, visualGraph);
+        controller.linkButtonController(button4, visualGraph);
+        controller.removeButtonController(button2, visualGraph, pane);
+        controller.setOnSave(otherMenuItem, G);
+        controller.endButtonController(button, button2, button3, button4, button5, button6,button7, bellmanFord);
+        controller.clearColorButtonController(button7,visualGraph);
+		controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu, bellmanFord);
+        controller.nextButtonController(button6, bellmanFord);
+               
         
-        
- 				
  		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
  			@Override
  			public void handle(ActionEvent event) {
  				G.removeAll();
- 				
+ 				System.out.println(G.V().size());
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
  		        visualGraph.removeAll();
@@ -270,12 +291,12 @@ public class applicationRunning{
  		        for (blackCircle b: visualGraph.circles()) {
  			    	controller.boundsController(b, pane);
  			    	}
- 			
+ 				System.out.println(G.V().size());
  		                }
  		});
     	
     	
-    	
+    	//vbox.getChildren().addAll(contliste);
     	
 
 
@@ -284,42 +305,7 @@ public class applicationRunning{
 		scene.getStylesheets().add(css);
 
     	stage2.setScene(scene);
-    	
-    	stage2.setX(Screen.getPrimary().getVisualBounds().getMinX());
-    	stage2.setY(Screen.getPrimary().getVisualBounds().getMinY());
-    	stage2.setWidth(Screen.getPrimary().getVisualBounds().getWidth());
-    	stage2.setHeight(Screen.getPrimary().getVisualBounds().getHeight());
-    	
-    	vbox.prefWidthProperty().bind(stage2.widthProperty());
-    	vbox.prefHeightProperty().bind(stage2.heightProperty());
-    	
-    	contliste.setMaxHeight(100);
-    	
-    	list.prefWidthProperty().bind(vbox.widthProperty());
-    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
-    	//list.prefHeightProperty().bind(vbox.heightProperty());
-    	//lacoda.prefHeightProperty().bind(vbox.heightProperty());
-
-    	
-    	pane.prefWidthProperty().bind(vbox.widthProperty());
-    	pane.prefHeightProperty().bind(vbox.heightProperty());
-    	
     	stage2.show();
-    	
-    	visualGraph = new VisualGraph<String>(G, pane);
-		controller = new Controller<String>(items,qu,visualGraph);
-    	
-        controller.addButtonController(button,pane, visualGraph);
-        controller.linkButtonController(button4, visualGraph);
-        controller.removeButtonController(button2, visualGraph, pane);
-        controller.setOnSave(otherMenuItem, G);
-        controller.endButtonController(button5);
-        controller.nextButtonController(button6);
-        controller.clearColorButtonController(button7,visualGraph);
-        button3.setOnMouseClicked(event ->{
-			controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu);
-    	});
-    	
     	for (blackCircle b: visualGraph.circles()) {
     	controller.boundsController(b, pane);
     	}
