@@ -106,6 +106,7 @@ public class GraphVisit<T extends Comparable<T>> {
 	});
 		next.setOnMouseClicked(event -> {
 			Node<T> n=q.pop();
+			Scanner scanner = new Scanner("");
 			c.GraphVisualize(visualGraph, radice, q, n, null, distances, parents, index);
 			Controller.items.add(0, "Pop of node "+n.getElement()+" from queue");
 			
@@ -113,11 +114,13 @@ public class GraphVisit<T extends Comparable<T>> {
 					c.GraphVisualize(visualGraph, radice,q, n, m, distances, parents, index);
 					Controller.items.add(0, "Analysis of adjacent node "+m.getElement());
 					
+					
 					if (distances[index.get(m)]==null || distances[index.get(n)]+G.w(n, m)<distances[index.get(m)]) {			
 						if (!q.contains(m)) {
 							Controller.items.add(0, "Node "+m.getElement()+" enqueued");
 							q.addLast(m);
 							c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
+							
 							}
 						
 						parents[index.get(m)]=n;
@@ -126,13 +129,18 @@ public class GraphVisit<T extends Comparable<T>> {
 						
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						
+						
+						
 						distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
 						
 						Controller.items.add(0, "Distance of node "+m.getElement()+" updated. New distance: "+distances[index.get(m)]);
 						
 						c.GraphVisualize(visualGraph, radice, q, n, m, distances, parents, index);
 						
+						
 					}	
+				
+				scanner.nextLine();
 				}
 				counter = counter+1;
 				if (counter==G.V().size()*G.V().size() || q.isEmpty()) {
