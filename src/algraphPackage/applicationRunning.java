@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.text.*;
 import javafx.geometry.Insets;
@@ -181,22 +182,23 @@ public class applicationRunning{
 		hbox6.setMinHeight(80);
 		vbox.getChildren().addAll(hbox1,hbox2,hbox3,hbox4,hbox5,hbox6);
 		button.setOnMouseClicked(event -> {
+			Boolean b = new Boolean(false);
 			try {
 				if(Integer.valueOf(textField1.getText())<Integer.valueOf(textField2.getText()) || Integer.valueOf(textField1.getText())<Integer.valueOf(textField2.getText()) )
-					throw new RuntimeException("Max must be greater than min");
+					{b = true; throw new RuntimeException("Max must be greater than min");}
 			G.randomGraph(Integer.valueOf(textField1.getText()), Integer.valueOf(textField2.getText()), Integer.valueOf(textField3.getText()), Integer.valueOf(textField4.getText()), checkBox.isSelected());
 			}catch(NumberFormatException e) {
 				Alert alert=new Alert(Alert.AlertType.ERROR);
 				alert.setContentText("Invalid values.");
 				alert.showAndWait();
-				randomWindow(G, css);
+				//randomWindow(G, css);
 			}catch(RuntimeException e) {
 				Alert alert=new Alert(Alert.AlertType.ERROR);
 				alert.setContentText("Invalid values."+e.getMessage());
 				alert.showAndWait();
-				randomWindow(G, css);
+				//randomWindow(G, css);
 			}
-			stage.close();
+			if (b == false) stage.close();
 		});
 		Scene scene = new Scene(vbox);
 		scene.getStylesheets().add(css);
@@ -245,9 +247,6 @@ public class applicationRunning{
     	button6.setDisable(true);
     	VBox vbox=new VBox();
     	HBox contliste = new HBox();
-    	list.prefWidthProperty().bind(vbox.widthProperty());
-    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
-    	ledist.prefWidthProperty().bind(vbox.widthProperty());
     	contliste.getChildren().addAll(list,lacoda, ledist);
     	
     	HBox hbox=new HBox();
@@ -258,25 +257,14 @@ public class applicationRunning{
     	hbox.setSpacing(10);
 
     	Pane pane=new Pane();
-    	pane.setMinHeight(100);
+    	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
+    	/*pane.setMinHeight(100);
     	pane.setMinWidth(100);
     	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
     	pane.prefWidthProperty().bind(vbox.widthProperty());
-    	pane.prefHeightProperty().bind(vbox.heightProperty());
+    	pane.prefHeightProperty().bind(vbox.heightProperty());*/
     
 
-		visualGraph = new VisualGraph<String>(G, pane);
-		controller = new Controller<String>(items, qu, dist, visualGraph);
-		BellmanFordMoore<String> bellmanFord=new BellmanFordMoore<>(visualGraph, null);
-    	
-        controller.addButtonController(button,pane, visualGraph);
-        controller.linkButtonController(button4, visualGraph);
-        controller.removeButtonController(button2, visualGraph, pane);
-        controller.setOnSave(otherMenuItem, G);
-        controller.endButtonController(button, button2, button3, button4, button5, button6,button7, bellmanFord);
-        controller.clearColorButtonController(button7,visualGraph);
-		controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu, bellmanFord);
-        controller.nextButtonController(button6, bellmanFord);
                
         
  		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
@@ -304,8 +292,50 @@ public class applicationRunning{
 		Scene scene = new Scene(vbox);
 		scene.getStylesheets().add(css);
 
+		
     	stage2.setScene(scene);
+    	
+    	stage2.setX(Screen.getPrimary().getVisualBounds().getMinX());
+    	stage2.setY(Screen.getPrimary().getVisualBounds().getMinY());
+    	stage2.setWidth(Screen.getPrimary().getVisualBounds().getWidth());
+    	stage2.setHeight(Screen.getPrimary().getVisualBounds().getHeight());
+    	
+    	vbox.prefWidthProperty().bind(stage2.widthProperty());
+    	vbox.prefHeightProperty().bind(stage2.heightProperty());
+    	//vbox.setMinHeight(1000000);
+    	//vbox.setMaxHeight(1024);
+    	
+    	System.out.println(stage2.getHeight());
+    	
+    	contliste.setMinHeight(50);
+    	
+    	list.prefWidthProperty().bind(vbox.widthProperty());
+    	lacoda.prefWidthProperty().bind(vbox.widthProperty());
+    	ledist.prefWidthProperty().bind(vbox.widthProperty());
+    	//list.prefHeightProperty().bind(vbox.heightProperty());
+    	//lacoda.prefHeightProperty().bind(vbox.heightProperty());
+
+    	
+    	pane.prefWidthProperty().bind(vbox.widthProperty());
+    	pane.prefHeightProperty().bind(vbox.heightProperty());
+    	
     	stage2.show();
+    	
+    	//pane.setMinHeight(stage2.getHeight()-contliste.getHeight()-hbox.getHeight()-menuBar.getHeight());
+    	
+    	visualGraph = new VisualGraph<String>(G, pane);
+		controller = new Controller<String>(items, qu, dist, visualGraph);
+		BellmanFordMoore<String> bellmanFord=new BellmanFordMoore<>(visualGraph, null);
+    	
+        controller.addButtonController(button,pane, visualGraph);
+        controller.linkButtonController(button4, visualGraph);
+        controller.removeButtonController(button2, visualGraph, pane);
+        controller.setOnSave(otherMenuItem, G);
+        controller.endButtonController(button, button2, button3, button4, button5, button6,button7, bellmanFord);
+        controller.clearColorButtonController(button7,visualGraph);
+		controller.applyButtonController(visualGraph, button, button2, button3, button4, button5, button6,button7,qu, bellmanFord);
+        controller.nextButtonController(button6, bellmanFord);
+    	
     	for (blackCircle b: visualGraph.circles()) {
     	controller.boundsController(b, pane);
     	}

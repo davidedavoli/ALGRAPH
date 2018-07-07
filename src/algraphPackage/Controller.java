@@ -208,7 +208,7 @@ public class Controller <T extends Comparable<T>>{
 		}
 		
 		Text text = new Text(vettore);
-		Text titolino = new Text("Questo è il vettore delle distanze");
+		Text titolino = new Text("Questo ï¿½ il vettore delle distanze");
 
 		panel.getChildren().addAll(titolino,text);
 		scene.getStylesheets().add(css);
@@ -461,7 +461,7 @@ public class Controller <T extends Comparable<T>>{
 			text.setY(circle.getCenterY()-2*circle.getRadius());
 		}
 		
-		for(Arrow line: blackcircle.getOutList())
+		for(Arrow line: blackcircle.getInList())
 		{
 		if (line.getEndX() > (bounds.getMaxX()-circle.getRadius())) {
 			line.setEndX(bounds.getMaxX()-circle.getRadius());
