@@ -10,11 +10,11 @@ public class VisualGraph<T  extends Comparable<T>> {
 	Graph<T> G;
 	Pane p;
 
-	public VisualGraph(Graph<T> lucaserafini, Pane p) {
+	public VisualGraph(Graph<T> lucaserafini, Pane pane) {
 		super();
 		G=lucaserafini;
 		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
+			mappa.put(lucamariotti, new blackCircle(pane, (String) lucamariotti.getElement()));
 		}
 		for (Node<T> lucamariotti : lucaserafini.V()){
 			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
@@ -22,7 +22,7 @@ public class VisualGraph<T  extends Comparable<T>> {
 				
 			}
 		}
-		this.p=p;
+		this.p=pane;
 	}
 	
 	public void removeAll() {
