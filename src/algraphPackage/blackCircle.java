@@ -95,8 +95,8 @@ public class blackCircle{
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
     	circle.setCursor(Cursor.MOVE);
-        circle.setCenterX(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinX()+10,pane.getLayoutBounds().getMaxX()-10));
-        circle.setCenterY(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinY()+10,pane.getLayoutBounds().getMaxY()-10));
+        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
+        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
         text.setText(string);
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());
@@ -111,7 +111,10 @@ public class blackCircle{
 	public void changeHovered() {
 		hovered = !hovered;
 	}
-	
+	public void setPositions() {
+		circle.setCenterX(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinX()+10,pane.getLayoutBounds().getMaxX()-10));
+        circle.setCenterY(ThreadLocalRandom.current().nextDouble(pane.getLayoutBounds().getMinY()+10,pane.getLayoutBounds().getMaxY()-10));
+	}
 	public Boolean getHovered() {
 		return hovered;
 	}

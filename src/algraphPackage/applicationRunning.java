@@ -337,6 +337,13 @@ public class applicationRunning{
         controller.nextButtonController(button6, bellmanFord);
     	
     	for (blackCircle b: visualGraph.circles()) {
+    	b.setPositions();
+    	for (Arrow o : b.getOutList()) {
+			o.setLines(o.getParent(), o.getTarget());
+		}
+		for (Arrow o : b.getInList()) {
+			o.setLines(o.getParent(), o.getTarget());
+		}
     	controller.boundsController(b, pane);
     	}
     }
