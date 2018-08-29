@@ -9,28 +9,28 @@ Per l'utilizzo:
 		-Impot Graph From File
 
 Generate Graph Manually:
-	Questa funzionalit‡ permette di creare manualmente il grafo mediante alcuni bottoni:
+	Questa funzionalit√† permette di creare manualmente il grafo mediante alcuni bottoni:
 		-Add node: Aggiunge un nodo
-		-Switch to [mode] mode: permette di scgliere fra le due modalit‡ di modifica: Selection e Link.
+		-Switch to [mode] mode: permette di scgliere fra le due modalit√† di modifica: Selection e Link.
 			-Selection mode: cliccando su uno degli elementi del grafo, questo viene selezionato.
 			-Link mode: cliccando su due nodi viene creato un arco orientato fra questi due nodi dal primo al secondo che si ha cliccato.
 		-Remove: elimina ogni elemento selezionato.
 	Cliccando sulle etichette degli elementi viene aperta una finestra di dialogo che permette all'utente di reimpostare il peso dell'arco o l'etichetta del nodo.
-	Infine Ë possibile trascinare i nodi del grafo per conferire al grafo un aspetto pi˘ gradevole
+	Infine √® possibile trascinare i nodi del grafo per conferire al grafo un aspetto pi√π gradevole
 
 Grenerate Random Graph:
-	Mediante una finestra di dialogo Ë possibile settare alcuni parametri per la generazione del grafo: 
+	Mediante una finestra di dialogo √® possibile settare alcuni parametri per la generazione del grafo: 
 		-Max Nodes
 		-Min Nodes
 		-Max Weight
 		-Min Weight
-	Density, infine, permette di aumentare il numero di archi totali del grafo: selezionandolo sar‡ pi˘ probabile che l'algoritmo generi grafi densi.
+	Density, infine, permette di aumentare il numero di archi totali del grafo: selezionandolo sar√† pi√π probabile che l'algoritmo generi grafi densi.
 
 Import Graph From File:
-	Mediante una finestra Ë possibile selezionare quale file importare, una volta effettuata la scelta, verr‡ aperta la pagina principale del programma.
+	Mediante una finestra √® possibile selezionare quale file importare, una volta effettuata la scelta, verr√† aperta la pagina principale del programma.
 	
 Main Page:
-	In questa pagina, oltre che alle funzionalit‡ di modifica di un grafo, sono persenti anche una barra dei menu, il pulsante Apply Algorithm e una lista di log.
+	In questa pagina, oltre che alle funzionalit√† di modifica di un grafo, sono persenti anche una barra dei menu, alcuni pulsanti per la gestione dell'esecuzione e tre liste di log.
 
 Menu Bar:
 	Prevede due pulsanti:
@@ -38,18 +38,17 @@ Menu Bar:
 		-Open, per l'apertura dei file
 
 Apply Algorithm:
-	Mediante questo pulsante viene lanciata l'esecuzione dell'algoritmo dal nodo selezionato; qualora ve ne sia pi˘ di uno, o vi siano dei cicli negativil'algoritmo non parte.
+	Mediante questo pulsante viene lanciata l'esecuzione dell'algoritmo dal nodo selezionato; qualora ve ne sia pi√π di uno, o vi siano dei cicli negativil'algoritmo non parte.
 	La radice viene colorata in rosso.
 	Il nodo estratto dalla coda viene colorato in blu.
 	Il nodo adiacente ad esso preso in analisi viene colorato in verde.
-	Ad ogni step Ë possibile, cliccando sopra ad un nodo, leggere in tempo reale la distanza di questo dalla radice.
+	Ad ogni step √® possibile, cliccando sopra ad un nodo, leggere in tempo reale la distanza di questo dalla radice.
 	Ad ogni step le frecce che fanno parte del vettore dei padri vengono colorate in rosso, in modo da dare una lettura intuitiva del vettore dei padri.
 	Ad ogni step la lcoda dei nodi viene mostrata nella parte destra della log bar.  
 	
 
 Log Bar:
-	Questa area dello schermo mostra tutte le attivit‡ del programma e le linee di pseudocodice eseguite dall'algoritmo nella parte sinistra
-	Nella parte destra viene mostrato lo stato della coda dell'algoritmo.
+	La prim lista a sinistra mostra le linee dello pseudocodice che paso dopo passo vengono eseguite, la lista in mezzo mostra lo stato della coda in cui vengono inseriti i nodi su cui dovr√† essere eseguito l'algoritmo e l'ultima lista mostra lo stato del vettoer delle distanze di ogni nodo dal nodo radice.
 
 Sviluppatori:
 	-Simone Branchetti		simone.branchetti2@studio.unibo.it
