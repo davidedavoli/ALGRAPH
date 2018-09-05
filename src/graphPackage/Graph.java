@@ -8,43 +8,43 @@ import algraphPackage.Controller;
 
 public class Graph<T extends Comparable<T>> implements IGraph<T>{
 
-	TreeMap<Node<T>, TreeMap<Node<T>, Integer>> pollo;
+	HashMap<Node<T>, HashMap<Node<T>, Integer>> grafo;
 	public Graph() {
-		this.pollo = new TreeMap<Node<T>, TreeMap<Node<T>, Integer>>();
+		this.grafo = new HashMap<Node<T>, HashMap<Node<T>, Integer>>();
 	}
 
 	@Override
 	public void insertNode(Node<T> u) {
-		if (!pollo.containsKey(u))
-			pollo.put(u, new TreeMap<Node<T>, Integer>());
+		if (!grafo.containsKey(u))
+			grafo.put(u, new HashMap<Node<T>, Integer>());
 		else {
-			pollo.remove(u);
-			pollo.put(u, new TreeMap<Node<T>, Integer>());
+			grafo.remove(u);
+			grafo.put(u, new HashMap<Node<T>, Integer>());
 		}
 	}
 
 	@Override
 	public void deleteNode(Node<T> u) {
-		pollo.remove(u);
-		for (Node<T> follo : pollo.keySet()) {
-			if (pollo.get(follo).keySet().contains(u))
-				pollo.get(follo).remove(u);
+		grafo.remove(u);
+		for (Node<T> follo : grafo.keySet()) {
+			if (grafo.get(follo).keySet().contains(u))
+				grafo.get(follo).remove(u);
 		}
 		
 	}
 
 	@Override
 	public void insertEdge(Node<T> u, Node<T> v, Integer distance) {
-		if (pollo.containsKey(u) && pollo.containsKey(v)) {
-				pollo.get(u).put(v, distance);
+		if (grafo.containsKey(u) && grafo.containsKey(v)) {
+				grafo.get(u).put(v, distance);
 		}
 		
 	}
 
 	@Override
 	public void deleteEdge(Node<T> u, Node<T> v) {
-		if (pollo.containsKey(u) && pollo.containsKey(v) && pollo.get(u).containsKey(v)) {
-			pollo.get(u).remove(v);
+		if (grafo.containsKey(u) && grafo.containsKey(v) && grafo.get(u).containsKey(v)) {
+			grafo.get(u).remove(v);
 		}
 			
 		
@@ -53,9 +53,9 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	@Override
 	public Set<Node<T>> adj(Node<T> u) {
 		TreeSet<Node<T>> p=new TreeSet<Node<T>>();
-		if (!pollo.containsKey(u))
+		if (!grafo.containsKey(u))
 			return null;
-		for (Node<T> gol : pollo.get(u).keySet()){
+		for (Node<T> gol : grafo.get(u).keySet()){
 			p.add(gol);
 		}
 		return p;
@@ -63,16 +63,39 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 
 	@Override
 	public Set<Node<T>> V() {
-		return pollo.keySet();
+		return grafo.keySet();
 	}
 	public void setNodeValue(Node<String> n, String s) {
+		/*HashMap<Node<T>, HashMap<Node<T>, Integer>> newGraph=new HashMap<Node<T>, HashMap<Node<T>, Integer>>();
+		Node<String> m= new Node<String>(null);
+		HashMap<Node<T>, Integer> dist=new HashMap<Node<T>, Integer>();
+		
+		for (Node<T> nodea: grafo.keySet()) {
+			if (nodea.equals(n)) {
+				newGraph.put((Node<T>)m, grafo.get(n));
+			}
+			else {
+				for (Node<T> nodeb: grafo.get(nodea).keySet()) {
+					if (!nodeb.equals(n))
+					dist.put(nodeb, grafo.get(nodea).get(nodeb));
+					else
+					dist.put((Node<T>)m, grafo.get(nodea).get(nodeb));
+				}
+				newGraph.put(nodea, dist);
+				dist=new HashMap<Node<T>, Integer>();
+			}
+			
+		}
+		
+		grafo=newGraph;
+		*/
 		n.setValue(s);
 	}
 	@Override
 	public void print() {
 		String p="";
-		for (Node <T> callo : pollo.keySet()) {
-			p+=callo.toString()+" :"+pollo.get(callo).toString()+"\n";
+		for (Node <T> callo : grafo.keySet()) {
+			p+=callo.toString()+" :"+grafo.get(callo).toString()+"\n";
 		}
 		System.out.print(p);
 
@@ -80,8 +103,8 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	}
 	
 	public Integer w(Node<T> a, Node<T> b) {
-		if (pollo.containsKey(a) && pollo.containsKey(b) && pollo.get(a).containsKey(b))
-			return pollo.get(a).get(b);
+		if (grafo.containsKey(a) && grafo.containsKey(b) && grafo.get(a).containsKey(b))
+			return grafo.get(a).get(b);
 		else
 			return null;
 	}
@@ -96,13 +119,13 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	}
 	public void outGraph(String path) {
 		Integer i=0;
-		TreeMap<Node<T>, Integer> nodes= new TreeMap<Node<T>, Integer>();
+		HashMap<Node<T>, Integer> nodes= new HashMap<Node<T>, Integer>();
 		try {
 			FileWriter b=new FileWriter(path);
 			BufferedWriter out=new BufferedWriter(b);
 			out.write("<N>");
 			out.write("\n");
-				for (Node<T> n : pollo.keySet()) {
+				for (Node<T> n : grafo.keySet()) {
 					out.write(i.toString()+":");
 					out.write(((String) n.getElement()));
 					nodes.put(n, i);
@@ -114,13 +137,14 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			out.write("<E>");
 			out.write("\n");
 			i=0;
-				for (Node<T> n : pollo.keySet()) {
-				for (Node<T> o : pollo.get(n).keySet()) {
+				for (Node<T> n : grafo.keySet()) {
+					if (n!=null && grafo.get(n)!=null)
+				for (Node<T> o : grafo.get(n).keySet()) {
 					out.write(nodes.get(n).toString());
 					out.write(":");
 					out.write(nodes.get(o).toString());
 					out.write(":");
-					out.write(pollo.get(n).get(o).toString());
+					out.write(grafo.get(n).get(o).toString());
 					out.write("\n");
 				} 
 			}
@@ -136,7 +160,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	}
 	public String inGraph(String path) {
 		Integer i=0;
-		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
+		HashMap<Integer, Node<T>> nodes= new HashMap<>();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));
 			String inStr="";
@@ -204,10 +228,10 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 	
 	public void removeAll() {
 		List<Node<T>> toRemove= new ArrayList<Node<T>>(); 
-		for (Node<T> key: pollo.keySet())
+		for (Node<T> key: grafo.keySet())
 			toRemove.add(key);
 		for (Node<T> key: toRemove)
-			pollo.remove(key);
+			grafo.remove(key);
 	}
 	
 	public void randomGraph(int Mnodes, int mnodes, int Mw, int mw, boolean dense) {
@@ -224,7 +248,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		else 
 			nedges=rand.nextInt(nnodes*3)+nnodes-1;
 		nedges=Math.min(nedges, nnodes*(nnodes-1)/2);
-		TreeMap<Integer, Node<T>> nodes= new TreeMap<>();
+		HashMap<Integer, Node<T>> nodes= new HashMap<>();
 		for (Integer i=0; i<nnodes; i++) {
 			nodes.put(i, new Node<T>((T)i.toString()));
 			this.insertNode(nodes.get(i));
@@ -233,12 +257,12 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			int nodea;
 			do{
 				nodea=rand.nextInt(nnodes);
-				}while (pollo.get(nodes.get(nodea)).keySet().size()>=(nnodes-1));
+				}while (grafo.get(nodes.get(nodea)).keySet().size()>=(nnodes-1));
 			
 			int nodeb;
 			do{
 				nodeb=rand.nextInt(nnodes);
-			}while (nodeb==nodea || pollo.get(nodes.get(nodea)).get(nodes.get(nodeb))!=null);
+			}while (nodeb==nodea || grafo.get(nodes.get(nodea)).get(nodes.get(nodeb))!=null);
 			if (Mw==mw)
 				this.insertEdge(nodes.get(nodea), nodes.get(nodeb), mw);
 			else
@@ -246,7 +270,7 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 		}
 		
 	}
-	public TreeMap<Node<T>, TreeMap<Node<T>, Integer>> getTreeMap(){
-		return pollo;
+	public HashMap<Node<T>, HashMap<Node<T>, Integer>> getHashMap(){
+		return grafo;
 	}
 }

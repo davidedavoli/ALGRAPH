@@ -311,9 +311,12 @@ public class Controller <T extends Comparable<T>>{
 			vbox.getChildren().addAll(hbox,hbox2);
 			button.setOnMouseClicked(e -> {
 				String tmp = blackcircle.getText().getText();
-				blackcircle.setText(textField.getText());
+				if (!textField.getText().contains(":")) {
 				applicationRunning.getVisualGraph().renameNode(blackcircle, textField.getText());
 				items.add(0, "Node name changed succesfully from "+tmp+" to "+blackcircle.getText().getText());
+				}
+				else
+					items.add(0, "Name must not contain ':'");
 				stage.close();
 			});
 			Scene scene = new Scene(vbox);

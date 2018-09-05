@@ -10,15 +10,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 	Graph<T> G;
 	Pane p;
 
-	public VisualGraph(Graph<T> lucaserafini, Pane pane) {
+	public VisualGraph(Graph<T> Graph, Pane pane) {
 		super();
-		G=lucaserafini;
-		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(pane, (String) lucamariotti.getElement()));
+		G=Graph;
+		for (Node<T> nodea : Graph.V()) {
+			blackCircle b=new blackCircle(pane, (String) nodea.getElement());
+			mappa.put(nodea, b);
 		}
-		for (Node<T> lucamariotti : lucaserafini.V()){
-			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
-				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo), G.w(lucamariotti, lucacontalbo).toString());
+		for (Node<T> nodea : Graph.V()){
+			for (Node<T> nodeb : Graph.adj(nodea)) {
+				mappa.get(nodea).bind(mappa.get(nodeb), G.w(nodea, nodeb).toString());
 				
 			}
 		}
@@ -35,14 +36,14 @@ public class VisualGraph<T  extends Comparable<T>> {
 			mappa.remove(key);
 	}
 	
-	public void readGraph(Graph<T> lucaserafini, Pane p) {
-		G=lucaserafini;
-		for (Node<T> lucamariotti : lucaserafini.V()) {
-			mappa.put(lucamariotti, new blackCircle(p, (String) lucamariotti.getElement()));
+	public void readGraph(Graph<T> nodec, Pane p) {
+		G=nodec;
+		for (Node<T> nodea : nodec.V()) {
+			mappa.put(nodea, new blackCircle(p, (String) nodea.getElement()));
 		}
-		for (Node<T> lucamariotti : lucaserafini.V()){
-			for (Node<T> lucacontalbo : lucaserafini.adj(lucamariotti)) {
-				mappa.get(lucamariotti).bind(mappa.get(lucacontalbo), G.w(lucamariotti, lucacontalbo).toString());
+		for (Node<T> nodea : nodec.V()){
+			for (Node<T> nodeb : nodec.adj(nodea)) {
+				mappa.get(nodea).bind(mappa.get(nodeb), G.w(nodea, nodeb).toString());
 				
 			}
 		}
@@ -70,19 +71,19 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 	public void deleteNode(Node<T> u) {
 		Arrow toRemove=null;
-		for (Node<T> lucaserafini : mappa.keySet()) {
-			for (Arrow a: mappa.get(lucaserafini).getInList()) {
+		for (Node<T> nodec : mappa.keySet()) {
+			for (Arrow a: mappa.get(nodec).getInList()) {
 				if (a.getParent()==mappa.get(u)) {
 					toRemove=(a);
 				}
 			}
-			if(mappa.get(lucaserafini).getInList().contains(toRemove))
-			mappa.get(lucaserafini).getInList().remove(toRemove);
+			if(mappa.get(nodec).getInList().contains(toRemove))
+			mappa.get(nodec).getInList().remove(toRemove);
 		}
-		for (Node<T> lucaserafini : mappa.keySet()) {
-			for (Node<T> lucamariotti : G.adj(lucaserafini)) {
-				if (lucamariotti==u) {
-					mappa.get(lucaserafini).deleteLink(mappa.get(u));
+		for (Node<T> nodec : mappa.keySet()) {
+			for (Node<T> nodea : G.adj(nodec)) {
+				if (nodea==u) {
+					mappa.get(nodec).deleteLink(mappa.get(u));
 				}
 			}
 		}
@@ -114,16 +115,16 @@ public class VisualGraph<T  extends Comparable<T>> {
 		mappa.get(u).deleteLink(mappa.get(v));
 	}
 	public void deleteChosenArrows() {
-		Iterator<Arrow> lucamariotti= chosenArrows().iterator();
-		while (lucamariotti.hasNext()) {
-			Arrow a=lucamariotti.next();
+		Iterator<Arrow> nodea= chosenArrows().iterator();
+		while (nodea.hasNext()) {
+			Arrow a=nodea.next();
 			deleteEdge(getNode(a.getParent()), getNode(a.getTarget()));
 		}
 	}
 	public void deleteChosenNodes() {
-		Iterator<Node<T>> lucamariotti= mappa.keySet().iterator();
-		while( lucamariotti.hasNext()) {
-			Node<T> pollo=lucamariotti.next();
+		Iterator<Node<T>> nodea= mappa.keySet().iterator();
+		while( nodea.hasNext()) {
+			Node<T> pollo=nodea.next();
 			if (mappa.get(pollo).getChosen()) {
 				this.deleteNode(pollo);
 			}
@@ -184,16 +185,18 @@ public class VisualGraph<T  extends Comparable<T>> {
 	}
 	
 	public void renameNode(blackCircle n, String s) {
-		for (Node<T> b: mappa.keySet()) {
-				if (mappa.get(b).equals(n))
-					G.setNodeValue((Node<String>) b, s);
-		
+		if (getNode(n)!=null) {
+		Node<T> nodo=getNode(n);
+		mappa.remove(nodo);
+		nodo.setValue((T)s);
+		n.setText(s);
+		mappa.put(nodo, n);
 		}
 	}
 	
 	public Node<T> getNode(blackCircle b){
 		for (Node<T> nodo: mappa.keySet()) {
-			if (mappa.get(nodo)==b)
+			if (mappa.get(nodo)==(b))
 				return nodo;
 				}
 		return null;
