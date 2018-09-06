@@ -190,9 +190,6 @@ public class Graph<T extends Comparable<T>> implements IGraph<T>{
 			inStr=in.readLine();
 			while (!inStr.equals("</E>")) {
 				String[] line=inStr.split(":");
-				if (line.length!=2) {
-					//Error.Inputfile()
-					}
 				this.insertEdge(nodes.get(Integer.parseInt(line[0])), nodes.get(Integer.parseInt(line[1])), Integer.parseInt(line[2]));
 				
 				inStr=in.readLine();

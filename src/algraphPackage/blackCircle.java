@@ -95,8 +95,8 @@ public class blackCircle{
 		circle = new Circle(10);
 		circle.setFill(Color.BLACK);
     	circle.setCursor(Cursor.MOVE);
-        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1700));
-        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,1000));
+        circle.setCenterX(ThreadLocalRandom.current().nextInt(0,1200));
+        circle.setCenterY(ThreadLocalRandom.current().nextInt(0,400));
         text.setText(string);
         text.setX(circle.getCenterX()-text.getLayoutBounds().getWidth()/2);
         text.setY(circle.getCenterY()-2*circle.getRadius());

@@ -19,6 +19,7 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	private Node<T> n;
 	private Iterator<Node<T>> iter;
 	private Node<T> m;
+	private LinkedList<Node<T>> speranza;
 	
 	
 	
@@ -102,6 +103,8 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	void popQueue() {
 		if (!q.isEmpty()) {
 		n=q.pop();
+		//for(Node<T> node: G.adj(n))
+		//	speranza.add(node);
 		iter=G.adj(n).iterator();
 		Controller.items.add(0, "n=Q.dequeue() //deuqueue of node "+n.getElement()+" from queue");
 		pc++;
@@ -133,6 +136,7 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	
 	void setM() {
 		m=iter.next();
+		//m=speranza.pop();
 		Controller.items.add(0, "m=adj(n) //set M="+m.getElement());
 	}
 	
@@ -174,7 +178,7 @@ public class BellmanFordMoore<T extends Comparable<T>> {
 	void setDistance() {
 		distances[index.get(m)]=distances[index.get(n)]+G.w(n, m);
 		Controller.items.add(0, "D[m]=d[m]+ G.w(n,m) //Distance of node "+m.getElement()+" updated. New distance: "+distances[index.get(m)]);
-		pc=0;
+		pc=1;
 	}
 	
 	public void setRadice(Node<T> r) {

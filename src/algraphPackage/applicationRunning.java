@@ -191,12 +191,10 @@ public class applicationRunning{
 				Alert alert=new Alert(Alert.AlertType.ERROR);
 				alert.setContentText("Invalid values.");
 				alert.showAndWait();
-				//randomWindow(G, css);
 			}catch(RuntimeException e) {
 				Alert alert=new Alert(Alert.AlertType.ERROR);
 				alert.setContentText("Invalid values."+e.getMessage());
 				alert.showAndWait();
-				//randomWindow(G, css);
 			}
 			if (b == false) stage.close();
 		});
@@ -252,26 +250,18 @@ public class applicationRunning{
     	HBox hbox=new HBox();
     	hbox.getChildren().addAll(button,button2,button3,button4,button7,button5,button6);
     	hbox.setMinHeight(100);
-    	//hbox.setMinWidth(100);
     	hbox.setAlignment(Pos.CENTER);
     	hbox.setSpacing(10);
 
     	Pane pane=new Pane();
     	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
-    	/*pane.setMinHeight(100);
-    	pane.setMinWidth(100);
-    	vbox.getChildren().addAll(menuBar,hbox,pane,contliste);
-    	pane.prefWidthProperty().bind(vbox.widthProperty());
-    	pane.prefHeightProperty().bind(vbox.heightProperty());*/
-    
-
-               
+                 
         
  		menuItem.setOnAction(new EventHandler<ActionEvent>() {	
  			@Override
  			public void handle(ActionEvent event) {
  				G.removeAll();
- 				System.out.println(G.V().size());
+ 				//System.out.println(G.V().size());
  				applicationRunning.graphFromFile(G);
  				pane.getChildren().remove(0, pane.getChildren().size());
  		        visualGraph.removeAll();
@@ -279,13 +269,10 @@ public class applicationRunning{
  		        for (blackCircle b: visualGraph.circles()) {
  			    	controller.boundsController(b, pane);
  			    	}
- 				System.out.println(G.V().size());
+ 				//System.out.println(G.V().size());
  		                }
  		});
-    	
-    	
-    	//vbox.getChildren().addAll(contliste);
-    	
+   
 
 
 		
@@ -302,8 +289,7 @@ public class applicationRunning{
     	
     	vbox.prefWidthProperty().bind(stage2.widthProperty());
     	vbox.prefHeightProperty().bind(stage2.heightProperty());
-    	//vbox.setMinHeight(1000000);
-    	//vbox.setMaxHeight(1024);
+    	
     	
     	System.out.println(stage2.getHeight());
     	
@@ -312,8 +298,6 @@ public class applicationRunning{
     	list.prefWidthProperty().bind(vbox.widthProperty());
     	lacoda.prefWidthProperty().bind(vbox.widthProperty());
     	ledist.prefWidthProperty().bind(vbox.widthProperty());
-    	//list.prefHeightProperty().bind(vbox.heightProperty());
-    	//lacoda.prefHeightProperty().bind(vbox.heightProperty());
 
     	
     	pane.prefWidthProperty().bind(vbox.widthProperty());
